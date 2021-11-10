@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<!--
+Copyright 2018 Ayuntamiento de A Coruña, Ayuntamiento de Madrid, Ayuntamiento de Santiago de Compostela, Ayuntamiento de Zaragoza, Entidad Pública Empresarial Red.es
+
+This visualization is part of the actions carried out within the "Ciudades Abiertas" project.
+
+Licensed under the EUPL, Version 1.2 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+You may not use this work except in compliance with the Licence.
+You may obtain a copy of the Licence at:
+
+https://joinup.ec.europa.eu/software/page/eupl
+
+Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the Licence for the specific language governing permissions and limitations under the Licence.
+-->
+<html lang="es" dir="ltr">
+
+<head>
+    <!-- Metadatos -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title data-i18n="ficha_contrato">Ficha de contrato</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- JQUERY UI CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.css" rel="stylesheet"
+        type="text/css">
+
+    <!-- Hojas de estilos internos -->
+    <link rel="stylesheet" href="../comunV2/dist/css/main.css">
+    <link rel="stylesheet" href="../comunV2/dist/css/ciudadesAbiertas.css">
+    <link rel="stylesheet" href="dist/css/contratos.css">
+    <link rel="stylesheet" href="dist/css/custom.css">
+
+    <!--Favicon-->
+    <link rel="shortcut icon" type="image/x-icon" href="../comunV2/dist/images/favicon.ico">
+
+</head>
+
+<body>
+    <div class="modal fade bd-loading-modal-lg" data-backdrop="static" data-keyboard="false" tabindex="-1"
+        role="dialog">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content modal-loading">
+                <span class="fa fa-spinner fa-spin fa-5x"></span>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="heading" aria-level="2">
+                        <div class="col-md-7 col-xs-7">
+                            <h2 id="titulo"></h2>
+                        </div>
+                        <div class="col-md-5 col-xs-5">
+                            <div class="pull-right">
+                                <button type="button" class="btn btn-primary btn-xs" onclick="volverBusqueda()"
+                                    data-i18n="volver">
+                                    Volver
+                                </button>
+                                <button type="button" class="btn btn-primary btn-xs"
+                                    onclick="cambioCapaBuscadorIframe()">
+                                    &times;
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                                <div class="container-fluid ">
+									<h2 data-i18n="detalle">Detalle</h2>
+                                    <div class="row ficha panel_indi">
+										<p><strong data-i18n="">Información general:</strong></p>
+										<div class="col-sm-4">
+											<p><span class="etiqueta" data-i18n="organismo_contratante:">Organismo Contratante:</span><a id="enlaceOrganismoC"><span id="organismoC"> </span></a></p>
+											<p><span class="etiqueta" data-i18n="n_expediente:">Nº Expediente:</span> <span id="expediente"></span> </p>
+											<p><span class="etiqueta" data-i18n="tipo_contrato:">Tipo de Contrato:</span> <span id="tipo"></span></p>
+											<p><span class="etiqueta" data-i18n="estado:">Estado:</span> <span id="estado"></span> </p>
+										</div>
+										<div class="col-sm-4">
+											<p><span class="etiqueta" data-i18n="procedimiento:">Procedimiento:</span> <span id="procedimiento"></span></p>
+											<p><span class="etiqueta" id="parrafoImporte" data-i18n="importe-licitacion:">Importe licitación:</span> <span id="importe"></span></p>
+											<p><span class="etiqueta" id="parrafoDuracion" data-i18n="duracion:">Duración:</span> <span id="duraccion"></span></p>
+											<p><span class="etiqueta" id="parrafoLicitadores" data-i18n="licitadores:">Licitadores:</span> <span id="numLicitadores"></span></p>
+                                        </div>
+										<div class="col-sm-4">
+											<p><span class="etiqueta" data-i18n="periodoinicio:">F Inicio:</span> <span id="periodoinicio"></span></p>
+											<p><span class="etiqueta" data-i18n="periodofin:">F Fin:</span> <span id="periodofin"></span></p>
+										</div>
+										<div class="col-sm-12 ficha_lista">
+											<p><span class="etiqueta" data-i18n="CPV:">CPV:</span><ul id="cpv"></ul></p>
+                                        </div>
+                                        <div class="col-sm-12 ficha_lista">
+											<p><span class="etiqueta" id="liLotes" data-i18n="lotes:">Lotes:</span><ol id="lotesPliego"></ol></p>
+										</div>
+                                    </div>
+                                </div>
+                                <div class="container-fluid ">
+									<h2  data-i18n="proceso">Proceso</h2>
+									<div class="col-sm-offset-2 col-sm-8 col-sm-offset-2">
+										<ul class="timeline">
+											<li id="bloqueLicitacion">
+												<div class="timeline-badge">
+													<em class="fa fa-check"></em>
+												</div>
+												<div class="timeline-panel">
+													<div class="timeline-heading">
+														<h4 class="timeline-title" data-i18n="licitacion">Licitación</h4>
+													</div>
+													<div class="timeline-body container-fluid">
+														<p><a id="url" data-i18n="url_licitacion" target="_blank">URL de la Licitación</a></p>
+													</div>
+												</div>
+											</li>
+											<li class="timeline-inverted" id="bloqueAdjudicacion">
+												<div class="timeline-badge">
+													<em class="fa fa-check"></em>
+												</div>
+												<div class="timeline-panel">
+													<div class="timeline-heading">
+														<h4 class="timeline-title" data-i18n="adjudicacion">Adjudicación
+														</h4>
+													</div>
+													<div class="timeline-body container-fluid">
+														<strong id="etiquetaLotesA" data-i18n="lotes:">Lotes:</strong>
+														<ol id="licitadores">
+														</ol>
+													</div>
+												</div>
+											</li>
+											<li id="bloqueEjecucion">
+												<div class="timeline-badge">
+													<em class="fa fa-check"></em>
+												</div>
+												<div class="timeline-panel">
+													<div class="timeline-heading">
+														<h4 class="timeline-title" data-i18n="ejecucion">Ejecución</h4>
+													</div>
+													<div class="timeline-body container-fluid">
+														<p><em class="fa fa-clock-o"></em> <span id="ejecucion"></span></p>
+													</div>
+												</div>
+											</li>
+										</ul>
+									 </div>
+                                </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <!-- jQuery UI-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.9.2/i18n/jquery.ui.datepicker-es.min.js"></script>
+
+    <!-- Bootstrap Core -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+
+    <!-- Normalización de datos -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+    <script src="vendor/datejs/date-es-ES.js"></script>
+
+    <!-- Multiidoma -->
+    <script src="vendor/CLDRPluralRuleParser/CLDRPluralRuleParser.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.messagestore.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.fallbacks.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.language.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.parser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.emitter.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.emitter.bidi.min.js"></script>
+
+    <!-- Scripts internos -->
+    <script src="dist/js/constantes.js"></script>
+    <script src="dist/js/general.js"></script>
+    <script src="dist/js/fichaContrato.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.modal').modal('show');
+            initComun();
+            inicializaFichaContrato();
+        });
+    </script>
+</body>
+
+</html>
