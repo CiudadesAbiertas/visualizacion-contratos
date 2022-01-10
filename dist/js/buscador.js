@@ -299,6 +299,7 @@ function obtieneDatosAPITender(url) {
     if (LOG_DEGUB_BUSCADOR) {
         console.log('obtieneDatosAPITender | ' + url);
     }
+
     $.getJSON(dameURL(url))
         .done(function (data) {
             if (data && data.records && data.records.length) {
@@ -792,7 +793,6 @@ function insertaDatosIniciales() {
 
     preparaTablaBuscadorCont(false);
     preparaTablaBuscadorAdj(false);
-   /* $('#collapseAnyo').collapse('show');*/
     capturaParam();
 
     let tableCon = $('#tablaContratos').DataTable();
@@ -891,7 +891,6 @@ function creaDatasetTabla(
     let impLotMayor = 0;
     let numAdj = 0;
     let diezImpAwardMayor = [0];
-   // let diezImpAwardMayor = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     let numProc1 = 0;
     let numProc2 = 0;
     let numProcTotal = 0;
@@ -916,7 +915,7 @@ function creaDatasetTabla(
     let restuadoCifLicitador = true;
 
     let tenderEncontrado = false;
-    let lotEncontrado = false;
+    
     let idTenderContados = [];
 
     // Recorremos todos los procesos
@@ -943,6 +942,9 @@ function creaDatasetTabla(
         let nombreLote = '';
         let importeLote = '';
         let awardValueAmount = '';
+        let lotEncontrado = false;
+        
+
 
         // Se inicializan las variables para saber que se está buscando
         if (idBusqueda) {
@@ -1025,6 +1027,7 @@ function creaDatasetTabla(
                     }
                 }
             }
+            
             //Se obtiene la categoria de la licitación
             if (tenderCol[processCol[i].hasTender].mainProcurementCategory) {
                 categoria = tenderCol[processCol[i].hasTender].mainProcurementCategory;
@@ -1055,29 +1058,27 @@ function creaDatasetTabla(
             }
 
             //Se obtiene la fecha de inicio de la licitación
-            if (
-                !restuadoFechaInicio &&
-                tenderCol[processCol[i].hasTender].periodStartDate
-            ) {
+            if (tenderCol[processCol[i].hasTender].periodStartDate) {
                 fechaInicio = tenderCol[processCol[i].hasTender].periodStartDate;
                 let fechaInicioAux = Date.parse(fechaInicio).toString('yyyy-MM-dd');
-                let fechaInicioBusquedaAux =
+                if(fechaInicioBusqueda) {
+                    let fechaInicioBusquedaAux =
                     Date.parse(fechaInicioBusqueda).toString('yyyy-MM-dd');
-                if (fechaInicioAux >= fechaInicioBusquedaAux) {
-                    restuadoFechaInicio = true;
+                    if (fechaInicioAux >= fechaInicioBusquedaAux) {
+                        restuadoFechaInicio = true;
+                    }
                 }
             }
             //Se obtiene la fecha de fin de la licitación
-            if (
-                !restuadoFechaFin &&
-                tenderCol[processCol[i].hasTender].periodEndDate
-            ) {
+            if (tenderCol[processCol[i].hasTender].periodEndDate) {
                 fechaFin = tenderCol[processCol[i].hasTender].periodEndDate;
                 let fechaFinAux = Date.parse(fechaFin).toString('yyyy-MM-dd');
-                let fechaFinBusquedaAux =
+                if(fechaFinBusqueda) {
+                    let fechaFinBusquedaAux =
                     Date.parse(fechaFinBusqueda).toString('yyyy-MM-dd');
-                if (fechaFinAux <= fechaFinBusquedaAux) {
-                    restuadoFechaFin = true;
+                    if (fechaFinAux <= fechaFinBusquedaAux) {
+                        restuadoFechaFin = true;
+                    }
                 }
             }
             //Se obtiene el procedimiento de la licitación
@@ -1203,6 +1204,7 @@ function creaDatasetTabla(
         if (lotCol[tenderCol[processCol[i].hasTender].id]) {
             lotEncontrado = true;
             let lotAux = lotCol[tenderCol[processCol[i].hasTender].id];
+            
             let restuadolicitadorAux = restuadolicitador;
             let j;
             for (j = 0; j < lotAux.length; j++) {
@@ -1278,7 +1280,8 @@ function creaDatasetTabla(
                         awardValueAmount,
                         nombreLote,
                         importeLote,
-                        nombreCompl
+                        nombreCompl,
+                        fechaInicio
                     ];
                     posResult = posResult + 1;
 
@@ -1314,7 +1317,6 @@ function creaDatasetTabla(
                             indicadorGlobal = indicadoresTemp[anyo];
                         } else {
                             indicadorGlobal = {
-                                // volAdj: 0,
                                 numAdj: 0,
                                 impAdj: 0,
                                 anyo: anyo,
@@ -1368,8 +1370,6 @@ function creaDatasetTabla(
                             }
                             l = l + 1;
                         }
-
-                        // impAward = impAward + award.valueAmount;
 
                         //Se calculan los indicadores de organización contratante
                         if (organismoCTitle) {
@@ -1431,23 +1431,6 @@ function creaDatasetTabla(
                         impLotMayor = importeLote;
                     }
 
-                    // let indicadorGlobal;
-                    // if (indicadoresTemp[anyo]) {
-                    //     indicadorGlobal = indicadoresTemp[anyo];
-                    // } else {
-                    //     indicadorGlobal = {
-                    //         // volAdj: 0,
-                    //         numAdj: 0,
-                    //         impAdj: 0,
-                    //         anyo: anyo,
-                    //     };
-                    //     anyos.push(anyo);
-                    // }
-                    // // indicadorGlobal.volAdj = indicadorGlobal.volAdj + 1;
-                    // indicadorGlobal.numAdj = indicadorGlobal.numAdj + 1;
-                    // indicadorGlobal.impAdj = indicadorGlobal.impAdj + award.valueAmount;
-                    // indicadoresTemp[anyo] = indicadorGlobal;
-
                     if (tenderEncontrado) {
                         if (idTenderContados.indexOf(lotAux[j].tenderId) == -1) {
                             //indicadores
@@ -1474,6 +1457,7 @@ function creaDatasetTabla(
             }
             if (anyoSelec.length) {
                 restuadoAnyo = false;
+                console.log('linea1539')
             }
             if (categoriaSelec.length) {
                 restuadoCategoria = false;
@@ -1513,213 +1497,198 @@ function creaDatasetTabla(
             }
         }
 
-        if (
-            restuadoId &&
-            restuadoNombre &&
-            restuadoAnyo &&
-            restuadoCategoria &&
-            restuadoEstado &&
-            restuadoOrganismoCId &&
-            restuadoOrganismoCTitle &&
-            restuadoFechaInicio &&
-            restuadoFechaFin &&
-            restuadolicitador &&
-            restuadoCPV &&
-            restuadoImporteDesde &&
-            restuadoImporteHasta &&
-            restuadoCifLicitador &&
-            restuadoProcedimiento
-        ) {
-            if (award) {
-                awardValueAmount = award.valueAmount;
-            }
-
-            // Tabla de contratos
-            dataSet[posResult] = [
-                identifier,
-                nombre,
-                importePliego,
-                estado,
-                categoria,
-                procedimiento,
-                organismoCTitle,
-                licitador,
-                nlicitadores,
-                organismoCId,
-                cifLicitador,
-                id,
-                awardValueAmount,
-                nombreLote,
-                importeLote,
-                nombreCompl
-            ];
-            posResult = posResult + 1;
-
-            // gráficos adjudicatarios
-            if (award && award.isSupplierFor) {
-                let group = awardGroup.get(award.isSupplierFor);
-                if (group) {
-                    group.numAdj = group.numAdj + 1;
-                    group.impAdj = group.impAdj + Number(award.valueAmount);
-
-                    //indicadores
-                    numAward = numAward + 1;
-                    impAward = impAward + award.valueAmount;
-                } else {
-                    group = {
-                        id: award.isSupplierFor,
-                        numAdj: Number(1),
-                        impAdj: Number(award.valueAmount),
-                    };
-                    if (organizationCol[award.isSupplierFor]) {
-                        group.title = organizationCol[award.isSupplierFor].title;
-                    }
-                    //indicadores
-                    numAward = numAward + 1;
-                    impAward = impAward + award.valueAmount;
+        if(!lotEncontrado) {
+            if (
+                restuadoId &&
+                restuadoNombre &&
+                restuadoAnyo &&
+                restuadoCategoria &&
+                restuadoEstado &&
+                restuadoOrganismoCId &&
+                restuadoOrganismoCTitle &&
+                restuadoFechaInicio &&
+                restuadoFechaFin &&
+                restuadolicitador &&
+                restuadoCPV &&
+                restuadoImporteDesde &&
+                restuadoImporteHasta &&
+                restuadoCifLicitador &&
+                restuadoProcedimiento
+            ) {
+                if (award) {
+                    awardValueAmount = award.valueAmount;
                 }
-                awardGroup.set(group.id, group);
-                
-                let indicadorGlobal;
-                if (indicadoresTemp[anyo]) {
-                    indicadorGlobal = indicadoresTemp[anyo];
-                } else {
-                    indicadorGlobal = {
-                        // volAdj: 0,
-                        numAdj: 0,
-                        impAdj: 0,
-                        anyo: anyo,
-                    };
-                    anyos.push(anyo);
-                }
-                // indicadorGlobal.volAdj =
-                indicadorGlobal.numAdj = indicadorGlobal.numAdj + 1;
-                indicadorGlobal.impAdj = indicadorGlobal.impAdj + award.valueAmount;
-                indicadoresTemp[anyo] = indicadorGlobal;
 
-                // gráfico tipo adjudicatario
-                let fistChar = ETIQUETA_TIPO_ENTIDAD.get(award.isSupplierFor.charAt(0));
-                let map = tipoAdjMap.get(fistChar);
-                if (fistChar) {
-                    if (map) {
-                        tipoAdjMap.set(fistChar, map + award.valueAmount);
+                // Tabla de contratos
+                dataSet[posResult] = [
+                    identifier,
+                    nombre,
+                    importePliego,
+                    estado,
+                    categoria,
+                    procedimiento,
+                    organismoCTitle,
+                    licitador,
+                    nlicitadores,
+                    organismoCId,
+                    cifLicitador,
+                    id,
+                    awardValueAmount,
+                    nombreLote,
+                    importeLote,
+                    nombreCompl,
+                    fechaInicio
+                ];
+                posResult = posResult + 1;
+
+                // gráficos adjudicatarios
+                if (award && award.isSupplierFor) {
+                    let group = awardGroup.get(award.isSupplierFor);
+                    if (group) {
+                        group.numAdj = group.numAdj + 1;
+                        group.impAdj = group.impAdj + Number(award.valueAmount);
+
+                        //indicadores
+                        numAward = numAward + 1;
+                        impAward = impAward + award.valueAmount;
                     } else {
-                        tipoAdjMap.set(fistChar, award.valueAmount);
-                    }
-                }
-
-                //indicadores
-                if (procedimiento == INDICADOR_1_TIPO_PROCEDIMIENTO) {
-                    numProc1 = numProc1 + 1;
-                }
-                if (procedimiento == INDICADOR_2_TIPO_PROCEDIMIENTO) {
-                    numProc2 = numProc2 + 1;
-                }
-                numProcTotal = numProcTotal + 1;
-
-                let valueAmount = award.valueAmount;
-                let l = 0;
-                let añadido = false;
-                while (l < diezImpAwardMayor.length && !añadido) {
-                    let impAwardAux = diezImpAwardMayor[l];
-                    if (valueAmount > impAwardAux) {
-                        let impAwardAux2;
-                        let o;
-                        for (o = l; o < diezImpAwardMayor.length; o++) {
-                            diezImpAwardMayor[o] = valueAmount;
-                            if (o + 1 < diezImpAwardMayor.length) {
-                                impAwardAux2 = diezImpAwardMayor[o + 1];
-                                diezImpAwardMayor[o + 1] = impAwardAux;
-                                valueAmount = impAwardAux;
-                                impAwardAux = impAwardAux2;
-                            }
+                        group = {
+                            id: award.isSupplierFor,
+                            numAdj: Number(1),
+                            impAdj: Number(award.valueAmount),
+                        };
+                        if (organizationCol[award.isSupplierFor]) {
+                            group.title = organizationCol[award.isSupplierFor].title;
                         }
-                        añadido = true;
+                        //indicadores
+                        numAward = numAward + 1;
+                        impAward = impAward + award.valueAmount;
                     }
-                    l = l + 1;
-                }
-
-                // Grafico imp org contratante
-                if (organismoCTitle && award.valueAmount) {
-                    let imp = orgContratanteImp.get(organismoCTitle);
-                    if (imp) {
-                        imp = imp + award.valueAmount;
+                    awardGroup.set(group.id, group);
+                    
+                    let indicadorGlobal;
+                    if (indicadoresTemp[anyo]) {
+                        indicadorGlobal = indicadoresTemp[anyo];
                     } else {
-                        imp = Number(award.valueAmount);
+                        indicadorGlobal = {
+                            numAdj: 0,
+                            impAdj: 0,
+                            anyo: anyo,
+                        };
+                        anyos.push(anyo);
                     }
-                    orgContratanteImp.set(organismoCTitle, imp);
-                }
+                    indicadorGlobal.numAdj = indicadorGlobal.numAdj + 1;
+                    indicadorGlobal.impAdj = indicadorGlobal.impAdj + award.valueAmount;
+                    indicadoresTemp[anyo] = indicadorGlobal;
 
-                // Grafico num org contratante
-                if (organismoCTitle) {
-                    let num = orgContratanteNum.get(organismoCTitle);
-                    if (num) {
-                        num = num + 1;
+                    // gráfico tipo adjudicatario
+                    let fistChar = ETIQUETA_TIPO_ENTIDAD.get(award.isSupplierFor.charAt(0));
+                    let map = tipoAdjMap.get(fistChar);
+                    if (fistChar) {
+                        if (map) {
+                            tipoAdjMap.set(fistChar, map + award.valueAmount);
+                        } else {
+                            tipoAdjMap.set(fistChar, award.valueAmount);
+                        }
+                    }
+
+                    //indicadores
+                    if (procedimiento == INDICADOR_1_TIPO_PROCEDIMIENTO) {
+                        numProc1 = numProc1 + 1;
+                    }
+                    if (procedimiento == INDICADOR_2_TIPO_PROCEDIMIENTO) {
+                        numProc2 = numProc2 + 1;
+                    }
+                    numProcTotal = numProcTotal + 1;
+
+                    let valueAmount = award.valueAmount;
+                    let l = 0;
+                    let añadido = false;
+                    while (l < diezImpAwardMayor.length && !añadido) {
+                        let impAwardAux = diezImpAwardMayor[l];
+                        if (valueAmount > impAwardAux) {
+                            let impAwardAux2;
+                            let o;
+                            for (o = l; o < diezImpAwardMayor.length; o++) {
+                                diezImpAwardMayor[o] = valueAmount;
+                                if (o + 1 < diezImpAwardMayor.length) {
+                                    impAwardAux2 = diezImpAwardMayor[o + 1];
+                                    diezImpAwardMayor[o + 1] = impAwardAux;
+                                    valueAmount = impAwardAux;
+                                    impAwardAux = impAwardAux2;
+                                }
+                            }
+                            añadido = true;
+                        }
+                        l = l + 1;
+                    }
+
+                    // Grafico imp org contratante
+                    if (organismoCTitle && award.valueAmount) {
+                        let imp = orgContratanteImp.get(organismoCTitle);
+                        if (imp) {
+                            imp = imp + award.valueAmount;
+                        } else {
+                            imp = Number(award.valueAmount);
+                        }
+                        orgContratanteImp.set(organismoCTitle, imp);
+                    }
+
+                    // Grafico num org contratante
+                    if (organismoCTitle) {
+                        let num = orgContratanteNum.get(organismoCTitle);
+                        if (num) {
+                            num = num + 1;
+                        } else {
+                            num = Number(1);
+                        }
+                        orgContratanteNum.set(organismoCTitle, num);
+                    }
+
+                    // tipo de contratos
+                    let numC = tipoContNum.get(categoria);
+                    if (numC) {
+                        tipoContNum.set(categoria, numC + 1);
                     } else {
-                        num = Number(1);
+                        tipoContNum.set(categoria, 1);
                     }
-                    orgContratanteNum.set(organismoCTitle, num);
+                    let impC = tipoContImp.get(categoria);
+                    if (impC) {
+                        tipoContImp.set(categoria, Number(impC) + Number(award.valueAmount));
+                    } else {
+                        tipoContImp.set(categoria, Number(award.valueAmount));
+                    }
+
+                    let numP = tipoProcNum.get(procedimiento);
+                    if (numP) {
+                        tipoProcNum.set(procedimiento, numP + 1);
+                    } else {
+                        tipoProcNum.set(procedimiento, 1);
+                    }
+                    let impP = tipoProcImp.get(procedimiento);
+                    if (impP) {
+                        tipoProcImp.set(procedimiento, Number(impP) + Number(award.valueAmount));
+                    } else {
+                        tipoProcImp.set(procedimiento, Number(award.valueAmount));
+                    }
                 }
 
-                // tipo de contratos
-                let numC = tipoContNum.get(categoria);
-                if (numC) {
-                    tipoContNum.set(categoria, numC + 1);
-                } else {
-                    tipoContNum.set(categoria, 1);
-                }
-                let impC = tipoContImp.get(categoria);
-                if (impC) {
-                    tipoContImp.set(categoria, Number(impC) + Number(award.valueAmount));
-                } else {
-                    tipoContImp.set(categoria, Number(award.valueAmount));
+                if (tenderEncontrado) {
+                    //indicadores
+                    numTender = numTender + 1;
+                    impTender = Number(impTender) + Number(importePliego);
                 }
 
-                let numP = tipoProcNum.get(procedimiento);
-                if (numP) {
-                    tipoProcNum.set(procedimiento, numP + 1);
-                } else {
-                    tipoProcNum.set(procedimiento, 1);
+                numLot = numLot + 1;
+                impLot = impLot + Number(importePliego);
+
+                if (importePliego < IMPORTE_MENOR_CONTRATOS) {
+                    impLotMenor = impLotMenor + Number(importePliego);
                 }
-                let impP = tipoProcImp.get(procedimiento);
-                if (impP) {
-                    tipoProcImp.set(procedimiento, Number(impP) + Number(award.valueAmount));
-                } else {
-                    tipoProcImp.set(procedimiento, Number(award.valueAmount));
+                if (impLotMayor < importePliego) {
+                    impLotMayor = importePliego;
                 }
             }
-
-            if (tenderEncontrado) {
-                //indicadores
-                numTender = numTender + 1;
-                impTender = Number(impTender) + Number(importePliego);
-            }
-
-            numLot = numLot + 1;
-            impLot = impLot + Number(importePliego);
-
-            if (importePliego < IMPORTE_MENOR_CONTRATOS) {
-                impLotMenor = impLotMenor + Number(importePliego);
-            }
-            if (impLotMayor < importePliego) {
-                impLotMayor = importePliego;
-            }
-
-            // let indicadorGlobal;
-            // if (indicadoresTemp[anyo]) {
-            //     indicadorGlobal = indicadoresTemp[anyo];
-            // } else {
-            //     indicadorGlobal = {
-            //         // volAdj: 0,
-            //         numAdj: 0,
-            //         impAdj: 0,
-            //         anyo: anyo,
-            //     };
-            //     anyos.push(anyo);
-            // }
-            // // indicadorGlobal.volAdj = indicadorGlobal.volAdj + 1;
-            // indicadorGlobal.impAdj = indicadorGlobal.impAdj + award.valueAmount;
-            // indicadoresTemp[anyo] = indicadorGlobal;
         }
     }
 
@@ -1748,37 +1717,18 @@ function creaDatasetTabla(
         simporteMedLicitaciones.format(importeFormato, Math.ceil)
     );
 
-    // let nContratos = numeral(numLot);
-    // $('#numContratos').html(nContratos.format());
-
     let nAdjudicatarios = numeral(numAward);
     $('#numAdjudicatarios').html(nAdjudicatarios.format());
-
-    // let sImporteContratos = numeral(impLot);
-    // $('#importeContratos').html(
-    //     sImporteContratos.format(importeFormatoSinDecimales, Math.ceil)
-    // );
 
     let sImporteAdjudicatarios = numeral(impAward);
     $('#importeAdjudicatarios').html(
         sImporteAdjudicatarios.format(importeFormato, Math.ceil)
     );
 
-    // let simpMedContratos = numeral(impLot / numLot);
-    // $('#importeMedContratos').html(
-    //     simpMedContratos.format(importeFormatoSinDecimales, Math.ceil)
-    // );
-
     let simpMedAdjudicatarios = numeral(impAward / numAward);
     $('#importeMedAdjudicatarios').html(
         simpMedAdjudicatarios.format(importeFormato, Math.ceil)
     );
-
-    /*let sImpLotMenor = numeral((impLotMenor * 100) / impLot);
-        $('#porcentajeContratosMenor').html(sImpLotMenor.format(numFormato, Math.ceil));
-
-        let simpLotMayor = numeral((impLotMayor * 100) / impLot);
-        $('#porcentajeContratosMayor').html(simpLotMayor.format(numFormato, Math.ceil));*/
 
     let pnumProc1 = numeral((numProc1 * 100) / numProcTotal);
     $('#porcentajeProcemimento1').html(pnumProc1.format(numFormato, Math.ceil));
@@ -1808,7 +1758,7 @@ function creaDatasetTabla(
     if(orgContratanteColIzq.length>0) {
         $('#nombreOrgContrMayor').html(orgContratanteColIzq[0].nameCompl);
         let pOrgContrMayor = numeral(
-            (orgContratanteColIzq[0].valueAmountTotal * 100) / impTender
+            (orgContratanteColIzq[0].valueAmountTotal * 100) / impAward
         );
         $('#porcentajeOrgContrMayor').html(
             pOrgContrMayor.format(numFormato, Math.ceil)
@@ -2012,8 +1962,6 @@ function creaDatasetTabla(
     let htmlContentIndAnuales =
         '<div class="row"><div class="col-md-12"><table style="width: 100%;"><tr><th>' +
         anyoCadena +
-        // '</th><th>' +
-        // noSubvencionCadena2 +
         '</th><th>' +
         noBeneficiarioCadena +
         '</th><th>' +
@@ -2024,7 +1972,6 @@ function creaDatasetTabla(
     anyos.sort();
     for (h = 0; h < anyos.length; h++) {
         let anyo = anyos[h];
-        // let volAdj = numeral(indicadoresTemp[anyo].volAdj);
         let numAdj = numeral(indicadoresTemp[anyo].numAdj);
         let impAdj = numeral(indicadoresTemp[anyo].impAdj);
         indicadoresGlobales.push(indicadoresTemp[anyo]);
@@ -2034,9 +1981,6 @@ function creaDatasetTabla(
             '<td>' +
             anyo +
             '</td>' +
-            // '<td>' +
-            // volAdj.format(numFormato, Math.ceil) +
-            // '</td>' +
             '<td>' +
             numAdj.format(numFormato, Math.ceil) +
             '</td>' +
@@ -2139,6 +2083,7 @@ function preparaTablaBuscadorCont(segundaPasada) {
     let copyCadena = '';
     let modificarTablaCadena = '';
     let descargarCadena = '';
+    
 
     identificadorCadena = $.i18n('identidicador');
     expedienteCadena = $.i18n('n_expediente');
@@ -2155,6 +2100,7 @@ function preparaTablaBuscadorCont(segundaPasada) {
     let importeAdjudicadoCadena = $.i18n('importe_adjudicado');
     let nombreLoteCadena = $.i18n('nombre_lote');
     let importeLoteCadena = $.i18n('importe_lote');
+    let fechaInicioCadena = $.i18n('fecha_inicio_licitacion');
 
     copyCadena = $.i18n('copiar');
     modificarTablaCadena = $.i18n('modificar_tabla');
@@ -2192,6 +2138,12 @@ function preparaTablaBuscadorCont(segundaPasada) {
                 title: nombreCadena,
                 render: function (data, type, row) {
                     return row[1];
+                },
+            },
+            {
+                title: fechaInicioCadena,
+                render: function (data, type, row) {
+                    return (Date.parse(row[16])).toString('dd-MM-yyyy');
                 },
             },
             {
@@ -2268,7 +2220,7 @@ function preparaTablaBuscadorCont(segundaPasada) {
                 render: function (data, type, row) {
                     return row[8];
                 },
-            },
+            }
         ],
         dom: '<"row panel-footer"<"col-sm-offset-1 col-sm-5"l><"col-sm-6"B>>rt<"row"<"col-sm-offset-1 col-sm-5"fi><"col-sm-5"p>>',
         buttons: [
@@ -2939,7 +2891,7 @@ function buscar(busquedaInicial) {
                 titleOrgContrBusqueda;
             busquedaTodo = false;
         }
-        idOrgContrBusqueda = organismoCMap.get(titleOrgContrBusqueda);
+        // idOrgContrBusqueda = organismoCMap.get(titleOrgContrBusqueda);
     }
 
     if (fechaInicioBusqueda) {
@@ -3078,7 +3030,7 @@ function buscar(busquedaInicial) {
         categoriaSelec,
         estadosSelec,
         idOrgContrBusqueda,
-        titleOrgContrSelec,
+        orgContrSelec,
         fechaInicioBusqueda,
         fechaFinBusqueda,
         procedimientoSelec,
@@ -3151,6 +3103,9 @@ function pintaGraficoOrgContImp(data, div) {
 
     chart.hiddenState.properties.opacity = 0;
 
+	chart.focusFilter.stroke = am4core.color("#0f0");
+	chart.focusFilter.strokeWidth = 4;
+	
     let categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
     categoryAxis.dataFields.category = 'nameCorto';
     categoryAxis.renderer.grid.template.location = 0;
@@ -3235,6 +3190,9 @@ function pintaGraficoOrgContNum(data, div) {
     chart.language.locale = am4lang_es_ES;
 
     chart.hiddenState.properties.opacity = 0;
+
+    chart.focusFilter.stroke = am4core.color("#0f0");
+	chart.focusFilter.strokeWidth = 4;
 
     let categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
     categoryAxis.dataFields.category = 'nameCorto';
@@ -3458,10 +3416,21 @@ function mostrarDatosOrgContNum() {
 
 function contruyeOrgContImp(value, key) {
     let nameCompl = key;
+    let nameCorto = nameCompl.substring(0, 30);
+    let numIguales = 0;
+    let d;
+    for(d=0;d<orgContratanteColIzq.length;d++) {
+        if(orgContratanteColIzq[d].nameCorto.substring(0, 28) == nameCorto.substring(0, 28)) {
+            numIguales = numIguales + 1;
+        }
+    }
+    if(numIguales!=0) { 
+        nameCorto = nameCompl.substring(0, 28) + '~' + numIguales;
+    }
     let orgContratante = {
         id: organismoCMap.get(nameCompl),
         nameCompl: nameCompl,
-        nameCorto: nameCompl.substring(0, 30),
+        nameCorto: nameCorto,
         valueAmountTotal: value,
     };
     let importe = numeral(orgContratante.valueAmountTotal).format(
@@ -3474,10 +3443,21 @@ function contruyeOrgContImp(value, key) {
 
 function contruyeOrgContNum(value, key) {
     let nameCompl = key;
+    let nameCorto = nameCompl.substring(0, 30);
+    let numIguales = 0;
+    let d;
+    for(d=0;d<orgContratanteColDer.length;d++) {
+        if(orgContratanteColDer[d].nameCorto.substring(0, 28) == nameCorto.substring(0, 28)) {
+            numIguales = numIguales + 1;
+        }
+    }
+    if(numIguales!=0) { 
+        nameCorto = nameCompl.substring(0, 28) + '~' + numIguales;
+    }
     let orgContratante = {
         id: organismoCMap.get(nameCompl),
         nameCompl: nameCompl,
-        nameCorto: nameCompl.substring(0, 30),
+        nameCorto: nameCorto,
         numTotal: Number(value),
     };
     let num = numeral(value).format(numFormatoSinDecimales, Math.ceil);
@@ -3500,6 +3480,17 @@ function contruyeDatasetAdj(value, key) {
 function contruyeAwardImp(value, key) {
     let id = key;
     let nameCompl = organizationCol[key].title;
+    let nameCorto = nameCompl.substring(0, 30);
+    let numIguales = 0;
+    let d;
+    for(d=0;d<awardColIzq.length;d++) {
+        if(awardColIzq[d].nameCorto.substring(0, 28) == nameCorto.substring(0, 28)) {
+            numIguales = numIguales + 1;
+        }
+    }
+    if(numIguales!=0) { 
+        nameCorto = nameCompl.substring(0, 28) + '~' + numIguales;
+    }
     let award = {
         id: id,
         nameCompl: nameCompl,
@@ -3507,7 +3498,7 @@ function contruyeAwardImp(value, key) {
         valueAmountTotal: value,
     };
     if (nameCompl) {
-        award.nameCorto = nameCompl.substring(0, 30);
+        award.nameCorto = nameCorto;
     }
     let importe = numeral(award.valueAmountTotal).format(
         importeFormato,
@@ -3520,6 +3511,17 @@ function contruyeAwardImp(value, key) {
 function contruyeAwardNum(value, key) {
     let id = key;
     let nameCompl = organizationCol[key].title;
+    let nameCorto = nameCompl.substring(0, 30);
+    let numIguales = 0;
+    let d;
+    for(d=0;d<awardColDer.length;d++) {
+        if(awardColDer[d].nameCorto.substring(0, 28) == nameCorto.substring(0, 28)) {
+            numIguales = numIguales + 1;
+        }
+    }
+    if(numIguales!=0) { 
+        nameCorto = nameCompl.substring(0, 28) + '~' + numIguales;
+    }
     let award = {
         id: id,
         nameCompl: nameCompl,
@@ -3527,7 +3529,7 @@ function contruyeAwardNum(value, key) {
         numTotal: Number(value),
     };
     if (nameCompl) {
-        award.nameCorto = nameCompl.substring(0, 30);
+        award.nameCorto = nameCorto;
     }
     let num = numeral(value).format(numFormatoSinDecimales, Math.ceil);
     award.value = num;
@@ -3637,6 +3639,9 @@ function pintaGraficoAwardImp(data, div) {
     chart.data = data;
     chart.language.locale = am4lang_es_ES;
 
+    chart.focusFilter.stroke = am4core.color("#0f0");
+	chart.focusFilter.strokeWidth = 4;
+
     chart.hiddenState.properties.opacity = 0;
 
     let categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
@@ -3720,6 +3725,9 @@ function pintaGraficoAwardNum(data, div) {
     chart.language.locale = am4lang_es_ES;
 
     chart.hiddenState.properties.opacity = 0;
+
+    chart.focusFilter.stroke = am4core.color("#0f0");
+	chart.focusFilter.strokeWidth = 4;
 
     let categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
     categoryAxis.dataFields.category = 'nameCorto';
@@ -3924,6 +3932,9 @@ function pintaGraficoTipAdj(data, div) {
     chart.dataFields.value = 'importe';
     chart.dataFields.name = 'tipo';
 
+    chart.focusFilter.stroke = am4core.color("#0f0");
+	chart.focusFilter.strokeWidth = 4;
+
     let level1 = chart.seriesTemplates.create('0');
     let level1_column = level1.columns.template;
 
@@ -3993,14 +4004,6 @@ function pintaGraficoTipAdj(data, div) {
         ];
     }
 
-	/*
-    if (!inIframe()) {
-        let h = window.innerHeight;
-        h = h - $('.panel-heading').height() * 4;
-        let p = porcentaje(h, 88);
-        $('#'+div).height(p);
-    }
-	*/
 }
 
 function contruyeTipAdjImp(value, key) {
@@ -4061,6 +4064,9 @@ function pintaGraficoTipoContNum(importesTipos, div) {
     chart.data = importesTipos;
     chart.language.locale = am4lang_es_ES;
 
+	chart.focusFilter.stroke = am4core.color("#0f0");
+	chart.focusFilter.strokeWidth = 4;
+
     let series = chart.series.push(new am4charts.PieSeries());
     series.dataFields.value = 'value';
     series.dataFields.category = 'name';
@@ -4098,15 +4104,6 @@ function pintaGraficoTipoContNum(importesTipos, div) {
             },
         ];
     }
-
-	/*
-    if (!inIframe()) {
-        let h = window.innerHeight;
-        h = h - $('.panel-heading').height() * 4;
-        let p = porcentaje(h, 88);
-        $('#chartTipoContNum').height(p);
-    }
-	*/
 }
 
 /*
@@ -4166,6 +4163,9 @@ function pintaGraficoTipoContImp(importesTipos, div) {
     series.labels.template.disabled = true;
     series.ticks.template.disabled = true;
 
+    chart.focusFilter.stroke = am4core.color("#0f0");
+	chart.focusFilter.strokeWidth = 4;
+
     chart.legend = new am4charts.Legend();
     chart.legend.position = 'bottom';
     chart.legend.labels.template.maxWidth = 120;
@@ -4196,15 +4196,6 @@ function pintaGraficoTipoContImp(importesTipos, div) {
             },
         ];
     }
-
-	/*
-    if (!inIframe()) {
-        let h = window.innerHeight;
-        h = h - $('.panel-heading').height() * 4;
-        let p = porcentaje(h, 88);
-        $('#chartTipoContImp').height(p);
-    }
-	*/
 }
 
 /*
@@ -4264,6 +4255,9 @@ function pintaGraficoTipoProcNum(importesTipos, div) {
     series.labels.template.disabled = true;
     series.ticks.template.disabled = true;
 
+    chart.focusFilter.stroke = am4core.color("#0f0");
+	chart.focusFilter.strokeWidth = 4;
+
     chart.legend = new am4charts.Legend();
     chart.legend.position = 'bottom';
     chart.legend.labels.template.maxWidth = 120;
@@ -4294,15 +4288,6 @@ function pintaGraficoTipoProcNum(importesTipos, div) {
             },
         ];
     }
-
-	/*
-    if (!inIframe()) {
-        let h = window.innerHeight;
-        h = h - $('.panel-heading').height() * 4;
-        let p = porcentaje(h, 88);
-        $('#chartTipoProcNum').height(p);
-    }
-	*/
 }
 
 /*
@@ -4362,6 +4347,9 @@ function pintaGraficoTipoProcImp(importesTipos, div) {
     series.labels.template.disabled = true;
     series.ticks.template.disabled = true;
 
+    chart.focusFilter.stroke = am4core.color("#0f0");
+	chart.focusFilter.strokeWidth = 4;
+
     chart.legend = new am4charts.Legend();
     chart.legend.position = 'bottom';
     chart.legend.labels.template.maxWidth = 120;
@@ -4392,15 +4380,6 @@ function pintaGraficoTipoProcImp(importesTipos, div) {
             },
         ];
     }
-
-	/*
-    if (!inIframe()) {
-        let h = window.innerHeight;
-        h = h - $('.panel-heading').height() * 4;
-        let p = porcentaje(h, 88);
-        $('#chartTipoProcImp').height(p);
-    }
-	*/
 }
 
 /*
@@ -4594,22 +4573,13 @@ function pintaIndicadoresGlobales(indicadoresGlobales, div) {
     chart.language.locale._decimalSeparator = ',';
     chart.language.locale._thousandSeparator = '.';
 
+    chart.focusFilter.stroke = am4core.color("#0f0");
+	chart.focusFilter.strokeWidth = 4;
+    
     let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
     categoryAxis.dataFields.category = 'anyo';
     categoryAxis.renderer.opposite = true;
     categoryAxis.title.text = anyoCadena2;
-
-    // let valueAxis1 = chart.yAxes.push(new am4charts.ValueAxis());
-    // valueAxis1.title.text = noSubvencionCadena2;
-    // let series1 = chart.series.push(new am4charts.LineSeries());
-    // series1.dataFields.valueY = 'volAdj';
-    // series1.dataFields.categoryX = 'anyo';
-    // series1.name = noSubvencionCadena2;
-    // series1.yAxis = valueAxis1;
-    // series1.strokeWidth = 3;
-    // series1.bullets.push(new am4charts.CircleBullet());
-    // series1.tooltipText = '{name} en {categoryX}: {valueY}';
-    // series1.legendSettings.valueText = '{valueY}';
 
     let valueAxis2 = chart.yAxes.push(new am4charts.ValueAxis());
     let series2 = chart.series.push(new am4charts.LineSeries());

@@ -541,6 +541,9 @@ function pintaGráficoNumContratos(data1) {
     chart.data = data1;
     chart.language.locale = am4lang_es_ES;
 
+    chart.focusFilter.stroke = am4core.color("#0f0");
+	chart.focusFilter.strokeWidth = 4;
+
     let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
     categoryAxis.dataFields.category = "anyoIndicador";
     categoryAxis.renderer.grid.template.location = 0;
@@ -575,6 +578,9 @@ function pintaGráficoImpContratos(data2) {
     chart.data = data2;
     chart.language.locale = am4lang_es_ES;
 
+    chart.focusFilter.stroke = am4core.color("#0f0");
+	chart.focusFilter.strokeWidth = 4;
+    
     let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
     categoryAxis.dataFields.category = "anyoIndicador";
     categoryAxis.renderer.grid.template.location = 0;
@@ -627,6 +633,7 @@ function creaDatasetTabla(organismoCIdBusqueda, anyoBusqueda, estadoBusqueda) {
         let orgContratante = {
             importePliego: 0,
         };
+        let procedimiento = "";
 
         if (anyoBusqueda) {
             resultadoAnyo = false;
@@ -670,6 +677,9 @@ function creaDatasetTabla(organismoCIdBusqueda, anyoBusqueda, estadoBusqueda) {
             if (tenderCol[processCol[i].hasTender].valueAmount) {
                 importePliego = tenderCol[processCol[i].hasTender].valueAmount;
                 orgContratante.importePliego = importePliego;
+            }
+            if (tenderCol[processCol[i].hasTender].procurementMethod) {
+                procedimiento = tenderCol[processCol[i].hasTender].procurementMethod;
             }
         }
 
@@ -753,7 +763,8 @@ function creaDatasetTabla(organismoCIdBusqueda, anyoBusqueda, estadoBusqueda) {
                         nombreLote,
                         importeLote,
                         importeAdj,
-                        nombreCompl
+                        nombreCompl,
+                        procedimiento
                     ];
                     posResult = posResult + 1;
                     insertado = true;
@@ -777,7 +788,8 @@ function creaDatasetTabla(organismoCIdBusqueda, anyoBusqueda, estadoBusqueda) {
                 nombreLote,
                 importeLote,
                 importeAdj,
-                nombreCompl
+                nombreCompl,
+                procedimiento
             ];
             posResult = posResult + 1;
             numContratosTotal = numContratosTotal + 1;
@@ -823,6 +835,7 @@ function preparaTablaFichaOrgCont(segundaPasada) {
     let importeLoteCadena = $.i18n("importe_lote");
     let importeAdjCadena = $.i18n("importe_adjudicado");
     let showHideCadena = $.i18n("Oculta columnas");
+    let procedimientoCadena = $.i18n('procedimiento');
 
     copyCadena = $.i18n("copiar");
     let urlLanguaje = "vendor/datatables/i18n/" + $.i18n().locale + ".json";
@@ -907,6 +920,12 @@ function preparaTablaFichaOrgCont(segundaPasada) {
                 },
             },
             {
+                title: procedimientoCadena,
+                render: function (data, type, row) {
+                    return ETIQUETA_TIP_PROC.get(row[13]);
+                },
+            },
+            {
                 title: adjudicatarioCadena,
                 render: function (data, type, row) {
                     return (
@@ -928,7 +947,7 @@ function preparaTablaFichaOrgCont(segundaPasada) {
                 render: function (data, type, row) {
                     return row[7];
                 },
-            },
+            }
         ],
 		dom: '<"row panel-footer"<"col-sm-offset-1 col-sm-5"l><"col-sm-5"B>>rt<"row"<"col-sm-offset-1 col-sm-5"fi><"col-sm-5"p>>',
         buttons: [

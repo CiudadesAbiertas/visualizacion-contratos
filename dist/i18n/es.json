@@ -219,6 +219,7 @@
     "n_contratos_procedimiento" : "Nº contratos por procedimiento",
     "adjudicatarios_mayusculas" : "ADJUDICACIONES",
     "importe_adjudicatarios_2" : "Importe adjudicado",
-    "importe_medio_adjudicatarios" : "Importe medio adjudicaciones"
+    "importe_medio_adjudicatarios" : "Importe medio adjudicaciones",
+    "fecha_inicio_licitacion" : "fecha de inicio de licitación"
 
 }

@@ -219,5 +219,6 @@
     "n_contratos_procedimiento" : "[GL]Nº contratos por procedimiento",
     "adjudicatarios_mayusculas" : "[GL]ADJUDICACIONES",
     "importe_adjudicatarios_2" : "[GL]Importe adjudicado",
-    "importe_medio_adjudicatarios" : "[GL]Importe medio adjudicaciones"
+    "importe_medio_adjudicatarios" : "[GL]Importe medio adjudicaciones",
+    "fecha_inicio_licitacion" : "[GL]fecha de inicio de licitación"
 }

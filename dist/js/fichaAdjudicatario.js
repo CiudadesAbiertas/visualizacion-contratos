@@ -609,6 +609,9 @@ function pintaGrafico(data1) {
     chart.data = data1;
     chart.language.locale = am4lang_es_ES;
 
+    chart.focusFilter.stroke = am4core.color("#0f0");
+	chart.focusFilter.strokeWidth = 4;
+
     let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
     categoryAxis.dataFields.category = "anyoIndicador";
     categoryAxis.renderer.inversed = true;
@@ -643,6 +646,9 @@ function pintaGrafico2(data2) {
     let chart = am4core.create("chartdivTree2", am4charts.XYChart);
     chart.data = data2;
     chart.language.locale = am4lang_es_ES;
+
+    chart.focusFilter.stroke = am4core.color("#0f0");
+	chart.focusFilter.strokeWidth = 4;
 
     let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
     categoryAxis.dataFields.category = "anyoIndicador";
@@ -1324,6 +1330,9 @@ function pintaGrafico3(data) {
     chart.data = data;
     chart.language.locale = am4lang_es_ES;
 
+    chart.focusFilter.stroke = am4core.color("#0f0");
+	chart.focusFilter.strokeWidth = 4;
+
     let series = chart.series.push(new am4charts.PieSeries());
     series.dataFields.value = "value";
     series.dataFields.category = "nameCorto";
@@ -1358,6 +1367,9 @@ function pintaGrafico4(data) {
     chart.data = data;
     chart.language.locale = am4lang_es_ES;
 
+    chart.focusFilter.stroke = am4core.color("#0f0");
+	chart.focusFilter.strokeWidth = 4;
+    
     let series = chart.series.push(new am4charts.PieSeries());
     series.dataFields.value = "value";
     series.dataFields.category = "name";
