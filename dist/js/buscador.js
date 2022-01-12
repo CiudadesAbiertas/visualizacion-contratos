@@ -24,10 +24,10 @@ var peticionesIniciales = [
     false,
     false,
     false,
-    false,
-    false,
-    false,
-    false,
+    true,
+    true,
+    true,
+    true,
 ];
 
 /*  Variables para almacenar la información de contratos */
@@ -78,138 +78,32 @@ Función de inicialización del script
 */
 function inicializaBuscador() {
     if (LOG_DEGUB_BUSCADOR) {
-        console.log('inicializaBuscador');
+        console.log('INFO inicializaBuscador');
     }
 
+    
     inicializaMultidiomaBuscador();
-}
-
-/* 
-Función para inicializar el multidioma
-*/
-function inicializaMultidiomaBuscador() {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('inicializaMultidiomaBuscador');
-    }
-    let langUrl = getUrlVars()['lang'];
-    if (!langUrl) {
-        langUrl = 'es';
-    }
-    $.i18n().locale = langUrl;
-    document.documentElement.lang = $.i18n().locale;
-    $('html').i18n();
-
-    jQuery(function ($) {
-        $.i18n()
-            .load({
-                en: './dist/i18n/en.json',
-                es: './dist/i18n/es.json',
-                gl: './dist/i18n/gl.json',
-            })
-            .done(function () {
-                $('html').i18n();
-                $('#modalIndAnuales').modal('hide');
-                inicializaHTMLBuscador();
-                preparaTablaBuscadorCont();
-                preparaTablaBuscadorAdj();
-            });
-    });
-
-    $.i18n.debug = LOG_DEGUB_BUSCADOR;
-}
-
-/*
-Función que invoca a todas las funciones que se realizan al inicializar el script
-*/
-function inicializaHTMLBuscador() {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('inicializaHTMLBuscador');
-    }
-
-    camposFecha();
-    if (!INDICADOR_1) {
-        $('#indicador1').hide();
-    }
-    if (!INDICADOR_2) {
-        $('#indicador2').hide();
-    }
-    if (!INDICADOR_3) {
-        $('#indicador3').hide();
-    }
-    if (!INDICADOR_4) {
-        $('#indicador4').hide();
-    }
     inicializaDatos();
-    $('#buscarListado').click(function () {
-        $("#modalCargaInicial").modal("show");
-        buscar();
-        this.blur();
-    });
 }
 
-/*
-Función que inicializa los botones de fecha
-*/
-function camposFecha() {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('camposFecha');
-    }
 
-    $(function () {
-        $('#buscadorDesdeFecha, #buscadorHastaFecha').datepicker({
-            showButtonPanel: false,
-            dateFormat: 'dd/mm/yy',
-        });
-
-        $('#botonDesde').click(function () {
-            if ($('#buscadorDesdeFecha').datepicker('widget').is(':visible')) {
-                $('#buscadorDesdeFecha').datepicker('hide');
-            } else {
-                $('#buscadorDesdeFecha').datepicker('show');
-            }
-        });
-
-        $('#botonHasta').click(function () {
-            if ($('#buscadorHastaFecha').datepicker('widget').is(':visible')) {
-                $('#buscadorHastaFecha').datepicker('hide');
-            } else {
-                $('#buscadorHastaFecha').datepicker('show');
-            }
-        });
-    });
-}
 
 /*
 Función que iniciliza los datos que dependen de la API
 */
 function inicializaDatos() {
     if (LOG_DEGUB_BUSCADOR) {
-        console.log('inicializaDatos');
+        console.log('INFO inicializaDatos');
     }
 
     obtieneDatosAPIProcess(dameURL(PROCESS_URL_1 + PROCESS_URL_2));
-    obtieneDatosAPIOrganization(dameURL(ORGANIZATION_URL_1 + ORGANIZATION_URL_2));
     obtieneDatosAPITender(dameURL(TENDER_URL_1 + TENDER_URL_2));
+    obtieneDatosAPILot(dameURL(LOT_URL_1 + LOT_URL_2));	
+    obtieneDatosAPIOrganization(dameURL(ORGANIZATION_URL_1 + ORGANIZATION_URL_2));
     obtieneDatosAPIAward(dameURL(AWARD_URL_1 + AWARD_URL_2));
+
     obtieneDatosAPIItem(dameURL(ITEM_URL_1 + ITEM_URL_2));
-    obtieneDatosAPITenderRelItem(
-        dameURL(TENDER_REL_ITEM_URL_1 + TENDER_REL_ITEM_URL_2)
-    );
-    obtieneDatosAPICategory(
-        dameURL(TENDER_DISTINCT_URL_1 + TENDER_DISTINCT_URL_2 + CATEGORY)
-    );
-    obtieneDatosAPIStatus(
-        dameURL(TENDER_DISTINCT_URL_1 + TENDER_DISTINCT_URL_2 + STATUS)
-    );
-    obtieneDatosAPIOrganismoCId(
-        dameURL(PROCESS_DISTINCT_URL_1 + PROCESS_DISTINCT_URL_2 + IS_BUYER_FOR)
-    );
-    obtieneDatosAPIProcedimiento(
-        dameURL(
-            TENDER_DISTINCT_URL_1 + TENDER_DISTINCT_URL_2 + PROCUREMENT_METHOD_DETAILS
-        )
-    );
-    obtieneDatosAPILot(dameURL(LOT_URL_1 + LOT_URL_2));
+    obtieneDatosAPITenderRelItem(dameURL(TENDER_REL_ITEM_URL_1 + TENDER_REL_ITEM_URL_2));
 }
 
 /*
@@ -217,7 +111,7 @@ Función que iniciliza los datos que dependen de la API
 */
 function obtieneDatosAPIProcess(url) {
     if (LOG_DEGUB_BUSCADOR) {
-        console.log('obtieneDatosAPIProcess | ' + url);
+        console.log('INFO obtieneDatosAPIProcess | ' + url);
     }
     $.getJSON(dameURL(url))
         .done(function (data) {
@@ -261,43 +155,9 @@ function obtieneDatosAPIProcess(url) {
 /*
 Función que iniciliza los datos que dependen de la API
 */
-function obtieneDatosAPIOrganization(url) {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('obtieneDatosAPIOrganization | ' + url);
-    }
-    $.getJSON(dameURL(url))
-        .done(function (data) {
-            if (data && data.records && data.records.length) {
-                let i;
-                for (i = 0; i < data.records.length; i++) {
-                    let organization = {
-                        id: data.records[i].id,
-                        title: data.records[i].title,
-                    };
-
-                    organizationCol[organization.id] = organization;
-                }
-                if (data.next) {
-                    obtieneDatosAPIOrganization(dameURL(data.next));
-                } else {
-                    modificaPeticionesInicialesr(1);
-                }
-            } else {
-                console.log(MSG_ERROR_API_RES_VACIO);
-            }
-        })
-        .fail(function (jqxhr, textStatus, error) {
-            let err = textStatus + ', ' + error;
-            console.error('Request Failed: ' + err);
-        });
-}
-
-/*
-Función que iniciliza los datos que dependen de la API
-*/
 function obtieneDatosAPITender(url) {
     if (LOG_DEGUB_BUSCADOR) {
-        console.log('obtieneDatosAPITender | ' + url);
+        console.log('INFO obtieneDatosAPITender | ' + url);
     }
 
     $.getJSON(dameURL(url))
@@ -334,7 +194,7 @@ function obtieneDatosAPITender(url) {
                 if (data.next) {
                     obtieneDatosAPITender(dameURL(data.next));
                 } else {
-                    modificaPeticionesInicialesr(2);
+                    modificaPeticionesInicialesr(1);
                 }
             } else {
                 console.log(MSG_ERROR_API_RES_VACIO);
@@ -344,271 +204,6 @@ function obtieneDatosAPITender(url) {
             let err = textStatus + ', ' + error;
             console.error('Request Failed: ' + err);
         });
-}
-
-/*
-Función que iniciliza los datos que dependen de la API
-*/
-function obtieneDatosAPIAward(url) {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('obtieneDatosAPIAward | ' + url);
-    }
-    $.getJSON(dameURL(url))
-        .done(function (data) {
-            if (data && data.records && data.records.length) {
-                let i;
-                for (i = 0; i < data.records.length; i++) {
-                    let award = {
-                        id: data.records[i].id,
-                        isSupplierFor: data.records[i].isSupplierFor,
-                        awardDate: data.records[i].awardDate,
-                        valueAmount: data.records[i].valueAmount,
-                        description: data.records[i].description,
-                    };
-                    awardCol[award.id] = award;
-                }
-                if (data.next) {
-                    obtieneDatosAPIAward(dameURL(data.next));
-                } else {
-                    modificaPeticionesInicialesr(6);
-                }
-            } else {
-                console.log(MSG_ERROR_API_RES_VACIO);
-            }
-        })
-        .fail(function (jqxhr, textStatus, error) {
-            let err = textStatus + ', ' + error;
-            console.error('Request Failed: ' + err);
-        });
-}
-
-/*
-Función que iniciliza los datos que dependen de la API
-*/
-function obtieneDatosAPIItem(url) {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('obtieneDatosAPIItem | ' + url);
-    }
-    $.getJSON(dameURL(url))
-        .done(function (data) {
-            if (data && data.records && data.records.length) {
-                let i;
-                for (i = 0; i < data.records.length; i++) {
-                    let item = {
-                        id: data.records[i].id,
-                        hasClassification: data.records[i].hasClassification,
-                        description: data.records[i].description,
-                    };
-                    itemCol[item.id] = item;
-                }
-                if (data.next) {
-                    obtieneDatosAPIItem(dameURL(data.next));
-                } else {
-                    modificaPeticionesInicialesr(7);
-                }
-            } else {
-                console.log(MSG_ERROR_API_RES_VACIO);
-            }
-        })
-        .fail(function (jqxhr, textStatus, error) {
-            let err = textStatus + ', ' + error;
-            console.error('Request Failed: ' + err);
-        });
-}
-
-/*
-Función que iniciliza los datos que dependen de la API
-*/
-function obtieneDatosAPITenderRelItem(url) {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('obtieneDatosAPITenderRelItem | ' + url);
-    }
-    $.getJSON(dameURL(url))
-        .done(function (data) {
-            if (data && data.records && data.records.length) {
-                let i;
-                for (i = 0; i < data.records.length; i++) {
-                    let tenderRelItem = {
-                        id: data.records[i].id,
-                        tender: data.records[i].tender,
-                        item: data.records[i].item,
-                    };
-                    let tenderRelItemAux = [];
-                    if (tenderRelItemCol[tenderRelItem.tender]) {
-                        tenderRelItemAux = tenderRelItemCol[tenderRelItem.tender];
-                    }
-                    tenderRelItemAux.push(tenderRelItem);
-                    tenderRelItemCol[tenderRelItem.tender] = tenderRelItemAux;
-                }
-                if (data.next) {
-                    obtieneDatosAPITenderRelItem(dameURL(data.next));
-                } else {
-                    modificaPeticionesInicialesr(8);
-                }
-            } else {
-                console.log(MSG_ERROR_API_RES_VACIO);
-            }
-        })
-        .fail(function (jqxhr, textStatus, error) {
-            let err = textStatus + ', ' + error;
-            console.error('Request Failed: ' + err);
-        });
-}
-
-/*
-Función que iniciliza los datos que dependen de la API
-*/
-function obtieneDatosAPICategory(url) {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('obtieneDatosAPICategory | ' + url);
-    }
-    $.getJSON(dameURL(url))
-        .done(function (data) {
-            if (data && data.records && data.records.length) {
-                let i;
-                for (i = 0; i < data.records.length; i++) {
-                    categoryCol.push(data.records[i]);
-                }
-                if (data.next) {
-                    obtieneDatosAPICategory(dameURL(data.next));
-                } else {
-                    modificaPeticionesInicialesr(3);
-                }
-            } else {
-                console.log(MSG_ERROR_API_RES_VACIO);
-            }
-        })
-        .fail(function (jqxhr, textStatus, error) {
-            let err = textStatus + ', ' + error;
-            console.error('Request Failed: ' + err);
-        });
-}
-
-function obtieneDatosAPIStatus(url) {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('obtieneDatosAPIStatus | ' + url);
-    }
-    $.getJSON(dameURL(url))
-        .done(function (data) {
-            if (data && data.records && data.records.length) {
-                let i;
-                for (i = 0; i < data.records.length; i++) {
-                    statusCol.push(data.records[i]);
-                }
-                if (data.next) {
-                    obtieneDatosAPIStatus(dameURL(data.next));
-                } else {
-                    modificaPeticionesInicialesr(4);
-                }
-            } else {
-                console.log(MSG_ERROR_API_RES_VACIO);
-            }
-        })
-        .fail(function (jqxhr, textStatus, error) {
-            let err = textStatus + ', ' + error;
-            console.error('Request Failed: ' + err);
-        });
-}
-
-/*
-Función que iniciliza los datos que dependen de la API
-*/
-function obtieneDatosAPIProcedimiento(url) {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('obtieneDatosAPIProcedimiento | ' + url);
-    }
-    $.getJSON(dameURL(url))
-        .done(function (data) {
-            if (data && data.records && data.records.length) {
-                let i;
-                for (i = 0; i < data.records.length; i++) {
-                    procedimientoCol.push(data.records[i]);
-                }
-                if (data.next) {
-                    obtieneDatosAPIProcedimiento(dameURL(data.next));
-                } else {
-                    modificaPeticionesInicialesr(9);
-                }
-            } else {
-                console.log(MSG_ERROR_API_RES_VACIO);
-            }
-        })
-        .fail(function (jqxhr, textStatus, error) {
-            let err = textStatus + ', ' + error;
-            console.error('Request Failed: ' + err);
-        });
-}
-
-/*
-Función que iniciliza los datos que dependen de la API
-*/
-function obtieneDatosAPIOrganismoCId(url) {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('obtieneDatosAPIOrganismoCId | ' + url);
-    }
-    $.getJSON(dameURL(url))
-        .done(function (data) {
-            if (data && data.records && data.records.length) {
-                let i;
-                for (i = 0; i < data.records.length; i++) {
-                    organismoCIdCol.push(data.records[i]);
-                }
-                if (data.next) {
-                    obtieneDatosAPIOrganismoCId(dameURL(data.next));
-                } else {
-                    modificaPeticionesInicialesr(4);
-                    obtieneDatosAPIOrganismoCTitle();
-                }
-            } else {
-                console.log(MSG_ERROR_API_RES_VACIO);
-            }
-        })
-        .fail(function (jqxhr, textStatus, error) {
-            let err = textStatus + ', ' + error;
-            console.error('Request Failed: ' + err);
-        });
-}
-
-/*
-Función que iniciliza los datos que dependen de la API
-*/
-function obtieneDatosAPIOrganismoCTitle() {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('obtieneDatosAPIOrganismoCTitle');
-    }
-    let h;
-    for (h = 0; h < organismoCIdCol.length; h++) {
-        let organismoCId = organismoCIdCol[h];
-
-        $.getJSON(
-            dameURL(ORGANIZATION_URL_1 + '/' + organismoCId + ORGANIZATION_URL_2)
-        )
-            .done(function (data) {
-                if (data && data.records && data.records.length) {
-                    let i;
-                    for (i = 0; i < data.records.length; i++) {
-                        let orgCon = {
-                            title : data.records[i].title,
-                            titleClean : quitarAcentos(data.records[i].title)
-                        }
-                        organismoCIdTitleCol.push(orgCon);
-                        organismoCMap.set(data.records[i].title, data.records[i].id);
-                    }
-                    if (data.next) {
-                        obtieneDatosAPIOrganismoCId(dameURL(data.next));
-                    } else {
-                        modificaPeticionesInicialesr(5);
-                    }
-                } else {
-                    console.log(MSG_ERROR_API_RES_VACIO);
-                }
-            })
-            .fail(function (jqxhr, textStatus, error) {
-                let err = textStatus + ', ' + error;
-                console.error('Request Failed: ' + err);
-            });
-    }
-    organismoCIdTitleCol.sort(compareTitle);
 }
 
 /*
@@ -616,7 +211,7 @@ Función que iniciliza los datos que dependen de la API
 */
 function obtieneDatosAPILot(url) {
     if (LOG_DEGUB_BUSCADOR) {
-        console.log('obtieneDatosAPILot | ' + url);
+        console.log('INFO obtieneDatosAPILot | ' + url);
     }
     $.getJSON(dameURL(url))
         .done(function (data) {
@@ -641,7 +236,7 @@ function obtieneDatosAPILot(url) {
                 if (data.next) {
                     obtieneDatosAPILot(dameURL(data.next));
                 } else {
-                    modificaPeticionesInicialesr(10);
+                    modificaPeticionesInicialesr(2);
                 }
             } else {
                 console.log(MSG_ERROR_API_RES_VACIO);
@@ -654,11 +249,157 @@ function obtieneDatosAPILot(url) {
 }
 
 /*
+Función que iniciliza los datos que dependen de la API
+*/
+function obtieneDatosAPIOrganization(url) {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO obtieneDatosAPIOrganization | ' + url);
+    }
+    $.getJSON(dameURL(url))
+        .done(function (data) {
+            if (data && data.records && data.records.length) {
+                let i;
+                for (i = 0; i < data.records.length; i++) {
+                    let organization = {
+                        id: data.records[i].id,
+                        title: data.records[i].title,
+                    };
+
+                    organizationCol[organization.id] = organization;
+                }
+                if (data.next) {
+                    obtieneDatosAPIOrganization(dameURL(data.next));
+                } else {
+                    modificaPeticionesInicialesr(3);
+                }
+            } else {
+                console.log(MSG_ERROR_API_RES_VACIO);
+            }
+        })
+        .fail(function (jqxhr, textStatus, error) {
+            let err = textStatus + ', ' + error;
+            console.error('Request Failed: ' + err);
+        });
+}
+
+
+
+/*
+Función que iniciliza los datos que dependen de la API
+*/
+function obtieneDatosAPIAward(url) {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO obtieneDatosAPIAward | ' + url);
+    }
+    $.getJSON(dameURL(url))
+        .done(function (data) {
+            if (data && data.records && data.records.length) {
+                let i;
+                for (i = 0; i < data.records.length; i++) {
+                    let award = {
+                        id: data.records[i].id,
+                        isSupplierFor: data.records[i].isSupplierFor,
+                        awardDate: data.records[i].awardDate,
+                        valueAmount: data.records[i].valueAmount,
+                        description: data.records[i].description,
+                    };
+                    awardCol[award.id] = award;
+                }
+                if (data.next) {
+                    obtieneDatosAPIAward(dameURL(data.next));
+                } else {
+                    modificaPeticionesInicialesr(4);
+                }
+            } else {
+                console.log(MSG_ERROR_API_RES_VACIO);
+            }
+        })
+        .fail(function (jqxhr, textStatus, error) {
+            let err = textStatus + ', ' + error;
+            console.error('Request Failed: ' + err);
+        });
+}
+
+/*
+Función que iniciliza los datos que dependen de la API
+*/
+function obtieneDatosAPIItem(url) {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO obtieneDatosAPIItem | ' + url);
+    }
+    $.getJSON(dameURL(url))
+        .done(function (data) {
+            if (data && data.records && data.records.length) {
+                let i;
+                for (i = 0; i < data.records.length; i++) {
+                    let item = {
+                        id: data.records[i].id,
+                        hasClassification: data.records[i].hasClassification,
+                        description: data.records[i].description,
+                    };
+                    itemCol[item.id] = item;
+                }
+                if (data.next) {
+                    obtieneDatosAPIItem(dameURL(data.next));
+                } else {
+                    modificaPeticionesInicialesr(5);
+                }
+            } else {
+                console.log(MSG_ERROR_API_RES_VACIO);
+            }
+        })
+        .fail(function (jqxhr, textStatus, error) {
+            let err = textStatus + ', ' + error;
+            console.error('Request Failed: ' + err);
+        });
+}
+
+/*
+Función que iniciliza los datos que dependen de la API
+*/
+function obtieneDatosAPITenderRelItem(url) {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO obtieneDatosAPITenderRelItem | ' + url);
+    }
+    $.getJSON(dameURL(url))
+        .done(function (data) {
+            if (data && data.records && data.records.length) {
+                let i;
+                for (i = 0; i < data.records.length; i++) {
+                    let tenderRelItem = {
+                        id: data.records[i].id,
+                        tender: data.records[i].tender,
+                        item: data.records[i].item,
+                    };
+                    let tenderRelItemAux = [];
+                    if (tenderRelItemCol[tenderRelItem.tender]) {
+                        tenderRelItemAux = tenderRelItemCol[tenderRelItem.tender];
+                    }
+                    tenderRelItemAux.push(tenderRelItem);
+                    tenderRelItemCol[tenderRelItem.tender] = tenderRelItemAux;
+                }
+                if (data.next) {
+                    obtieneDatosAPITenderRelItem(dameURL(data.next));
+                } else {
+                    modificaPeticionesInicialesr(6);
+                }
+            } else {
+                console.log(MSG_ERROR_API_RES_VACIO);
+            }
+        })
+        .fail(function (jqxhr, textStatus, error) {
+            let err = textStatus + ', ' + error;
+            console.error('Request Failed: ' + err);
+        });
+}
+
+
+/*
 Funcion que modifica un attributo del objeto taskmaster del padre (si existe)
 */
 function modificaPeticionesInicialesr(attr) {
     if (LOG_DEGUB_BUSCADOR) {
-        console.log('modificaPeticionesInicialesr | ' + attr);
+        console.log('INFO modificaPeticionesInicialesr | ' + attr);
     }
     if (peticionesIniciales) {
         peticionesIniciales[attr] = true;
@@ -671,7 +412,7 @@ Funcion que chequea el objecto peticionesIniciales
 */
 function checkPeticionesIniciales() {
     if (LOG_DEGUB_BUSCADOR) {
-        console.log('checkPeticionesIniciales');
+        console.log('INFO checkPeticionesIniciales');
     }
 
     if (!peticionesIniciales) {
@@ -714,7 +455,7 @@ function checkPeticionesIniciales() {
 
     setTimeout(function () {
         insertaDatosIniciales();
-    }, 500);
+    }, 0);
 }
 
 /*
@@ -722,7 +463,7 @@ Inserta en la página web los datos obtenidos de la API
 */
 function insertaDatosIniciales() {
     if (LOG_DEGUB_BUSCADOR) {
-        console.log('insertaDatosIniciales');
+        console.log('INFO insertaDatosIniciales');
     }
 
     ETIQUETA_TIP_CONT.forEach((value, key) => {
@@ -811,6 +552,1915 @@ function insertaDatosIniciales() {
 /*
 Crea una estractura que será insertada en la tabla de la página web
 */
+
+
+
+/* 
+Función para inicializar el multidioma
+*/
+function inicializaMultidiomaBuscador() {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO inicializaMultidiomaBuscador');
+    }
+    let langUrl = getUrlVars()['lang'];
+    if (!langUrl) {
+        langUrl = 'es';
+    }
+    $.i18n().locale = langUrl;
+    document.documentElement.lang = $.i18n().locale;
+    $('html').i18n();
+
+    jQuery(function ($) {
+        $.i18n()
+            .load({
+                es: "dist/i18n/es.json",
+                en: "dist/i18n/en.json",
+                gl: "dist/i18n/gl.json",
+            })
+            .done(function () {
+                $('html').i18n();
+                //$('#modalIndAnuales').modal('hide');
+                inicializaDatosFiltrosDatos()
+				inicializaHTMLBuscador();
+                preparaTablaBuscadorCont();
+                preparaTablaBuscadorAdj();
+            });
+    });
+
+    $.i18n.debug = LOG_DEGUB_BUSCADOR;
+}
+
+/*
+Función que iniciliza los datos que dependen de la API
+*/
+function inicializaDatosFiltrosDatos() {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO inicializaDatosFiltrosDatos');
+    }
+	
+    obtieneDatosAPICategory(dameURL(TENDER_DISTINCT_URL_1 + TENDER_DISTINCT_URL_2 + CATEGORY));
+    obtieneDatosAPIStatus(dameURL(TENDER_DISTINCT_URL_1 + TENDER_DISTINCT_URL_2 + STATUS));
+    obtieneDatosAPIProcedimiento(dameURL(TENDER_DISTINCT_URL_1 + TENDER_DISTINCT_URL_2 + PROCUREMENT_METHOD_DETAILS));
+    obtieneDatosAPIOrganismoCId(dameURL(PROCESS_DISTINCT_URL_1 + PROCESS_DISTINCT_URL_2 + IS_BUYER_FOR));
+}
+
+
+/*
+Función que iniciliza los datos que dependen de la API
+*/
+function obtieneDatosAPICategory(url) {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO obtieneDatosAPICategory | ' + url);
+    }
+    $.getJSON(dameURL(url))
+        .done(function (data) {
+            if (data && data.records && data.records.length) {
+                let i;
+                for (i = 0; i < data.records.length; i++) {
+                    categoryCol.push(data.records[i]);
+                }
+                if (data.next) {
+                    obtieneDatosAPICategory(dameURL(data.next));
+                } else {
+                    modificaPeticionesInicialesr(7);
+                }
+            } else {
+                console.log(MSG_ERROR_API_RES_VACIO);
+            }
+        })
+        .fail(function (jqxhr, textStatus, error) {
+            let err = textStatus + ', ' + error;
+            console.error('Request Failed: ' + err);
+        });
+}
+
+function obtieneDatosAPIStatus(url) {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO obtieneDatosAPIStatus | ' + url);
+    }
+    $.getJSON(dameURL(url))
+        .done(function (data) {
+            if (data && data.records && data.records.length) {
+                let i;
+                for (i = 0; i < data.records.length; i++) {
+                    statusCol.push(data.records[i]);
+                }
+                if (data.next) {
+                    obtieneDatosAPIStatus(dameURL(data.next));
+                } else {
+                    modificaPeticionesInicialesr(8);
+                }
+            } else {
+                console.log(MSG_ERROR_API_RES_VACIO);
+            }
+        })
+        .fail(function (jqxhr, textStatus, error) {
+            let err = textStatus + ', ' + error;
+            console.error('Request Failed: ' + err);
+        });
+}
+
+/*
+Función que iniciliza los datos que dependen de la API
+*/
+function obtieneDatosAPIProcedimiento(url) {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO obtieneDatosAPIProcedimiento | ' + url);
+    }
+    $.getJSON(dameURL(url))
+        .done(function (data) {
+            if (data && data.records && data.records.length) {
+                let i;
+                for (i = 0; i < data.records.length; i++) {
+                    procedimientoCol.push(data.records[i]);
+                }
+                if (data.next) {
+                    obtieneDatosAPIProcedimiento(dameURL(data.next));
+                } else {
+                    modificaPeticionesInicialesr(9);
+                }
+            } else {
+                console.log(MSG_ERROR_API_RES_VACIO);
+            }
+        })
+        .fail(function (jqxhr, textStatus, error) {
+            let err = textStatus + ', ' + error;
+            console.error('Request Failed: ' + err);
+        });
+}
+
+/*
+Función que iniciliza los datos que dependen de la API
+*/
+function obtieneDatosAPIOrganismoCId(url) {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO obtieneDatosAPIOrganismoCId | ' + url);
+    }
+    $.getJSON(dameURL(url))
+        .done(function (data) {
+            if (data && data.records && data.records.length) {
+                let i;
+                for (i = 0; i < data.records.length; i++) {
+                    organismoCIdCol.push(data.records[i]);
+                }
+                if (data.next) {
+                    obtieneDatosAPIOrganismoCId(dameURL(data.next));
+                } else {
+                    modificaPeticionesInicialesr(10);
+                    obtieneDatosAPIOrganismoCTitle();
+                }
+            } else {
+                console.log(MSG_ERROR_API_RES_VACIO);
+            }
+        })
+        .fail(function (jqxhr, textStatus, error) {
+            let err = textStatus + ', ' + error;
+            console.error('Request Failed: ' + err);
+        });
+}
+
+/*
+Función que iniciliza los datos que dependen de la API
+*/
+function obtieneDatosAPIOrganismoCTitle() {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO obtieneDatosAPIOrganismoCTitle');
+    }
+    let h;
+    for (h = 0; h < organismoCIdCol.length; h++) {
+        let organismoCId = organismoCIdCol[h];
+
+        $.getJSON(
+            dameURL(ORGANIZATION_URL_1 + '/' + organismoCId + ORGANIZATION_URL_2)
+        )
+            .done(function (data) {
+                if (data && data.records && data.records.length) {
+                    let i;
+                    for (i = 0; i < data.records.length; i++) {
+                        let orgCon = {
+                            title : data.records[i].title,
+                            titleClean : quitarAcentos(data.records[i].title)
+                        }
+                        organismoCIdTitleCol.push(orgCon);
+                        organismoCMap.set(data.records[i].title, data.records[i].id);
+                    }
+                    if (data.next) {
+                        obtieneDatosAPIOrganismoCId(dameURL(data.next));
+                    } else {
+                        modificaPeticionesInicialesr(10);
+                    }
+                } else {
+                    console.log(MSG_ERROR_API_RES_VACIO);
+                }
+            })
+            .fail(function (jqxhr, textStatus, error) {
+                let err = textStatus + ', ' + error;
+                console.error('Request Failed: ' + err);
+            });
+    }
+    organismoCIdTitleCol.sort(compareTitle);
+}
+
+
+/*
+Función que pinta el gráfico
+*/
+function pintaIndicadoresGlobales(indicadoresGlobales, div) {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO pintaIndicadoresGlobales');
+    }
+
+    let anyoCadena2 = $.i18n('anyos2');
+    let noAdjudicatarioCadena2 = $.i18n('num_adjudicatario2');
+    let importeCadena2 = $.i18n('importe_adjudicatario2');
+
+    let chart = am4core.create(div, am4charts.XYChart);
+
+    chart.data = indicadoresGlobales;
+    chart.language.locale._decimalSeparator = ',';
+    chart.language.locale._thousandSeparator = '.';
+
+    chart.focusFilter.stroke = am4core.color("#0f0");
+	chart.focusFilter.strokeWidth = 4;
+    
+    let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+    categoryAxis.dataFields.category = 'anyo';
+    categoryAxis.renderer.opposite = true;
+    categoryAxis.title.text = anyoCadena2;
+
+    let valueAxis2 = chart.yAxes.push(new am4charts.ValueAxis());
+    let series2 = chart.series.push(new am4charts.LineSeries());
+    series2.dataFields.valueY = 'numAdj';
+    series2.dataFields.categoryX = 'anyo';
+    series2.name = noAdjudicatarioCadena2;
+    valueAxis2.title.text = noAdjudicatarioCadena2;
+    series2.yAxis = valueAxis2;
+    series2.strokeWidth = 3;
+    series2.bullets.push(new am4charts.CircleBullet());
+    series2.tooltipText = '{name} en {categoryX}: {valueY}';
+    series2.legendSettings.valueText = '{valueY}';
+
+    let valueAxis3 = chart.yAxes.push(new am4charts.ValueAxis());
+    let series3 = chart.series.push(new am4charts.LineSeries());
+    series3.dataFields.valueY = 'impAdj';
+    series3.dataFields.categoryX = 'anyo';
+    series3.name = importeCadena2;
+    valueAxis3.title.text = importeCadena2;
+    series3.yAxis = valueAxis3;
+    series3.strokeWidth = 3;
+    series3.bullets.push(new am4charts.CircleBullet());
+    series3.tooltipText = '{name} en {categoryX}: {valueY}';
+    series3.legendSettings.valueText = '{valueY}';
+
+    chart.cursor = new am4charts.XYCursor();
+    chart.cursor.behavior = 'zoomY';
+
+    chart.legend = new am4charts.Legend();
+
+    if(div=='chartdiv')
+    {
+        chart.exporting.menu = new am4core.ExportMenu();
+        chart.exporting.menu.container = document.getElementById("exportIndAnuales");
+        chart.exporting.filePrefix = 'grafico';
+        chart.exporting.menu.items = [
+            {
+                label: "<i class='fa fa-download fa-2'></i>",
+                menu: [
+                    { type: "csv", label: "CSV" },
+                    { type: "xlsx", label: "XLSX" },
+                    { type: "json", label: "JSON" },
+                ],
+            },
+        ];
+    }
+}
+
+/*
+Función que muestra u oculta la capa de la tabla de datos
+*/
+function mostrarDatosIndAnuales() {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO mostrarDatosIndAnuales');
+    }
+
+    $('#datosIndAnuales').toggle();
+    if (!heightInicial) {
+        heightInicial = $('#iframeBuscador', window.parent.document).height();
+    }
+
+    let isVisible = $('#datosIndAnuales').is(':visible');
+    if (isVisible) {
+        $('#iframeBuscador', window.parent.document).height(
+            $('body').height() + 10
+        );
+    } else {
+        if ($('.table-responsive').is(':visible')) {
+            $('#iframeBuscador', window.parent.document).height(heightConTabla);
+        } else {
+            $('#iframeBuscador', window.parent.document).height(heightInicial);
+        }
+    }
+}
+
+
+function contruyeOrgContImp(value, key) {
+    let nameCompl = key;
+    let nameCorto = nameCompl.substring(0, 30);
+    let numIguales = 0;
+    let d;
+    for(d=0;d<orgContratanteColIzq.length;d++) {
+        if(orgContratanteColIzq[d].nameCorto.substring(0, 28) == nameCorto.substring(0, 28)) {
+            numIguales = numIguales + 1;
+        }
+    }
+    if(numIguales!=0) { 
+        nameCorto = nameCompl.substring(0, 28) + '~' + numIguales;
+    }
+    let orgContratante = {
+        id: organismoCMap.get(nameCompl),
+        nameCompl: nameCompl,
+        nameCorto: nameCorto,
+        valueAmountTotal: value,
+    };
+    let importe = numeral(orgContratante.valueAmountTotal).format(
+        importeFormato,
+        Math.ceil
+    );
+    orgContratante.importe = importe;
+    orgContratanteColIzq.push(orgContratante);
+}
+/*
+Crea una estractura que será insertada en la tabla de la página web
+*/
+function datosGraficoOrgContImp() {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO datosGraficoOrgContImp');
+    }
+
+    let organizacionesCadena = $.i18n('organizaciones');
+    let importeCadena = $.i18n('importe');
+    
+    let htmlContent =
+        '<div class="row"><div class="col-md-12"><table style="width: 100%;"><tr><th>' +
+        organizacionesCadena +
+        '</th><th>' +
+        importeCadena +
+        '</th></tr>';
+    let c;
+    for (c = 0; c < orgContratanteColIzq.length; c++) {
+        let orgContratanteAux = orgContratanteColIzq[c];
+        htmlContent =
+            htmlContent +
+            '<tr>' +
+            '<td>' +
+            orgContratanteAux.nameCompl +
+            '</td>' +
+            '<td>' +
+            orgContratanteAux.importe +
+            '</td>' +
+            '</tr>';
+    }
+    htmlContent =
+        htmlContent +
+        '</table></div></div>';
+    $('#datosOrgContImp').html(htmlContent);
+
+    pintaGraficoOrgContImp(orgContratanteColIzq.slice(0, REGISTRO_GRAFICOS), 'chartOrgContImp');
+    pintaGraficoOrgContImp(orgContratanteColIzq.slice(0, REGISTRO_GRAFICOS), 'chartOrgContImp2');
+
+}
+/*
+función que pinta el gráfico
+*/
+function pintaGraficoOrgContImp(data, div) {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO pintaGraficoOrgContImp');
+    }
+
+    am4core.useTheme(am4themes_frozen);
+
+    let chart = am4core.create(div, am4charts.XYChart);
+    chart.data = data;
+    chart.language.locale = am4lang_es_ES;
+
+    chart.hiddenState.properties.opacity = 0;
+
+	chart.focusFilter.stroke = am4core.color("#0f0");
+	chart.focusFilter.strokeWidth = 4;
+	
+    let categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
+    categoryAxis.dataFields.category = 'nameCorto';
+    categoryAxis.renderer.grid.template.location = 0;
+    categoryAxis.renderer.minGridDistance = 1;
+    categoryAxis.renderer.inversed = true;
+    categoryAxis.renderer.grid.template.disabled = true;
+
+    let valueAxis = chart.xAxes.push(new am4charts.ValueAxis());
+    valueAxis.min = 0;
+
+    let series = chart.series.push(new am4charts.ColumnSeries());
+    series.dataFields.categoryY = 'nameCorto';
+    series.dataFields.valueX = 'valueAmountTotal';
+    series.columns.template.properties.tooltipText = '{valueAmountTotal} €';
+    series.columns.template.cursorOverStyle = am4core.MouseCursorStyle.pointer;
+    series.columns.template.adapter.add('fill', function (fill, target) {
+        return chart.colors.getIndex(target.dataItem.index);
+    });
+    series.columns.template.events.on(
+        'hit',
+        function (ev) {
+            let url = 'fichaOrganizacionContratante.html?lang=' + $.i18n().locale;
+            url =
+                url +
+                '&id=' +
+                ev.target.dataItem.dataContext.id +
+                '&capaAnterior=inicio';
+
+            $('#iframeFichaOrganizacionContratante', window.parent.document).attr(
+                'src',
+                url
+            );
+            $('#iframeFichaOrganizacionContratante', window.parent.document).height(
+                FICHAS_HEIGHT
+            );
+
+            $('#capaBuscador', window.parent.document).hide();
+            $('#capaAyuda', window.parent.document).hide();
+            $('#capaFichaContrato', window.parent.document).hide();
+            $('#capaFichaAdjudicatario', window.parent.document).hide();
+            $('#capaFichaOrganizacionContratante', window.parent.document).show();
+
+            $('html,body', window.parent.document).scrollTop(0);
+        },
+        this
+    );
+    
+    if(div=='chartOrgContImp')
+    {
+        chart.exporting.menu = new am4core.ExportMenu();
+        chart.exporting.menu.container = document.getElementById("exportOrgContImp");
+        chart.exporting.filePrefix = 'grafico';
+        chart.exporting.menu.items = [
+            {
+                label: "<i class='fa fa-download fa-2'></i>",
+                menu: [
+                    { type: "csv", label: "CSV" },
+                    { type: "xlsx", label: "XLSX" },
+                    { type: "json", label: "JSON" },
+                ],
+            },
+        ];
+    }
+}
+
+/*
+Función que muestra u oculta la capa de la tabla de datos
+*/
+function mostrarDatosOrgContImp() {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO mostrarDatosOrgContImp');
+    }
+
+    $('#datosOrgContImp').toggle();
+    if (!heightInicial) {
+        heightInicial = $('#iframeBuscador', window.parent.document).height();
+    }
+
+    let isVisible = $('#datosOrgContImp').is(':visible');
+    if (isVisible) {
+        $('#iframeBuscador', window.parent.document).height(
+            $('body').height() + 10
+        );
+    } else {
+        if ($('.table-responsive').is(':visible')) {
+            $('#iframeBuscador', window.parent.document).height(heightConTabla);
+        } else {
+            $('#iframeBuscador', window.parent.document).height(heightInicial);
+        }
+    }
+}
+
+function contruyeOrgContNum(value, key) {
+    let nameCompl = key;
+    let nameCorto = nameCompl.substring(0, 30);
+    let numIguales = 0;
+    let d;
+    for(d=0;d<orgContratanteColDer.length;d++) {
+        if(orgContratanteColDer[d].nameCorto.substring(0, 28) == nameCorto.substring(0, 28)) {
+            numIguales = numIguales + 1;
+        }
+    }
+    if(numIguales!=0) { 
+        nameCorto = nameCompl.substring(0, 28) + '~' + numIguales;
+    }
+    let orgContratante = {
+        id: organismoCMap.get(nameCompl),
+        nameCompl: nameCompl,
+        nameCorto: nameCorto,
+        numTotal: Number(value),
+    };
+    let num = numeral(value).format(numFormatoSinDecimales, Math.ceil);
+    orgContratante.value = num;
+    orgContratanteColDer.push(orgContratante);
+}
+/*
+                Crea una estractura que será insertada en la tabla de la página web
+*/
+function datosGraficoOrgContNum() {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO datosGraficoOrgContNum');
+    }
+
+    orgContratanteColDer.sort(compareNum);
+
+    let organizacionesCadena = $.i18n('organizaciones');
+    let numeroContratos =  $.i18n('numero_contratos');
+    
+    let htmlContent =
+        '<div class="row"><div class="col-md-12"><table style="width: 100%;"><tr><th>' +
+        organizacionesCadena +
+        '</th><th>' +
+        numeroContratos +
+        '</th></tr>';
+    let c;
+    for (c = 0; c < orgContratanteColDer.length; c++) {
+        let orgContratanteAux = orgContratanteColDer[c];
+        htmlContent =
+            htmlContent +
+            '<tr>' +
+            '<td>' +
+            orgContratanteAux.nameCompl +
+            '</td>' +
+            '<td>' +
+            orgContratanteAux.value +
+            '</td>' +
+            '</tr>';
+    }
+
+    htmlContent =
+        htmlContent +
+        '</table></div></div>';
+    $('#datosOrgContNum').html(htmlContent);
+
+    pintaGraficoOrgContNum(orgContratanteColDer.slice(0, REGISTRO_GRAFICOS), 'chartOrgContNum');
+    pintaGraficoOrgContNum(orgContratanteColDer.slice(0, REGISTRO_GRAFICOS), 'chartOrgContNum2');
+}
+/*
+Función que pinta el gráfico
+*/
+function pintaGraficoOrgContNum(data, div) {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO pintaGraficoOrgContNum');
+    }
+
+    am4core.useTheme(am4themes_frozen);
+
+    let chart = am4core.create(div, am4charts.XYChart);
+    chart.data = data;
+    chart.language.locale = am4lang_es_ES;
+
+    chart.hiddenState.properties.opacity = 0;
+
+    chart.focusFilter.stroke = am4core.color("#0f0");
+	chart.focusFilter.strokeWidth = 4;
+
+    let categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
+    categoryAxis.dataFields.category = 'nameCorto';
+    categoryAxis.renderer.grid.template.location = 0;
+    categoryAxis.renderer.minGridDistance = 1;
+    categoryAxis.renderer.inversed = true;
+    categoryAxis.renderer.grid.template.disabled = true;
+
+    let valueAxis = chart.xAxes.push(new am4charts.ValueAxis());
+    valueAxis.min = 0;
+
+    let series = chart.series.push(new am4charts.ColumnSeries());
+    series.dataFields.categoryY = 'nameCorto';
+    series.dataFields.valueX = 'value';
+    series.columns.template.properties.tooltipText = '{value}';
+    series.columns.template.cursorOverStyle = am4core.MouseCursorStyle.pointer;
+    series.columns.template.adapter.add('fill', function (fill, target) {
+        return chart.colors.getIndex(target.dataItem.index);
+    });
+    series.columns.template.events.on(
+        'hit',
+        function (ev) {
+            let url = 'fichaOrganizacionContratante.html?lang=' + $.i18n().locale;
+            url =
+                url +
+                '&id=' +
+                ev.target.dataItem.dataContext.id +
+                '&capaAnterior=inicio';
+
+            $('#iframeFichaOrganizacionContratante', window.parent.document).attr(
+                'src',
+                url
+            );
+            $('#iframeFichaOrganizacionContratante', window.parent.document).height(
+                FICHAS_HEIGHT
+            );
+
+            $('#capaBuscador', window.parent.document).hide();
+            $('#capaAyuda', window.parent.document).hide();
+            $('#capaFichaContrato', window.parent.document).hide();
+            $('#capaFichaAdjudicatario', window.parent.document).hide();
+            $('#capaFichaOrganizacionContratante', window.parent.document).show();
+
+            $('html,body', window.parent.document).scrollTop(0);
+        },
+        this
+    );
+    
+    if(div=='chartOrgContNum')
+    {
+        chart.exporting.menu = new am4core.ExportMenu();
+        chart.exporting.menu.container = document.getElementById("exportOrgContNum");
+        chart.exporting.filePrefix = 'grafico';
+        chart.exporting.menu.items = [
+            {
+                label: "<i class='fa fa-download fa-2'></i>",
+                menu: [
+                    { type: "csv", label: "CSV" },
+                    { type: "xlsx", label: "XLSX" },
+                    { type: "json", label: "JSON" },
+                ],
+            },
+        ];
+    }
+}
+
+
+
+
+
+
+
+/*
+Función que muestra u oculta la capa de la tabla de datos
+*/
+function mostrarDatosOrgContNum() {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO mostrarDatosOrgContNum');
+    }
+
+    $('#datosOrgContNum').toggle();
+    if (!heightInicial) {
+        heightInicial = $('#iframeBuscador', window.parent.document).height();
+    }
+
+    let isVisible = $('#datosOrgContNum').is(':visible');
+    if (isVisible) {
+        $('#iframeBuscador', window.parent.document).height(
+            $('body').height() + 10
+        );
+    } else {
+        if ($('.table-responsive').is(':visible')) {
+            $('#iframeBuscador', window.parent.document).height(heightConTabla);
+        } else {
+            $('#iframeBuscador', window.parent.document).height(heightInicial);
+        }
+    }
+}
+
+
+
+
+function contruyeDatasetAdj(value, key) {
+    datasetAdj[posResultAdj] = [
+        value.title,
+        value.id,
+        value.numAdj,
+        value.impAdj,
+    ];
+    posResultAdj = posResultAdj + 1;
+    awardNum.set(value.id, value.numAdj);
+    awardImp.set(value.id, value.impAdj);
+}
+
+function contruyeAwardImp(value, key) {
+    let id = key;
+    let nameCompl = organizationCol[key].title;
+    let nameCorto = nameCompl.substring(0, 30);
+    let numIguales = 0;
+    let d;
+    for(d=0;d<awardColIzq.length;d++) {
+        if(awardColIzq[d].nameCorto.substring(0, 28) == nameCorto.substring(0, 28)) {
+            numIguales = numIguales + 1;
+        }
+    }
+    if(numIguales!=0) { 
+        nameCorto = nameCompl.substring(0, 28) + '~' + numIguales;
+    }
+    let award = {
+        id: id,
+        nameCompl: nameCompl,
+        nameCorto: '',
+        valueAmountTotal: value,
+    };
+    if (nameCompl) {
+        award.nameCorto = nameCorto;
+    }
+    let importe = numeral(award.valueAmountTotal).format(importeFormato,Math.ceil);
+    award.importe = importe;
+    awardColIzq.push(award);
+}
+/*
+                Crea una estractura que será insertada en la tabla de la página web
+*/
+function datosGraficoAwardImp() {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO datosGraficoAwardImp');
+    }
+
+    awardColIzq.sort(compareImp);
+
+    let adjudicatariosCadena = $.i18n('adjudicatarios');
+    let importeCadena = $.i18n('importe');
+    
+    let htmlContent =
+        '<div class="row"><div class="col-md-12"><table style="width: 100%;"><tr><th>' +
+        adjudicatariosCadena +
+        '</th><th>' +
+        importeCadena +
+        '</th></tr>';
+    let c;
+    for (c = 0; c < awardColIzq.length; c++) {
+        let awardAux = awardColIzq[c];
+        htmlContent =
+            htmlContent +
+            '<tr>' +
+            '<td>' +
+            awardAux.nameCompl +
+            '</td>' +
+            '<td>' +
+            awardAux.importe +
+            '</td>' +
+            '</tr>';
+    }
+    htmlContent =
+        htmlContent +
+        '</table></div></div>';
+    $('#datos_subInfIzqAdj').html(htmlContent);
+
+    pintaGraficoAwardImp(awardColIzq.slice(0, REGISTRO_GRAFICOS),'chartAdjImp');
+    pintaGraficoAwardImp(awardColIzq.slice(0, REGISTRO_GRAFICOS),'chartAdjImp2');
+}
+
+/*
+Función que pinta el gráfico
+*/
+function pintaGraficoAwardImp(data, div) {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO pintaGraficoAwardImp');
+    }
+
+    am4core.useTheme(am4themes_frozen);
+
+    let chart = am4core.create(
+        div,
+        am4charts.XYChart
+    );
+    chart.data = data;
+    chart.language.locale = am4lang_es_ES;
+
+    chart.focusFilter.stroke = am4core.color("#0f0");
+	chart.focusFilter.strokeWidth = 4;
+
+    chart.hiddenState.properties.opacity = 0;
+
+    let categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
+    categoryAxis.dataFields.category = 'nameCorto';
+    categoryAxis.renderer.grid.template.location = 0;
+    categoryAxis.renderer.minGridDistance = 1;
+    categoryAxis.renderer.inversed = true;
+    categoryAxis.renderer.grid.template.disabled = true;
+
+    let valueAxis = chart.xAxes.push(new am4charts.ValueAxis());
+    valueAxis.min = 0;
+
+    let series = chart.series.push(new am4charts.ColumnSeries());
+    series.dataFields.categoryY = 'nameCorto';
+    series.dataFields.valueX = 'valueAmountTotal';
+    series.columns.template.properties.tooltipText = '{valueAmountTotal} €';
+    series.columns.template.cursorOverStyle = am4core.MouseCursorStyle.pointer;
+    series.columns.template.adapter.add('fill', function (fill, target) {
+        return chart.colors.getIndex(target.dataItem.index);
+    });
+    series.columns.template.events.on(
+        'hit',
+        function (ev) {
+            let url = 'fichaAdjudicatario.html?lang=' + $.i18n().locale;
+            url =
+                url +
+                '&id=' +
+                ev.target.dataItem.dataContext.id +
+                '&capaAnterior=inicio';
+
+            $('#iframeFichaAdjudicatario', window.parent.document).attr('src', url);
+            $('#iframeFichaAdjudicatario', window.parent.document).height(
+                FICHAS_HEIGHT
+            );
+
+            $('#capaBuscador', window.parent.document).hide();
+            $('#capaAyuda', window.parent.document).hide();
+            $('#capaFichaContrato', window.parent.document).hide();
+            $('#capaFichaAdjudicatario', window.parent.document).show();
+            $('#capaFichaOrganizacionContratante', window.parent.document).hide();
+
+            $('html,body', window.parent.document).scrollTop(0);
+        },
+        this
+    );
+
+    if(div=='chartAdjImp')
+    {
+        chart.exporting.menu = new am4core.ExportMenu();
+        chart.exporting.menu.container = document.getElementById("exportAdjImp");
+        chart.exporting.filePrefix = 'grafico';
+        chart.exporting.menu.items = [
+            {
+                label: "<i class='fa fa-download fa-2'></i>",
+                menu: [
+                    { type: "csv", label: "CSV" },
+                    { type: "xlsx", label: "XLSX" },
+                    { type: "json", label: "JSON" },
+                ],
+            },
+        ];
+    }
+}
+/*
+Función que muestra u oculta la capa de la tabla de datos
+*/
+function mostrarDatosAwardImp() {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO mostrarDatosAwardImp');
+    }
+
+    $('#datos_subInfIzqAdj').toggle();
+    if (!heightInicial) {
+        heightInicial = $('#iframeBuscador', window.parent.document).height();
+    }
+
+    let isVisible = $('#datos_subInfIzqAdj').is(':visible');
+    if (isVisible) {
+        $('#iframeBuscador', window.parent.document).height($('body').height());
+    } else {
+        if ($('.table-responsive').is(':visible')) {
+            $('#iframeBuscador', window.parent.document).height(heightConTabla);
+        } else {
+            $('#iframeBuscador', window.parent.document).height(heightInicial);
+        }
+    }
+}
+
+
+function contruyeAwardNum(value, key) {
+    let id = key;
+    let nameCompl = organizationCol[key].title;
+    let nameCorto = nameCompl.substring(0, 30);
+    let numIguales = 0;
+    let d;
+    for(d=0;d<awardColDer.length;d++) {
+        if(awardColDer[d].nameCorto.substring(0, 28) == nameCorto.substring(0, 28)) {
+            numIguales = numIguales + 1;
+        }
+    }
+    if(numIguales!=0) { 
+        nameCorto = nameCompl.substring(0, 28) + '~' + numIguales;
+    }
+    let award = {
+        id: id,
+        nameCompl: nameCompl,
+        nameCorto: '',
+        numTotal: Number(value),
+    };
+    if (nameCompl) {
+        award.nameCorto = nameCorto;
+    }
+    let num = numeral(value).format(numFormatoSinDecimales, Math.ceil);
+    award.value = num;
+    awardColDer.push(award);
+}
+
+
+
+/*
+                Crea una estractura que será insertada en la tabla de la página web
+*/
+function datosGraficoAwardNum() {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO datosGraficoAwardNum');
+    }
+
+    awardColDer.sort(compareNum);
+
+    let adjudicatariosCadena = $.i18n('adjudicatarios');
+    let numeroContratos = $.i18n('numero_contratos');
+    
+    let htmlContent =
+        '<div class="row"><div class="col-md-12"><table style="width: 100%;"><tr><th>' +
+        adjudicatariosCadena +
+        '</th><th>' +
+        numeroContratos +
+        '</th></tr>';
+    let c;
+    for (c = 0; c < awardColDer.length; c++) {
+        let awardAux = awardColDer[c];
+        htmlContent =
+            htmlContent +
+            '<tr>' +
+            '<td>' +
+            awardAux.nameCompl +
+            '</td>' +
+            '<td>' +
+            awardAux.value +
+            '</td>' +
+            '</tr>';
+    }
+
+    htmlContent =
+        htmlContent +
+        '</table></div></div>';
+    $('#datos_subInfDerAdj').html(htmlContent);
+
+    pintaGraficoAwardNum(awardColDer.slice(0, REGISTRO_GRAFICOS),'chartAdjNum');
+    pintaGraficoAwardNum(awardColDer.slice(0, REGISTRO_GRAFICOS),'chartAdjNum2');
+}
+
+
+/*
+Función que pinta el gráfico
+*/
+function pintaGraficoAwardNum(data, div) {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO pintaGraficoAwardNum');
+    }
+
+    am4core.useTheme(am4themes_frozen);
+
+    let chart = am4core.create(div, am4charts.XYChart);
+    chart.data = data;
+    chart.language.locale = am4lang_es_ES;
+
+    chart.hiddenState.properties.opacity = 0;
+
+    chart.focusFilter.stroke = am4core.color("#0f0");
+	chart.focusFilter.strokeWidth = 4;
+
+    let categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
+    categoryAxis.dataFields.category = 'nameCorto';
+    categoryAxis.renderer.grid.template.location = 0;
+    categoryAxis.renderer.minGridDistance = 1;
+    categoryAxis.renderer.inversed = true;
+    categoryAxis.renderer.grid.template.disabled = true;
+
+    let valueAxis = chart.xAxes.push(new am4charts.ValueAxis());
+    valueAxis.min = 0;
+
+    let series = chart.series.push(new am4charts.ColumnSeries());
+    series.dataFields.categoryY = 'nameCorto';
+    series.dataFields.valueX = 'value';
+    series.columns.template.properties.tooltipText = '{value}';
+    series.columns.template.cursorOverStyle = am4core.MouseCursorStyle.pointer;
+    series.columns.template.adapter.add('fill', function (fill, target) {
+        return chart.colors.getIndex(target.dataItem.index);
+    });
+    series.columns.template.events.on(
+        'hit',
+        function (ev) {
+            let url = 'fichaAdjudicatario.html?lang=' + $.i18n().locale;
+            url =
+                url +
+                '&id=' +
+                ev.target.dataItem.dataContext.id +
+                '&capaAnterior=inicio';
+
+            $('#iframeFichaAdjudicatario', window.parent.document).attr('src', url);
+            $('#iframeFichaAdjudicatario', window.parent.document).height(
+                FICHAS_HEIGHT
+            );
+
+            $('#capaBuscador', window.parent.document).hide();
+            $('#capaAyuda', window.parent.document).hide();
+            $('#capaFichaContrato', window.parent.document).hide();
+            $('#capaFichaAdjudicatario', window.parent.document).show();
+            $('#capaFichaOrganizacionContratante', window.parent.document).hide();
+
+            $('html,body', window.parent.document).scrollTop(0);
+        },
+        this
+    );
+
+    if(div=='chartAdjNum')
+    {
+        chart.exporting.menu = new am4core.ExportMenu();
+        chart.exporting.menu.container = document.getElementById("exportAdjNum");
+        chart.exporting.filePrefix = 'grafico';
+        chart.exporting.menu.items = [
+            {
+                label: "<i class='fa fa-download fa-2'></i>",
+                menu: [
+                    { type: "csv", label: "CSV" },
+                    { type: "xlsx", label: "XLSX" },
+                    { type: "json", label: "JSON" },
+                ],
+            },
+        ];
+    }
+}
+
+
+
+/*
+Función que muestra u oculta la capa de la tabla de datos
+*/
+function mostrarDatosAwardNum() {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO mostrarDatosAwardNum');
+    }
+
+    $('#datos_subInfDerAdj').toggle();
+    if (!heightInicial) {
+        heightInicial = $('#iframeBuscador', window.parent.document).height();
+    }
+
+    let isVisible = $('#datos_subInfDerAdj').is(':visible');
+    if (isVisible) {
+        $('#iframeBuscador', window.parent.document).height($('body').height());
+    } else {
+        if ($('.table-responsive').is(':visible')) {
+            $('#iframeBuscador', window.parent.document).height(heightConTabla);
+        } else {
+            $('#iframeBuscador', window.parent.document).height(heightInicial);
+        }
+    }
+}
+
+
+/*
+Función que pinta el gráfico ImpContratos
+*/
+function pintaGraficoTipAdj(data, div) {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO pintaGraficoTipAdj');
+    }
+
+    am4core.useTheme(am4themes_frozen);
+
+    let chart = am4core.create(div, am4charts.TreeMap);
+    chart.data = data;
+    chart.language.locale = am4lang_es_ES;
+    chart.layoutAlgorithm = chart.squarify;
+
+    chart.dataFields.value = 'importe';
+    chart.dataFields.name = 'tipo';
+
+    chart.focusFilter.stroke = am4core.color("#0f0");
+	chart.focusFilter.strokeWidth = 4;
+
+    let level1 = chart.seriesTemplates.create('0');
+    let level1_column = level1.columns.template;
+
+    level1_column.column.cornerRadius(2, 2, 2, 2);
+    level1_column.stroke = am4core.color('#fff');
+    level1_column.strokeWidth = 1;
+    level1_column.properties.tooltipText = '{parentName} {name}: {value} €';
+
+    let level1_bullet = level1.bullets.push(new am4charts.LabelBullet());
+    level1_bullet.locationY = 0.5;
+    level1_bullet.locationX = 0.5;
+    level1_bullet.label.text = '{name}\n{value}€';
+    level1_bullet.label.fill = am4core.color('#222');
+    level1_bullet.label.truncate = false;
+
+    level1_bullet.label.padding(4, 10, 4, 10);
+    level1_bullet.label.fontSize = 20;
+    level1_bullet.layout = 'absolute';
+    level1_bullet.label.isMeasured = true;
+
+    if(div=='chartTipAdj'){
+    level1_bullet.events.on('ready', function (event) {
+        let target = event.target;
+        if (target.parent) {
+            let pw = target.maxWidth;
+            let ph = target.maxHeight;
+
+            let label = target.children.getIndex(0);
+            let tw = label.measuredWidth;
+            let th = label.measuredHeight;
+
+            let scale = Math.min(pw / tw, ph / th);
+
+            if (!isNaN(scale) && scale != Infinity) {
+                if (scale > LIMITE_AGRANDAR_TEXTOS_TREEMAP) {
+                    scale = LIMITE_AGRANDAR_TEXTOS_TREEMAP;
+                }
+                target.scale = scale;
+            }
+            
+            if (scale < LIMITE_OCULTAR_TEXTOS_TREEMAP) {
+                target.disabled = true;
+            }
+            
+        }
+    });
+    }
+    
+    if(div=='chartTipAdj')
+    {
+        chart.exporting.menu = new am4core.ExportMenu();
+        chart.exporting.menu.container = document.getElementById("exportTipAdj");
+        chart.exporting.filePrefix = 'grafico';
+        chart.exporting.menu.items = [
+            {
+                label: "<i class='fa fa-download fa-2'></i>",
+                menu: [
+                    { type: "csv", label: "CSV" },
+                    { type: "xlsx", label: "XLSX" },
+                    { type: "json", label: "JSON" },
+                ],
+            },
+        ];
+    }
+
+}
+
+function contruyeTipAdjImp(value, key) {
+    let data = {
+        tipo: key,
+        importe: value,
+    };
+    tipAdjCol.push(data);
+}
+
+/*
+Función que muestra u oculta la capa de la tabla de datos
+*/
+function mostrarDatosTipAdjImp() {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO mostrarDatosTipAdjImp');
+    }
+
+    $('#datos_tablaTipAdj').toggle();
+    if (!heightInicial) {
+        heightInicial = $('#iframeBuscador', window.parent.document).height();
+    }
+
+    let isVisible = $('#datos_tablaTipAdj').is(':visible');
+    if (isVisible) {
+        $('#iframeBuscador', window.parent.document).height(
+            $('body').height() + 10
+        );
+    } else {
+        if ($('.table-responsive').is(':visible')) {
+            $('#iframeBuscador', window.parent.document).height(heightConTabla);
+        } else {
+            $('#iframeBuscador', window.parent.document).height(heightInicial);
+        }
+    }
+}
+
+function contruyeTipoContNum(value, key) {
+    let data = {
+        name: ETIQUETA_TIP_CONT.get(key),
+        value: value,
+    };
+    tipoContNumCol.push(data);
+}
+
+/*
+Función que pinta el gráfico
+*/
+function pintaGraficoTipoContNum(importesTipos, div) {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO pintaGraficoTarta');
+    }
+
+    am4core.useTheme(am4themes_frozen);
+
+    let chart = am4core.create(div, am4charts.PieChart);
+    chart.data = importesTipos;
+    chart.language.locale = am4lang_es_ES;
+
+	chart.focusFilter.stroke = am4core.color("#0f0");
+	chart.focusFilter.strokeWidth = 4;
+
+    let series = chart.series.push(new am4charts.PieSeries());
+    series.dataFields.value = 'value';
+    series.dataFields.category = 'name';
+
+    series.labels.template.disabled = true;
+    series.ticks.template.disabled = true;
+
+    chart.legend = new am4charts.Legend();
+    chart.legend.position = 'bottom';
+    chart.legend.labels.template.maxWidth = 120;
+    chart.legend.labels.template.truncate = true;
+    chart.legend.itemContainers.template.tooltipText = '{category}';
+	
+    series.legendSettings.labelText = '{name}';
+    series.legendSettings.valueText = '{value}';
+    series.slices.template.tooltipText = '{name}: {value}';
+    series.slices.template.cursorOverStyle = am4core.MouseCursorStyle.pointer;
+
+    if(div=='chartTipoContNum')
+    {
+        chart.exporting.menu = new am4core.ExportMenu();
+        chart.exporting.menu.container = document.getElementById("exportTipoContNum");
+        chart.exporting.filePrefix = 'grafico';
+        chart.exporting.menu.items = [
+            {
+                label: "<i class='fa fa-download fa-2'></i>",
+                menu: [
+                    { type: "csv", label: "CSV" },
+                    { type: "xlsx", label: "XLSX" },
+                    { type: "json", label: "JSON" },
+                ],
+            },
+        ];
+    }
+}
+
+/*
+Función que muestra u oculta la capa de la tabla de datos
+*/
+function mostrarDatosTipoContNum() {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO mostrarDatosTipoContNum');
+    }
+
+    $('#datos_tablaTipoContNum').toggle();
+    if (!heightInicial) {
+        heightInicial = $('#iframeBuscador', window.parent.document).height();
+    }
+
+    let isVisible = $('#datos_tablaTipoContNum').is(':visible');
+    if (isVisible) {
+        $('#iframeBuscador', window.parent.document).height(
+            $('body').height() + 10
+        );
+    } else {
+        if ($('.table-responsive').is(':visible')) {
+            $('#iframeBuscador', window.parent.document).height(heightConTabla);
+        } else {
+            $('#iframeBuscador', window.parent.document).height(heightInicial);
+        }
+    }
+}
+
+function contruyeTipoContImp(value, key) {
+    let data = {
+        name: ETIQUETA_TIP_CONT.get(key),
+        value: value,
+    };
+    tipoContImpCol.push(data);
+}
+
+/*
+Función que pinta el gráfico
+*/
+function pintaGraficoTipoContImp(importesTipos, div) {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO pintaGraficoTipoContImp');
+    }
+
+    am4core.useTheme(am4themes_frozen);
+
+    let chart = am4core.create(div, am4charts.PieChart);
+    chart.data = importesTipos;
+    chart.language.locale = am4lang_es_ES;
+
+    let series = chart.series.push(new am4charts.PieSeries());
+    series.dataFields.value = 'value';
+    series.dataFields.category = 'name';
+
+    series.labels.template.disabled = true;
+    series.ticks.template.disabled = true;
+
+    chart.focusFilter.stroke = am4core.color("#0f0");
+	chart.focusFilter.strokeWidth = 4;
+
+    chart.legend = new am4charts.Legend();
+    chart.legend.position = 'bottom';
+    chart.legend.labels.template.maxWidth = 120;
+    chart.legend.labels.template.truncate = true;
+    chart.legend.itemContainers.template.tooltipText = '{category}';
+
+    series.legendSettings.labelText = '{name}';
+    series.legendSettings.valueText = '{value}€';
+    series.slices.template.tooltipText = '{name}: {value} €';
+    series.slices.template.cursorOverStyle = am4core.MouseCursorStyle.pointer;
+
+    if(div=='chartTipoContImp')
+    {
+        chart.exporting.menu = new am4core.ExportMenu();
+        chart.exporting.menu.container = document.getElementById("exportTipoContImp");
+        chart.exporting.filePrefix = 'grafico';
+        chart.exporting.menu.items = [
+            {
+                label: "<i class='fa fa-download fa-2'></i>",
+                menu: [
+                    { type: "csv", label: "CSV" },
+                    { type: "xlsx", label: "XLSX" },
+                    { type: "json", label: "JSON" },
+                ],
+            },
+        ];
+    }
+}
+
+/*
+Función que muestra u oculta la capa de la tabla de datos
+*/
+function mostrarDatosTipoContImp() {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO mostrarDatosTipoContImp');
+    }
+
+    $('#datos_tablaTipoContImp').toggle();
+    if (!heightInicial) {
+        heightInicial = $('#iframeBuscador', window.parent.document).height();
+    }
+
+    let isVisible = $('#datos_tablaTipoContImp').is(':visible');
+    if (isVisible) {
+        $('#iframeBuscador', window.parent.document).height(
+            $('body').height() + 10
+        );
+    } else {
+        if ($('.table-responsive').is(':visible')) {
+            $('#iframeBuscador', window.parent.document).height(heightConTabla);
+        } else {
+            $('#iframeBuscador', window.parent.document).height(heightInicial);
+        }
+    }
+}
+
+function contruyeTipoProcNum(value, key) {
+    let data = {
+        name: ETIQUETA_TIP_PROC.get(key),
+        value: value,
+    };
+    tipoProcNumCol.push(data);
+}
+
+/*
+Función que pinta el gráfico
+*/
+function pintaGraficoTipoProcNum(importesTipos, div) {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO pintaGraficoTipoProcNum');
+    }
+
+    am4core.useTheme(am4themes_frozen);
+
+    let chart = am4core.create(div, am4charts.PieChart);
+    chart.data = importesTipos;
+    chart.language.locale = am4lang_es_ES;
+
+    let series = chart.series.push(new am4charts.PieSeries());
+    series.dataFields.value = 'value';
+    series.dataFields.category = 'name';
+
+    series.labels.template.disabled = true;
+    series.ticks.template.disabled = true;
+
+    chart.focusFilter.stroke = am4core.color("#0f0");
+	chart.focusFilter.strokeWidth = 4;
+
+    chart.legend = new am4charts.Legend();
+    chart.legend.position = 'bottom';
+    chart.legend.labels.template.maxWidth = 120;
+    chart.legend.labels.template.truncate = true;
+    chart.legend.itemContainers.template.tooltipText = '{category}';
+	
+    series.legendSettings.labelText = '{name}';
+    series.legendSettings.valueText = '{value}';
+    series.slices.template.tooltipText = '{name}: {value}';
+    series.slices.template.cursorOverStyle = am4core.MouseCursorStyle.pointer;
+
+    if(div=='chartTipoProcNum')
+    {
+        chart.exporting.menu = new am4core.ExportMenu();
+        chart.exporting.menu.container = document.getElementById("exportTipoProcNum");
+        chart.exporting.filePrefix = 'grafico';
+        chart.exporting.menu.items = [
+            {
+                label: "<i class='fa fa-download fa-2'></i>",
+                menu: [
+                    { type: "csv", label: "CSV" },
+                    { type: "xlsx", label: "XLSX" },
+                    { type: "json", label: "JSON" },
+                ],
+            },
+        ];
+    }
+}
+
+/*
+Función que muestra u oculta la capa de la tabla de datos
+*/
+function mostrarDatosTipoProcNum() {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO mostrarDatosTipoProcNum');
+    }
+
+    $('#datos_tablaTipoProcNum').toggle();
+    if (!heightInicial) {
+        heightInicial = $('#iframeBuscador', window.parent.document).height();
+    }
+
+    let isVisible = $('#datos_tablaTipoProcNum').is(':visible');
+    if (isVisible) {
+        $('#iframeBuscador', window.parent.document).height(
+            $('body').height() + 10
+        );
+    } else {
+        if ($('.table-responsive').is(':visible')) {
+            $('#iframeBuscador', window.parent.document).height(heightConTabla);
+        } else {
+            $('#iframeBuscador', window.parent.document).height(heightInicial);
+        }
+    }
+}
+
+function contruyeTipoProcImp(value, key) {
+    let data = {
+        name: ETIQUETA_TIP_PROC.get(key),
+        value: value,
+    };
+    tipoProcImpCol.push(data);
+}
+
+/*
+Función que pinta el gráfico
+*/
+function pintaGraficoTipoProcImp(importesTipos, div) {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO pintaGraficoTipoProcImp');
+    }
+
+    am4core.useTheme(am4themes_frozen);
+
+    let chart = am4core.create(div, am4charts.PieChart);
+    chart.data = importesTipos;
+    chart.language.locale = am4lang_es_ES;
+
+    let series = chart.series.push(new am4charts.PieSeries());
+    series.dataFields.value = 'value';
+    series.dataFields.category = 'name';
+
+    series.labels.template.disabled = true;
+    series.ticks.template.disabled = true;
+
+    chart.focusFilter.stroke = am4core.color("#0f0");
+	chart.focusFilter.strokeWidth = 4;
+
+    chart.legend = new am4charts.Legend();
+    chart.legend.position = 'bottom';
+    chart.legend.labels.template.maxWidth = 120;
+    chart.legend.labels.template.truncate = true;
+    chart.legend.itemContainers.template.tooltipText = '{category}';
+
+    series.legendSettings.labelText = '{name}';
+    series.legendSettings.valueText = '{value}€';
+    series.slices.template.tooltipText = '{name}: {value} €';
+    series.slices.template.cursorOverStyle = am4core.MouseCursorStyle.pointer;
+
+    if(div=='chartTipoProcImp')
+    {
+        chart.exporting.menu = new am4core.ExportMenu();
+        chart.exporting.menu.container = document.getElementById("exportTipoProcImp");
+        chart.exporting.filePrefix = 'grafico';
+        chart.exporting.menu.items = [
+            {
+                label: "<i class='fa fa-download fa-2'></i>",
+                menu: [
+                    { type: "csv", label: "CSV" },
+                    { type: "xlsx", label: "XLSX" },
+                    { type: "json", label: "JSON" },
+                ],
+            },
+        ];
+    }
+}
+
+/*
+Función que muestra u oculta la capa de la tabla de datos
+*/
+function mostrarDatosTipoProcImp() {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO mostrarDatosTipoProcImp');
+    }
+
+    $('#datos_tablaTipoProcImp').toggle();
+    if (!heightInicial) {
+        heightInicial = $('#iframeBuscador', window.parent.document).height();
+    }
+
+    let isVisible = $('#datos_tablaTipoProcImp').is(':visible');
+    if (isVisible) {
+        $('#iframeBuscador', window.parent.document).height(
+            $('body').height() + 10
+        );
+    } else {
+        if ($('.table-responsive').is(':visible')) {
+            $('#iframeBuscador', window.parent.document).height(heightConTabla);
+        } else {
+            $('#iframeBuscador', window.parent.document).height(heightInicial);
+        }
+    }
+}
+
+/*
+Función que invoca a todas las funciones que se realizan al inicializar el script
+*/
+function inicializaHTMLBuscador() {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO inicializaHTMLBuscador');
+    }
+
+    camposFecha();
+    if (!INDICADOR_1) {
+        $('#indicador1').hide();
+    }
+    if (!INDICADOR_2) {
+        $('#indicador2').hide();
+    }
+    if (!INDICADOR_3) {
+        $('#indicador3').hide();
+    }
+    if (!INDICADOR_4) {
+        $('#indicador4').hide();
+    }
+    $('#buscarListado').click(function () {
+        $("#modalCargaInicial").modal("show");
+        buscar();
+        this.blur();
+    });
+}
+
+
+/*
+Función que comprueba y captura si se han pasado parámetros a la web, en caso de haberlos ejecutará una búsqueda con ellos.
+*/
+function capturaParam() {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO capturaParam');
+    }
+
+    let paramId = getUrlVars()['id'];
+    if (paramId) {
+        $('#buscadorExpediente').val(decodeURI(paramId));
+    }
+    let paramNombre = getUrlVars()['nombre'];
+    if (paramNombre) {
+        $('#buscadorNombre').val(decodeURI(paramNombre));
+    }
+    let paramEstado = getUrlVars()['estado'];
+    if (paramEstado) {
+        $('#selectEstado').val(decodeURI(paramEstado));
+    }
+    let paramCategoria = getUrlVars()['categoria'];
+    if (paramCategoria) {
+        $('#selectCategoria').val(decodeURI(paramCategoria));
+    }
+    let paramProcedimiento = getUrlVars()['procedimiento'];
+    if (paramProcedimiento) {
+        $('#selectProcedimiento').val(decodeURI(paramProcedimiento));
+    }
+    let paramCPV = getUrlVars()['cpv'];
+    if (paramCPV) {
+        $('#buscadorCPV').val(decodeURI(paramCPV));
+    }
+    let paramNombreContratante = getUrlVars()['nombreContratante'];
+    if (paramNombreContratante) {
+        $('#selectNomOrgContr').val(decodeURI(paramNombreContratante));
+    }
+    let paramAdjucicatario = getUrlVars()['adjucicatario'];
+    if (paramAdjucicatario) {
+        $('#buscadorLicitador').val(decodeURI(paramAdjucicatario));
+    }
+    let paramDesdeFecha = getUrlVars()['fechaDesde'];
+    if (paramDesdeFecha) {
+        $('#buscadorDesdeFecha').val(decodeURI(paramDesdeFecha));
+    }
+    let paramHastaFecha = getUrlVars()['fechaHasta'];
+    if (paramHastaFecha) {
+        $('#buscadorHastaFecha').val(decodeURI(paramHastaFecha));
+    }
+    let paramImporteDesde = getUrlVars()['importeDesde'];
+    if (paramImporteDesde) {
+        $('#buscadorImporteDesde').val(decodeURI(paramImporteDesde));
+    }
+    let paramTipoBeneficiario = getUrlVars()['tipo'];
+    if (paramTipoBeneficiario) {
+        let paramCifAdjudicatario = IDENTIFICADOR_TIPO_ENTIDAD.get(
+            decodeURI(paramTipoBeneficiario)
+        );
+        if (paramCifAdjudicatario) {
+            $('#buscadorCifLicitador').val(decodeURI(paramCifAdjudicatario));
+        }
+    }
+
+    buscar();
+}
+/*
+                Funcion que realiza las busquedas en la tabla
+*/
+function buscar() {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO buscar');
+    }
+
+    orgContratanteNum = new Map();
+    orgContratanteImp = new Map();
+    orgContratanteColIzq = [];
+    orgContratanteColDer = [];
+    awardNum = new Map();
+    awardImp = new Map();
+    awardColIzq = [];
+    awardColDer = [];
+    estadosSelec = [];
+    categoriaSelec = [];
+    procedimientoSelec = [];
+    orgContrSelec = [];
+    anyoSelec = [];
+
+    if (!heightInicial) {
+        heightInicial = $('#iframeBuscador', window.parent.document).height();
+    }
+
+    let idBusqueda = $('#buscadorExpediente').val();
+    let nombreBusqueda = $('#buscadorNombre').val();
+    let idOrgContrBusqueda = '';
+    let fechaInicioBusqueda = $('#buscadorDesdeFecha').val();
+    let fechaFinBusqueda = $('#buscadorHastaFecha').val();
+    let licitadorBusqueda = $('#buscadorLicitador').val();
+    let CPVBusqueda = $('#buscadorCPV').val();
+    let importeDesdeBusqueda = $('#buscadorImporteDesde').val();
+    let importeHastaBusqueda = $('#buscadorImporteHasta').val();
+    let cifLicitadorBusqueda = $('#buscadorCifLicitador').val();
+    let titleOrgContrSelec = [];
+    obteneValoresAnyos();
+    obteneValoresEstados();
+    obteneValoresCategorias();
+    obteneValoresProcedimiento();
+    obteneValoresOrgContr();
+
+    creaDatasetTabla(
+        idBusqueda,
+        nombreBusqueda,
+        anyoSelec,
+        categoriaSelec,
+        estadosSelec,
+        idOrgContrBusqueda,
+        orgContrSelec,
+        fechaInicioBusqueda,
+        fechaFinBusqueda,
+        procedimientoSelec,
+        licitadorBusqueda,
+        CPVBusqueda,
+        importeDesdeBusqueda,
+        importeHastaBusqueda,
+        cifLicitadorBusqueda
+    );
+
+    orgContratanteNum.forEach(contruyeOrgContNum);
+    datosGraficoOrgContImp();
+    datosGraficoOrgContNum();
+
+    awardImp.forEach(contruyeAwardImp);
+    awardNum.forEach(contruyeAwardNum);
+    datosGraficoAwardImp();
+    datosGraficoAwardNum();
+
+    $("#modalCargaInicial").modal("hide");
+}
+
+
+/*
+Función que inicializa los botones de fecha
+*/
+function camposFecha() {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO camposFecha');
+    }
+
+    $(function () {
+        $('#buscadorDesdeFecha, #buscadorHastaFecha').datepicker({
+            showButtonPanel: false,
+            dateFormat: 'dd/mm/yy',
+        });
+
+    });
+}
+
+
+
+function quitarAcentos(cadena) {
+    const acentos = {
+        á: 'a',
+        é: 'e',
+        í: 'i',
+        ó: 'o',
+        ú: 'u',
+        Á: 'A',
+        É: 'E',
+        Í: 'I',
+        Ó: 'O',
+        Ú: 'U',
+    };
+    return cadena
+        .split('')
+        .map((letra) => acentos[letra] || letra)
+        .join('')
+        .toString();
+}
+
+function quitaSeleccionAnyos() {
+    let e;
+    for (e = 0; e < anyoCol.length; e++) {
+        $('#anyo' + anyoCol[e]).prop('checked', false);
+    }
+}
+
+function obteneValoresAnyos() {
+    let e;
+    for (e = 0; e < anyoCol.length; e++) {
+        if ($('#anyo' + anyoCol[e]).prop('checked')) {
+            let anyoAux = $('#anyo' + anyoCol[e]).val();
+            anyoSelec.push(anyoAux);
+        }
+    }
+}
+
+function quitaSeleccionEstados() {
+    ETIQUETA_ESTADO.forEach((value, key) => {
+        $('#estado' + key).prop('checked', false);
+    });
+}
+
+function obteneValoresEstados() {
+    ETIQUETA_ESTADO.forEach((value, key) => {
+        if ($('#estado' + key).prop('checked')) {
+            let estadoAux = $('#estado' + key).val();
+            estadosSelec.push(estadoAux);
+        }
+    });
+}
+
+function quitaSeleccionCategorias() {
+    ETIQUETA_TIP_CONT.forEach((value, key) => {
+        $('#categoria' + key).prop('checked', false);
+    });
+}
+
+function obteneValoresCategorias() {
+    ETIQUETA_TIP_CONT.forEach((value, key) => {
+        if ($('#categoria' + key).prop('checked')) {
+            let categoriaAux = $('#categoria' + key).val();
+            categoriaSelec.push(categoriaAux);
+        }
+    });
+}
+
+function quitaSeleccionProcedimiento() {
+    ETIQUETA_TIP_PROC.forEach((value, key) => {
+        $('#procedimiento' + key).prop('checked', false);
+    });
+}
+
+function obteneValoresProcedimiento() {
+    ETIQUETA_TIP_PROC.forEach((value, key) => {
+        if ($('#procedimiento' + key).prop('checked')) {
+            let procedimientoAux = $('#procedimiento' + key).val();
+            procedimientoSelec.push(procedimientoAux);
+        }
+    });
+}
+
+function quitaSeleccionOrgContr() {
+    let d;
+    for (d = 0; d < organismoCIdTitleCol.length; d++) {
+        $('#checkNomOrgCont' + d).prop('checked', false);
+    }
+}
+
+function obteneValoresOrgContr() {
+    let d;
+    for (d = 0; d < organismoCIdTitleCol.length; d++) {
+        if ($('#checkNomOrgCont' + d).prop('checked')) {
+            let orgContrAux = $('#checkNomOrgCont' + d).val();
+            orgContrSelec.push(orgContrAux);
+        }
+    }
+}
+
+function searchOrganizacion() {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO mostrarDatosTipoProcImp');
+    }
+    let organizacion = $('#buscadorNomOrgContr').val();
+    if (organizacion.length >= 3) {
+        let d;
+        for (d = 0; d < organismoCIdTitleCol.length; d++) {
+            if (
+                quitarAcentos(organismoCIdTitleCol[d].title)
+                    .toLowerCase()
+                    .indexOf(quitarAcentos(organizacion).toLowerCase()) != -1
+            ) {
+                $('#checkNomOrgCont' + d).show();
+                $('#labelNomOrgCont' + d).show();
+                $('#checkNomOrgCont' + d).prop('checked', true);
+            } else {
+                $('#checkNomOrgCont' + d).hide();
+                $('#labelNomOrgCont' + d).hide();
+                $('#checkNomOrgCont' + d).prop('checked', false);
+            }
+        }
+    } else {
+        let d;
+        for (d = 0; d < organismoCIdTitleCol.length; d++) {
+            $('#checkNomOrgCont' + d).show();
+            $('#labelNomOrgCont' + d).show();
+            $('#checkNomOrgCont' + d).prop('checked', false);
+        }
+    }
+}
+
+
+
+function compareTitle (a, b) {
+    if (a.titleClean < b.titleClean) return -1;
+    if (b.titleClean < a.titleClean) return 1;
+
+    return 0;
+}
+
+function compareImp(a, b) {
+    if (a.valueAmountTotal > b.valueAmountTotal) return -1;
+    if (b.valueAmountTotal > a.valueAmountTotal) return 1;
+
+    return 0;
+}
+
+function compareNum(a, b) {
+    if (a.numTotal > b.numTotal) return -1;
+    if (b.numTotal > a.numTotal) return 1;
+
+    return 0;
+}
+
+/*
+                Función para limpiar el formulario
+*/
+function limpiarFormulario() {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO limpiarFormulario');
+    }
+
+    $('#buscadorExpediente').val('');
+    $('#buscadorNombre').val('');
+    $('#selectIdOrgContr').val('');
+    $('#selectNomOrgContr').selectpicker('deselectAll');
+    $('#buscadorHastaFecha').val('');
+    $('#buscadorDesdeFecha').val('');
+    $('#buscadorImporteDesde').val('');
+    $('#buscadorImporteHasta').val('');
+    $('#buscadorCPV').val('');
+    $('#buscadorLicitador').val('');
+    $('#buscadorCifLicitador').val('');
+    quitaSeleccionAnyos();
+    quitaSeleccionEstados();
+    quitaSeleccionCategorias();
+    quitaSeleccionProcedimiento();
+    quitaSeleccionOrgContr();
+
+    estadosSelec = [];
+    categoriaSelec = [];
+    procedimientoSelec = [];
+    anyoSelec = [];
+
+    $('#iframeBuscador', window.parent.document).height(heightInicial);
+}
+
+
+function selececionarTodo(capa) {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO selececionarTodo');
+    }
+    $('#' + capa + ' .checkbox label input').prop('checked', true);
+}
+
+function quitarSeleccion(capa) {
+    if (LOG_DEGUB_BUSCADOR) {
+        console.log('INFO quitarSeleccion');
+    }
+    $('#' + capa + ' .checkbox label input').prop('checked', false);
+}
+
 function creaDatasetTabla(
     idBusqueda,
     nombreBusqueda,
@@ -830,7 +2480,7 @@ function creaDatasetTabla(
 ) {
     if (LOG_DEGUB_BUSCADOR) {
         console.log(
-            'creaDatasetTabla | ' +
+            'creaDatasetTabla Buscador | ' +
                 idBusqueda +
                 ' , ' +
                 nombreBusqueda +
@@ -1457,7 +3107,6 @@ function creaDatasetTabla(
             }
             if (anyoSelec.length) {
                 restuadoAnyo = false;
-                console.log('linea1539')
             }
             if (categoriaSelec.length) {
                 restuadoCategoria = false;
@@ -1692,16 +3341,6 @@ function creaDatasetTabla(
         }
     }
 
-    // tabla contratos
-    let tableCont = $('#tablaContratos').DataTable();
-    tableCont.clear().draw();
-    tableCont.rows.add(dataSet).draw();
-
-    // tabla adjudicatarios
-    awardGroup.forEach(contruyeDatasetAdj);
-    let tableAdj = $('#tablaAdjudicatarios').DataTable();
-    tableAdj.clear().draw();
-    tableAdj.rows.add(datasetAdj).draw();
 
     //indicadores
     let nLicitaciones = numeral(numTender);
@@ -1804,7 +3443,7 @@ function creaDatasetTabla(
     pintaGraficoTipAdj(tipAdjCol, 'chartTipAdj');
     pintaGraficoTipAdj(tipAdjCol, 'chartTipAdj2');
 
-    // tipo de contratos
+    // grafico tipo de contratos numero
     tipoContNum.forEach(contruyeTipoContNum);
     tipoContNumCol.sort(function (a, b) {
         return b.value - a.value;
@@ -1843,6 +3482,7 @@ function creaDatasetTabla(
     pintaGraficoTipoContNum(tipoContNumCol, 'chartTipoContNum');
     pintaGraficoTipoContNum(tipoContNumCol, 'chartTipoContNum2');
 
+    // grafico tipo de contratos importe
     tipoContImp.forEach(contruyeTipoContImp);
 
     let tipoContratoCadena = $.i18n('categoria');
@@ -1878,7 +3518,7 @@ function creaDatasetTabla(
     pintaGraficoTipoContImp(tipoContImpCol, 'chartTipoContImp');
     pintaGraficoTipoContImp(tipoContImpCol, 'chartTipoContImp2');
 
-    // tipo de procedimiento
+    // grafico tipo de procedimiento numero
     tipoProcNum.forEach(contruyeTipoProcNum);
     tipoProcNumCol.sort(function (a, b) {
         return b.value - a.value;
@@ -1917,6 +3557,7 @@ function creaDatasetTabla(
     pintaGraficoTipoProcNum(tipoProcNumCol, 'chartTipoProcNum');
     pintaGraficoTipoProcNum(tipoProcNumCol, 'chartTipoProcNum2');
 
+    // grafico tipo de procedimiento importe
     tipoProcImp.forEach(contruyeTipoProcImp);
     tipoProcImpCol.sort(function (a, b) {
         return b.value - a.value;
@@ -1955,15 +3596,15 @@ function creaDatasetTabla(
     pintaGraficoTipoProcImp(tipoProcImpCol, 'chartTipoProcImp');
     pintaGraficoTipoProcImp(tipoProcImpCol, 'chartTipoProcImp2');
 
-    let noSubvencionCadena2 = $.i18n('vol_adjudicatario');
+    // grafico indicadores anuales
     let anyoCadena = $.i18n('anyos');
-    let noBeneficiarioCadena = $.i18n('num_adjudicatario');
+    let noAdjudicatarioCadena = $.i18n('num_adjudicatario');
     importeCadena2 = $.i18n('importe_adjudicatario');
     let htmlContentIndAnuales =
         '<div class="row"><div class="col-md-12"><table style="width: 100%;"><tr><th>' +
         anyoCadena +
         '</th><th>' +
-        noBeneficiarioCadena +
+        noAdjudicatarioCadena +
         '</th><th>' +
         importeCadena2 +
         '</th></tr>';
@@ -1995,116 +3636,49 @@ function creaDatasetTabla(
     $('#datosIndAnuales').html(htmlContentIndAnuales);
     pintaIndicadoresGlobales(indicadoresGlobales, 'chartdiv');
     pintaIndicadoresGlobales(indicadoresGlobales, 'chartdiv2');
+	
+	
+	
+    // tabla contratos
+    let tableCont = $('#tablaContratos').DataTable();
+    tableCont.clear().draw();
+    tableCont.rows.add(dataSet).draw();
+
+    // tabla adjudicatarios
+    awardGroup.forEach(contruyeDatasetAdj);
+    let tableAdj = $('#tablaAdjudicatarios').DataTable();
+    tableAdj.clear().draw();
+    tableAdj.rows.add(datasetAdj).draw();
 }
-
-/*
-Función que comprueba y captura si se han pasado parámetros a la web, en caso de haberlos ejecutará una búsqueda con ellos.
-*/
-function capturaParam() {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('capturaParam');
-    }
-
-    let paramId = getUrlVars()['id'];
-    if (paramId) {
-        $('#buscadorExpediente').val(decodeURI(paramId));
-    }
-    let paramNombre = getUrlVars()['nombre'];
-    if (paramNombre) {
-        $('#buscadorNombre').val(decodeURI(paramNombre));
-    }
-    let paramEstado = getUrlVars()['estado'];
-    if (paramEstado) {
-        $('#selectEstado').val(decodeURI(paramEstado));
-    }
-    let paramCategoria = getUrlVars()['categoria'];
-    if (paramCategoria) {
-        $('#selectCategoria').val(decodeURI(paramCategoria));
-    }
-    let paramProcedimiento = getUrlVars()['procedimiento'];
-    if (paramProcedimiento) {
-        $('#selectProcedimiento').val(decodeURI(paramProcedimiento));
-    }
-    let paramCPV = getUrlVars()['cpv'];
-    if (paramCPV) {
-        $('#buscadorCPV').val(decodeURI(paramCPV));
-    }
-    let paramNombreContratante = getUrlVars()['nombreContratante'];
-    if (paramNombreContratante) {
-        $('#selectNomOrgContr').val(decodeURI(paramNombreContratante));
-    }
-    let paramAdjucicatario = getUrlVars()['adjucicatario'];
-    if (paramAdjucicatario) {
-        $('#buscadorLicitador').val(decodeURI(paramAdjucicatario));
-    }
-    let paramDesdeFecha = getUrlVars()['fechaDesde'];
-    if (paramDesdeFecha) {
-        $('#buscadorDesdeFecha').val(decodeURI(paramDesdeFecha));
-    }
-    let paramHastaFecha = getUrlVars()['fechaHasta'];
-    if (paramHastaFecha) {
-        $('#buscadorHastaFecha').val(decodeURI(paramHastaFecha));
-    }
-    let paramImporteDesde = getUrlVars()['importeDesde'];
-    if (paramImporteDesde) {
-        $('#buscadorImporteDesde').val(decodeURI(paramImporteDesde));
-    }
-    let paramTipoBeneficiario = getUrlVars()['tipo'];
-    if (paramTipoBeneficiario) {
-        let paramCifAdjudicatario = IDENTIFICADOR_TIPO_ENTIDAD.get(
-            decodeURI(paramTipoBeneficiario)
-        );
-        if (paramCifAdjudicatario) {
-            $('#buscadorCifLicitador').val(decodeURI(paramCifAdjudicatario));
-        }
-    }
-
-    buscar(BUSQUEDA_INICIAL_ANYO);
-}
-
 /*
 Función que inicializa la tabla de búsqueda
 */
 function preparaTablaBuscadorCont(segundaPasada) {
     if (LOG_DEGUB_BUSCADOR) {
-        console.log('preparaTablaBuscadorCont');
+        console.log('INFO preparaTablaBuscadorCont');
     }
 
     let dataSet = [];
-    let expedienteCadena = '';
-    let nombreCadena = '';
-    let categoriaCadena = '';
-    let estadoCadena = '';
-    let organismoContratanteCadena = '';
-    let numeroLicitadoresCadena = '';
-    let adjudicatarioCadena = '';
-    let importeCadena = '';
-    let procedimientoCadena = '';
-    let copyCadena = '';
-    let modificarTablaCadena = '';
-    let descargarCadena = '';
+    let expedienteCadena = $.i18n("n_expediente");
+    let nombreCadena = $.i18n('nombre');
+    let categoriaCadena = $.i18n('categoria');
+    let estadoCadena =  $.i18n('estado');
+    let organismoContratanteCadena = $.i18n('organismo_contratante');
+    let numeroLicitadoresCadena =  $.i18n('numero_licitadores');
+    let adjudicatarioCadena =  $.i18n('adjudicatario');
+    let importeCadena = $.i18n('importe');
+    let procedimientoCadena = $.i18n('procedimiento');
+    let copyCadena = $.i18n('copiar');
+    let modificarTablaCadena = $.i18n('modificar_tabla');
+    let descargarCadena = $.i18n('descargar');
     
 
     identificadorCadena = $.i18n('identidicador');
-    expedienteCadena = $.i18n('n_expediente');
-    nombreCadena = $.i18n('nombre');
-    categoriaCadena = $.i18n('categoria');
-    estadoCadena = $.i18n('estado');
-    organismoContratanteCadena = $.i18n('organismo_contratante');
-    numeroLicitadoresCadena = $.i18n('numero_licitadores');
-    organismoContratanteIdCadena = $.i18n('organismo_contratante_id');
-    adjudicatarioCadena = $.i18n('adjudicatario');
-    importeCadena = $.i18n('importe');
-    procedimientoCadena = $.i18n('procedimiento');
     let showHideCadena = $.i18n('oculta_columnas');
     let importeAdjudicadoCadena = $.i18n('importe_adjudicado');
     let nombreLoteCadena = $.i18n('nombre_lote');
     let importeLoteCadena = $.i18n('importe_lote');
     let fechaInicioCadena = $.i18n('fecha_inicio_licitacion');
-
-    copyCadena = $.i18n('copiar');
-    modificarTablaCadena = $.i18n('modificar_tabla');
-    descargarCadena = $.i18n('descargar');
 
     let urlLanguaje = 'vendor/datatables/i18n/' + $.i18n().locale + '.json';
 
@@ -2458,7 +4032,7 @@ Función que inicializa la tabla de búsqueda
 */
 function preparaTablaBuscadorAdj(segundaPasada) {
     if (LOG_DEGUB_BUSCADOR) {
-        console.log('preparaTablaBuscadorAdj');
+        console.log('INFO preparaTablaBuscadorAdj');
     }
 
     let dataSet = [];
@@ -2747,1109 +4321,16 @@ function dameCeldaAdjudicatario(row) {
     return resultado;
 }
 
-/*
-                Funcion que realiza las busquedas en la tabla
-*/
-function buscar(busquedaInicial) {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('buscar');
-    }
 
-    $('#textoBusquedaGraficosCont').html('');
-    orgContratanteNum = new Map();
-    orgContratanteImp = new Map();
-    orgContratanteColIzq = [];
-    orgContratanteColDer = [];
-    awardNum = new Map();
-    awardImp = new Map();
-    awardColIzq = [];
-    awardColDer = [];
-    estadosSelec = [];
-    categoriaSelec = [];
-    procedimientoSelec = [];
-    orgContrSelec = [];
-    anyoSelec = [];
 
-    if (!heightInicial) {
-        heightInicial = $('#iframeBuscador', window.parent.document).height();
-    }
 
-    let textoBusqueda = '';
-    let textoBusquedaTabla = '';
-    let busquedaTodo = true;
-
-    let idBusqueda = $('#buscadorExpediente').val();
-    let nombreBusqueda = $('#buscadorNombre').val();
-    let idOrgContrBusqueda = '';
-    let fechaInicioBusqueda = $('#buscadorDesdeFecha').val();
-    let fechaFinBusqueda = $('#buscadorHastaFecha').val();
-    let licitadorBusqueda = $('#buscadorLicitador').val();
-    let CPVBusqueda = $('#buscadorCPV').val();
-    let importeDesdeBusqueda = $('#buscadorImporteDesde').val();
-    let importeHastaBusqueda = $('#buscadorImporteHasta').val();
-    let cifLicitadorBusqueda = $('#buscadorCifLicitador').val();
-    let titleOrgContrSelec = [];
-    obteneValoresAnyos();
-    if (busquedaInicial) {
-        anyoSelec.push(busquedaInicial);
-        $('#anyo' + busquedaInicial).prop('checked', true);
-    }
-    obteneValoresEstados();
-    obteneValoresCategorias();
-    obteneValoresProcedimiento();
-    obteneValoresOrgContr();
-
-    if (idBusqueda) {
-        textoBusqueda =
-            textoBusqueda +
-            '<span class="textoNegrita">' +
-            $.i18n('n_expediente:') +
-            '</span>' +
-            ' ' +
-            idBusqueda;
-        busquedaTodo = false;
-    }
-
-    if (nombreBusqueda) {
-        if (textoBusqueda) {
-            textoBusqueda = textoBusqueda + ' | ';
-        }
-        textoBusqueda =
-            textoBusqueda +
-            '<span class="textoNegrita">' +
-            $.i18n('nombre:') +
-            '</span>' +
-            ' ' +
-            nombreBusqueda;
-        busquedaTodo = false;
-    }
-    let l;
-    for (l = 0; l < anyoSelec.length; l++) {
-        let anyoBusqueda = anyoSelec[l];
-        if (anyoBusqueda) {
-            if (textoBusqueda) {
-                textoBusqueda = textoBusqueda + ' | ';
-            }
-            textoBusqueda =
-                textoBusqueda +
-                '<span class="textoNegrita">' +
-                $.i18n('anyo:') +
-                '</span>' +
-                ' ' +
-                anyoBusqueda;
-            busquedaTodo = false;
-        }
-    }
-    let q;
-    for (q = 0; q < categoriaSelec.length; q++) {
-        let categoriaBusqueda = categoriaSelec[q];
-        if (categoriaBusqueda) {
-            if (textoBusqueda) {
-                textoBusqueda = textoBusqueda + ' | ';
-            }
-            textoBusqueda =
-                textoBusqueda +
-                '<span class="textoNegrita">' +
-                $.i18n('categoria:') +
-                '</span>' +
-                ' ' +
-                ETIQUETA_TIP_CONT.get(categoriaBusqueda);
-            busquedaTodo = false;
-        }
-    }
-    let r;
-    for (r = 0; r < estadosSelec.length; r++) {
-        let estado = estadosSelec[r];
-        if (estado) {
-            if (textoBusqueda) {
-                textoBusqueda = textoBusqueda + ' | ';
-            }
-            textoBusqueda =
-                textoBusqueda +
-                '<span class="textoNegrita">' +
-                $.i18n('estado:') +
-                '</span>' +
-                ' ' +
-                ETIQUETA_ESTADO.get(estado);
-            busquedaTodo = false;
-        }
-    }
-
-    let o;
-    for (o = 0; o < orgContrSelec.length; o++) {
-        let titleOrgContrBusqueda = orgContrSelec[o];
-        if (titleOrgContrBusqueda) {
-            if (textoBusqueda) {
-                textoBusqueda = textoBusqueda + ' | ';
-            }
-            textoBusqueda =
-                textoBusqueda +
-                '<span class="textoNegrita">' +
-                $.i18n('organizacion_contratante:') +
-                '</span>' +
-                ' ' +
-                titleOrgContrBusqueda;
-            busquedaTodo = false;
-        }
-        // idOrgContrBusqueda = organismoCMap.get(titleOrgContrBusqueda);
-    }
-
-    if (fechaInicioBusqueda) {
-        if (textoBusqueda) {
-            textoBusqueda = textoBusqueda + ' | ';
-        }
-        textoBusqueda =
-            textoBusqueda +
-            '<span class="textoNegrita">' +
-            $.i18n('fecha') +
-            ' ' +
-            $.i18n('desde:') +
-            '</span>' +
-            ' ' +
-            fechaInicioBusqueda;
-        busquedaTodo = false;
-    }
-
-    if (fechaFinBusqueda) {
-        if (textoBusqueda) {
-            textoBusqueda = textoBusqueda + ' | ';
-        }
-        textoBusqueda =
-            textoBusqueda +
-            '<span class="textoNegrita">' +
-            $.i18n('fecha') +
-            ' ' +
-            $.i18n('hasta:') +
-            '</span>' +
-            ' ' +
-            fechaFinBusqueda;
-        busquedaTodo = false;
-    }
-    let s;
-    for (s = 0; s < procedimientoSelec.length; s++) {
-        let procedimientoBusqueda = procedimientoSelec[s];
-        if (procedimientoBusqueda) {
-            if (textoBusqueda) {
-                textoBusqueda = textoBusqueda + ' | ';
-            }
-            textoBusqueda =
-                textoBusqueda +
-                '<span class="textoNegrita">' +
-                $.i18n('procedimiento:') +
-                '</span>' +
-                ' ' +
-                ETIQUETA_TIP_PROC.get(procedimientoBusqueda);
-            busquedaTodo = false;
-        }
-    }
-
-    if (licitadorBusqueda) {
-        if (textoBusqueda) {
-            textoBusqueda = textoBusqueda + ' | ';
-        }
-        textoBusqueda =
-            textoBusqueda +
-            '<span class="textoNegrita">' +
-            $.i18n('adjudicatario:') +
-            '</span>' +
-            ' ' +
-            licitadorBusqueda;
-        busquedaTodo = false;
-    }
-
-    if (CPVBusqueda) {
-        if (textoBusqueda) {
-            textoBusqueda = textoBusqueda + ' | ';
-        }
-        textoBusqueda =
-            textoBusqueda +
-            '<span class="textoNegrita">' +
-            $.i18n('CPV:') +
-            '</span>' +
-            ' ' +
-            CPVBusqueda;
-        busquedaTodo = false;
-    }
-
-    if (importeDesdeBusqueda) {
-        if (textoBusqueda) {
-            textoBusqueda = textoBusqueda + ' | ';
-        }
-        textoBusqueda =
-            textoBusqueda +
-            '<span class="textoNegrita">' +
-            $.i18n('importe') +
-            ' ' +
-            $.i18n('desde:') +
-            '</span>' +
-            ' ' +
-            importeDesdeBusqueda;
-        busquedaTodo = false;
-    }
-
-    if (importeHastaBusqueda) {
-        if (textoBusqueda) {
-            textoBusqueda = textoBusqueda + ' | ';
-        }
-        textoBusqueda =
-            textoBusqueda +
-            '<span class="textoNegrita">' +
-            $.i18n('importe') +
-            ' ' +
-            $.i18n('hasta:') +
-            '</span>' +
-            ' ' +
-            importeHastaBusqueda;
-        busquedaTodo = false;
-    }
-
-    if (cifLicitadorBusqueda) {
-        if (textoBusqueda) {
-            textoBusqueda = textoBusqueda + ' | ';
-        }
-        textoBusqueda =
-            textoBusqueda +
-            '<span class="textoNegrita">' +
-            $.i18n('adjudicatario_cif:') +
-            '</span>' +
-            ' ' +
-            cifLicitadorBusqueda;
-        busquedaTodo = false;
-    }
-
-    if (busquedaTodo) {
-        textoBusquedaTabla = $.i18n('datos_tabla_filtrar');
-        textoBusquedaGrafico = $.i18n('datos_grafico_filtrar');
-    }
-    $('#textoBusquedaTabla').html(textoBusquedaTabla + textoBusqueda);
-    $('#textoBusquedaGraficosCont').html(textoBusquedaTabla + textoBusqueda);
-    creaDatasetTabla(
-        idBusqueda,
-        nombreBusqueda,
-        anyoSelec,
-        categoriaSelec,
-        estadosSelec,
-        idOrgContrBusqueda,
-        orgContrSelec,
-        fechaInicioBusqueda,
-        fechaFinBusqueda,
-        procedimientoSelec,
-        licitadorBusqueda,
-        CPVBusqueda,
-        importeDesdeBusqueda,
-        importeHastaBusqueda,
-        cifLicitadorBusqueda
-    );
-
-    orgContratanteNum.forEach(contruyeOrgContNum);
-    datosGraficoOrgContImp();
-    datosGraficoOrgContNum();
-
-    awardImp.forEach(contruyeAwardImp);
-    awardNum.forEach(contruyeAwardNum);
-    datosGraficoAwardImp();
-    datosGraficoAwardNum();
-
-    $("#modalCargaInicial").modal("hide");
-}
 
 /*
-                Función para limpiar el formulario
-*/
-function limpiarFormulario() {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('limpiarFormulario');
-    }
-
-    $('#buscadorExpediente').val('');
-    $('#buscadorNombre').val('');
-    $('#selectIdOrgContr').val('');
-    $('#selectNomOrgContr').selectpicker('deselectAll');
-    $('#buscadorHastaFecha').val('');
-    $('#buscadorDesdeFecha').val('');
-    $('#buscadorImporteDesde').val('');
-    $('#buscadorImporteHasta').val('');
-    $('#buscadorCPV').val('');
-    $('#buscadorLicitador').val('');
-    $('#buscadorCifLicitador').val('');
-    quitaSeleccionAnyos();
-    quitaSeleccionEstados();
-    quitaSeleccionCategorias();
-    quitaSeleccionProcedimiento();
-    quitaSeleccionOrgContr();
-
-    estadosSelec = [];
-    categoriaSelec = [];
-    procedimientoSelec = [];
-    anyoSelec = [];
-
-    $('#iframeBuscador', window.parent.document).height(heightInicial);
-}
-
-/*
-función que pinta el gráfico
-*/
-function pintaGraficoOrgContImp(data, div) {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('pintaGraficoOrgContImp');
-    }
-
-    am4core.useTheme(am4themes_frozen);
-    am4core.useTheme(am4themes_animated);
-
-    let chart = am4core.create(div, am4charts.XYChart);
-    chart.data = data;
-    chart.language.locale = am4lang_es_ES;
-
-    chart.hiddenState.properties.opacity = 0;
-
-	chart.focusFilter.stroke = am4core.color("#0f0");
-	chart.focusFilter.strokeWidth = 4;
-	
-    let categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
-    categoryAxis.dataFields.category = 'nameCorto';
-    categoryAxis.renderer.grid.template.location = 0;
-    categoryAxis.renderer.minGridDistance = 1;
-    categoryAxis.renderer.inversed = true;
-    categoryAxis.renderer.grid.template.disabled = true;
-
-    let valueAxis = chart.xAxes.push(new am4charts.ValueAxis());
-    valueAxis.min = 0;
-
-    let series = chart.series.push(new am4charts.ColumnSeries());
-    series.dataFields.categoryY = 'nameCorto';
-    series.dataFields.valueX = 'valueAmountTotal';
-    series.columns.template.properties.tooltipText = '{valueAmountTotal} €';
-    series.columns.template.cursorOverStyle = am4core.MouseCursorStyle.pointer;
-    series.columns.template.adapter.add('fill', function (fill, target) {
-        return chart.colors.getIndex(target.dataItem.index);
-    });
-    series.columns.template.events.on(
-        'hit',
-        function (ev) {
-            let url = 'fichaOrganizacionContratante.html?lang=' + $.i18n().locale;
-            url =
-                url +
-                '&id=' +
-                ev.target.dataItem.dataContext.id +
-                '&capaAnterior=inicio';
-
-            $('#iframeFichaOrganizacionContratante', window.parent.document).attr(
-                'src',
-                url
-            );
-            $('#iframeFichaOrganizacionContratante', window.parent.document).height(
-                FICHAS_HEIGHT
-            );
-
-            $('#capaBuscador', window.parent.document).hide();
-            $('#capaAyuda', window.parent.document).hide();
-            $('#capaFichaContrato', window.parent.document).hide();
-            $('#capaFichaAdjudicatario', window.parent.document).hide();
-            $('#capaFichaOrganizacionContratante', window.parent.document).show();
-
-            $('html,body', window.parent.document).scrollTop(0);
-        },
-        this
-    );
-    
-    if(div=='chartOrgContImp')
-    {
-        // Enable export
-        chart.exporting.menu = new am4core.ExportMenu();
-        chart.exporting.menu.container = document.getElementById("exportOrgContImp");
-        chart.exporting.filePrefix = 'grafico';
-        /* Opciones: csv, gif, html, jpg, json, pdf, pdfdata, png, print, svg, xlsx
-        */
-        chart.exporting.menu.items = [
-            {
-                label: "<i class='fa fa-download fa-2'></i>",
-                menu: [
-                    { type: "csv", label: "CSV" },
-                    { type: "xlsx", label: "XLSX" },
-                    { type: "json", label: "JSON" },
-                ],
-            },
-        ];
-    }
-}
-
-/*
-Función que pinta el gráfico
-*/
-function pintaGraficoOrgContNum(data, div) {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('pintaGraficoOrgContNum');
-    }
-
-    am4core.useTheme(am4themes_frozen);
-    am4core.useTheme(am4themes_animated);
-
-    let chart = am4core.create(div, am4charts.XYChart);
-    chart.data = data;
-    chart.language.locale = am4lang_es_ES;
-
-    chart.hiddenState.properties.opacity = 0;
-
-    chart.focusFilter.stroke = am4core.color("#0f0");
-	chart.focusFilter.strokeWidth = 4;
-
-    let categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
-    categoryAxis.dataFields.category = 'nameCorto';
-    categoryAxis.renderer.grid.template.location = 0;
-    categoryAxis.renderer.minGridDistance = 1;
-    categoryAxis.renderer.inversed = true;
-    categoryAxis.renderer.grid.template.disabled = true;
-
-    let valueAxis = chart.xAxes.push(new am4charts.ValueAxis());
-    valueAxis.min = 0;
-
-    let series = chart.series.push(new am4charts.ColumnSeries());
-    series.dataFields.categoryY = 'nameCorto';
-    series.dataFields.valueX = 'value';
-    series.columns.template.properties.tooltipText = '{value}';
-    series.columns.template.cursorOverStyle = am4core.MouseCursorStyle.pointer;
-    series.columns.template.adapter.add('fill', function (fill, target) {
-        return chart.colors.getIndex(target.dataItem.index);
-    });
-    series.columns.template.events.on(
-        'hit',
-        function (ev) {
-            let url = 'fichaOrganizacionContratante.html?lang=' + $.i18n().locale;
-            url =
-                url +
-                '&id=' +
-                ev.target.dataItem.dataContext.id +
-                '&capaAnterior=inicio';
-
-            $('#iframeFichaOrganizacionContratante', window.parent.document).attr(
-                'src',
-                url
-            );
-            $('#iframeFichaOrganizacionContratante', window.parent.document).height(
-                FICHAS_HEIGHT
-            );
-
-            $('#capaBuscador', window.parent.document).hide();
-            $('#capaAyuda', window.parent.document).hide();
-            $('#capaFichaContrato', window.parent.document).hide();
-            $('#capaFichaAdjudicatario', window.parent.document).hide();
-            $('#capaFichaOrganizacionContratante', window.parent.document).show();
-
-            $('html,body', window.parent.document).scrollTop(0);
-        },
-        this
-    );
-    
-    if(div=='chartOrgContNum')
-    {
-        // Enable export
-        chart.exporting.menu = new am4core.ExportMenu();
-        chart.exporting.menu.container = document.getElementById("exportOrgContNum");
-        chart.exporting.filePrefix = 'grafico';
-        /* Opciones: csv, gif, html, jpg, json, pdf, pdfdata, png, print, svg, xlsx
-        */
-        chart.exporting.menu.items = [
-            {
-                label: "<i class='fa fa-download fa-2'></i>",
-                menu: [
-                    { type: "csv", label: "CSV" },
-                    { type: "xlsx", label: "XLSX" },
-                    { type: "json", label: "JSON" },
-                ],
-            },
-        ];
-    }
-}
-
-/*
-Crea una estractura que será insertada en la tabla de la página web
-*/
-function datosGraficoOrgContImp() {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('datosGraficoOrgContImp');
-    }
-
-    let organizacionesCadena = $.i18n('organizaciones');
-    let importeCadena = $.i18n('importe');
-    
-    let htmlContent =
-        '<div class="row"><div class="col-md-12"><table style="width: 100%;"><tr><th>' +
-        organizacionesCadena +
-        '</th><th>' +
-        importeCadena +
-        '</th></tr>';
-    let c;
-    for (c = 0; c < orgContratanteColIzq.length; c++) {
-        let orgContratanteAux = orgContratanteColIzq[c];
-        htmlContent =
-            htmlContent +
-            '<tr>' +
-            '<td>' +
-            orgContratanteAux.nameCompl +
-            '</td>' +
-            '<td>' +
-            orgContratanteAux.importe +
-            '</td>' +
-            '</tr>';
-    }
-    htmlContent =
-        htmlContent +
-        '</table></div></div>';
-    $('#datosOrgContImp').html(htmlContent);
-
-    pintaGraficoOrgContImp(orgContratanteColIzq.slice(0, REGISTRO_GRAFICOS), 'chartOrgContImp');
-    pintaGraficoOrgContImp(orgContratanteColIzq.slice(0, REGISTRO_GRAFICOS), 'chartOrgContImp2');
-    
-}
-
-/*
-                Crea una estractura que será insertada en la tabla de la página web
-*/
-function datosGraficoOrgContNum() {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('datosGraficoOrgContNum');
-    }
-
-    orgContratanteColDer.sort(compareNum);
-
-    let organizacionesCadena = $.i18n('organizaciones');
-    let numeroContratos =  $.i18n('numero_contratos');
-    
-    let htmlContent =
-        '<div class="row"><div class="col-md-12"><table style="width: 100%;"><tr><th>' +
-        organizacionesCadena +
-        '</th><th>' +
-        numeroContratos +
-        '</th></tr>';
-    let c;
-    for (c = 0; c < orgContratanteColDer.length; c++) {
-        let orgContratanteAux = orgContratanteColDer[c];
-        htmlContent =
-            htmlContent +
-            '<tr>' +
-            '<td>' +
-            orgContratanteAux.nameCompl +
-            '</td>' +
-            '<td>' +
-            orgContratanteAux.value +
-            '</td>' +
-            '</tr>';
-    }
-
-    htmlContent =
-        htmlContent +
-        '</table></div></div>';
-    $('#datosOrgContNum').html(htmlContent);
-
-    pintaGraficoOrgContNum(orgContratanteColDer.slice(0, REGISTRO_GRAFICOS), 'chartOrgContNum');
-    pintaGraficoOrgContNum(orgContratanteColDer.slice(0, REGISTRO_GRAFICOS), 'chartOrgContNum2');
-}
-
-function compareImp(a, b) {
-    if (a.valueAmountTotal > b.valueAmountTotal) return -1;
-    if (b.valueAmountTotal > a.valueAmountTotal) return 1;
-
-    return 0;
-}
-
-function compareNum(a, b) {
-    if (a.numTotal > b.numTotal) return -1;
-    if (b.numTotal > a.numTotal) return 1;
-
-    return 0;
-}
-
-/*
-Función que muestra u oculta la capa de la tabla de datos
-*/
-function mostrarDatosOrgContImp() {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('mostrarDatosOrgContImp');
-    }
-
-    $('#datosOrgContImp').toggle();
-    if (!heightInicial) {
-        heightInicial = $('#iframeBuscador', window.parent.document).height();
-    }
-
-    let isVisible = $('#datosOrgContImp').is(':visible');
-    if (isVisible) {
-        $('#iframeBuscador', window.parent.document).height(
-            $('body').height() + 10
-        );
-    } else {
-        if ($('.table-responsive').is(':visible')) {
-            $('#iframeBuscador', window.parent.document).height(heightConTabla);
-        } else {
-            $('#iframeBuscador', window.parent.document).height(heightInicial);
-        }
-    }
-}
-
-/*
-Función que muestra u oculta la capa de la tabla de datos
-*/
-function mostrarDatosOrgContNum() {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('mostrarDatosOrgContNum');
-    }
-
-    $('#datosOrgContNum').toggle();
-    if (!heightInicial) {
-        heightInicial = $('#iframeBuscador', window.parent.document).height();
-    }
-
-    let isVisible = $('#datosOrgContNum').is(':visible');
-    if (isVisible) {
-        $('#iframeBuscador', window.parent.document).height(
-            $('body').height() + 10
-        );
-    } else {
-        if ($('.table-responsive').is(':visible')) {
-            $('#iframeBuscador', window.parent.document).height(heightConTabla);
-        } else {
-            $('#iframeBuscador', window.parent.document).height(heightInicial);
-        }
-    }
-}
-
-function contruyeOrgContImp(value, key) {
-    let nameCompl = key;
-    let nameCorto = nameCompl.substring(0, 30);
-    let numIguales = 0;
-    let d;
-    for(d=0;d<orgContratanteColIzq.length;d++) {
-        if(orgContratanteColIzq[d].nameCorto.substring(0, 28) == nameCorto.substring(0, 28)) {
-            numIguales = numIguales + 1;
-        }
-    }
-    if(numIguales!=0) { 
-        nameCorto = nameCompl.substring(0, 28) + '~' + numIguales;
-    }
-    let orgContratante = {
-        id: organismoCMap.get(nameCompl),
-        nameCompl: nameCompl,
-        nameCorto: nameCorto,
-        valueAmountTotal: value,
-    };
-    let importe = numeral(orgContratante.valueAmountTotal).format(
-        importeFormato,
-        Math.ceil
-    );
-    orgContratante.importe = importe;
-    orgContratanteColIzq.push(orgContratante);
-}
-
-function contruyeOrgContNum(value, key) {
-    let nameCompl = key;
-    let nameCorto = nameCompl.substring(0, 30);
-    let numIguales = 0;
-    let d;
-    for(d=0;d<orgContratanteColDer.length;d++) {
-        if(orgContratanteColDer[d].nameCorto.substring(0, 28) == nameCorto.substring(0, 28)) {
-            numIguales = numIguales + 1;
-        }
-    }
-    if(numIguales!=0) { 
-        nameCorto = nameCompl.substring(0, 28) + '~' + numIguales;
-    }
-    let orgContratante = {
-        id: organismoCMap.get(nameCompl),
-        nameCompl: nameCompl,
-        nameCorto: nameCorto,
-        numTotal: Number(value),
-    };
-    let num = numeral(value).format(numFormatoSinDecimales, Math.ceil);
-    orgContratante.value = num;
-    orgContratanteColDer.push(orgContratante);
-}
-
-function contruyeDatasetAdj(value, key) {
-    datasetAdj[posResultAdj] = [
-        value.title,
-        value.id,
-        value.numAdj,
-        value.impAdj,
-    ];
-    posResultAdj = posResultAdj + 1;
-    awardNum.set(value.id, value.numAdj);
-    awardImp.set(value.id, value.impAdj);
-}
-
-function contruyeAwardImp(value, key) {
-    let id = key;
-    let nameCompl = organizationCol[key].title;
-    let nameCorto = nameCompl.substring(0, 30);
-    let numIguales = 0;
-    let d;
-    for(d=0;d<awardColIzq.length;d++) {
-        if(awardColIzq[d].nameCorto.substring(0, 28) == nameCorto.substring(0, 28)) {
-            numIguales = numIguales + 1;
-        }
-    }
-    if(numIguales!=0) { 
-        nameCorto = nameCompl.substring(0, 28) + '~' + numIguales;
-    }
-    let award = {
-        id: id,
-        nameCompl: nameCompl,
-        nameCorto: '',
-        valueAmountTotal: value,
-    };
-    if (nameCompl) {
-        award.nameCorto = nameCorto;
-    }
-    let importe = numeral(award.valueAmountTotal).format(
-        importeFormato,
-        Math.ceil
-    );
-    award.importe = importe;
-    awardColIzq.push(award);
-}
-
-function contruyeAwardNum(value, key) {
-    let id = key;
-    let nameCompl = organizationCol[key].title;
-    let nameCorto = nameCompl.substring(0, 30);
-    let numIguales = 0;
-    let d;
-    for(d=0;d<awardColDer.length;d++) {
-        if(awardColDer[d].nameCorto.substring(0, 28) == nameCorto.substring(0, 28)) {
-            numIguales = numIguales + 1;
-        }
-    }
-    if(numIguales!=0) { 
-        nameCorto = nameCompl.substring(0, 28) + '~' + numIguales;
-    }
-    let award = {
-        id: id,
-        nameCompl: nameCompl,
-        nameCorto: '',
-        numTotal: Number(value),
-    };
-    if (nameCompl) {
-        award.nameCorto = nameCorto;
-    }
-    let num = numeral(value).format(numFormatoSinDecimales, Math.ceil);
-    award.value = num;
-    awardColDer.push(award);
-}
-
-/*
-                Crea una estractura que será insertada en la tabla de la página web
-*/
-function datosGraficoAwardImp() {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('datosGraficoAwardImp');
-    }
-
-    awardColIzq.sort(compareImp);
-
-    let adjudicatariosCadena = $.i18n('adjudicatarios');
-    let importeCadena = $.i18n('importe');
-    
-    let htmlContent =
-        '<div class="row"><div class="col-md-12"><table style="width: 100%;"><tr><th>' +
-        adjudicatariosCadena +
-        '</th><th>' +
-        importeCadena +
-        '</th></tr>';
-    let c;
-    for (c = 0; c < awardColIzq.length; c++) {
-        let awardAux = awardColIzq[c];
-        htmlContent =
-            htmlContent +
-            '<tr>' +
-            '<td>' +
-            awardAux.nameCompl +
-            '</td>' +
-            '<td>' +
-            awardAux.importe +
-            '</td>' +
-            '</tr>';
-    }
-    htmlContent =
-        htmlContent +
-        '</table></div></div>';
-    $('#datos_subInfIzqAdj').html(htmlContent);
-
-    pintaGraficoAwardImp(awardColIzq.slice(0, REGISTRO_GRAFICOS),'chartAdjImp');
-    pintaGraficoAwardImp(awardColIzq.slice(0, REGISTRO_GRAFICOS),'chartAdjImp2');
-}
-
-/*
-                Crea una estractura que será insertada en la tabla de la página web
-*/
-function datosGraficoAwardNum() {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('datosGraficoAwardNum');
-    }
-
-    awardColDer.sort(compareNum);
-
-    let adjudicatariosCadena = $.i18n('adjudicatarios');
-    let numeroContratos = $.i18n('numero_contratos');
-    
-    let htmlContent =
-        '<div class="row"><div class="col-md-12"><table style="width: 100%;"><tr><th>' +
-        adjudicatariosCadena +
-        '</th><th>' +
-        numeroContratos +
-        '</th></tr>';
-    let c;
-    for (c = 0; c < awardColDer.length; c++) {
-        let awardAux = awardColDer[c];
-        htmlContent =
-            htmlContent +
-            '<tr>' +
-            '<td>' +
-            awardAux.nameCompl +
-            '</td>' +
-            '<td>' +
-            awardAux.value +
-            '</td>' +
-            '</tr>';
-    }
-
-    htmlContent =
-        htmlContent +
-        '</table></div></div>';
-    $('#datos_subInfDerAdj').html(htmlContent);
-
-    pintaGraficoAwardNum(awardColDer.slice(0, REGISTRO_GRAFICOS),'chartAdjNum');
-    pintaGraficoAwardNum(awardColDer.slice(0, REGISTRO_GRAFICOS),'chartAdjNum2');
-}
-
-/*
-Función que pinta el gráfico
-*/
-function pintaGraficoAwardImp(data, div) {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('pintaGraficoAwardImp');
-    }
-
-    am4core.useTheme(am4themes_frozen);
-    am4core.useTheme(am4themes_animated);
-
-    let chart = am4core.create(
-        div,
-        am4charts.XYChart
-    );
-    chart.data = data;
-    chart.language.locale = am4lang_es_ES;
-
-    chart.focusFilter.stroke = am4core.color("#0f0");
-	chart.focusFilter.strokeWidth = 4;
-
-    chart.hiddenState.properties.opacity = 0;
-
-    let categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
-    categoryAxis.dataFields.category = 'nameCorto';
-    categoryAxis.renderer.grid.template.location = 0;
-    categoryAxis.renderer.minGridDistance = 1;
-    categoryAxis.renderer.inversed = true;
-    categoryAxis.renderer.grid.template.disabled = true;
-
-    let valueAxis = chart.xAxes.push(new am4charts.ValueAxis());
-    valueAxis.min = 0;
-
-    let series = chart.series.push(new am4charts.ColumnSeries());
-    series.dataFields.categoryY = 'nameCorto';
-    series.dataFields.valueX = 'valueAmountTotal';
-    series.columns.template.properties.tooltipText = '{valueAmountTotal} €';
-    series.columns.template.cursorOverStyle = am4core.MouseCursorStyle.pointer;
-    series.columns.template.adapter.add('fill', function (fill, target) {
-        return chart.colors.getIndex(target.dataItem.index);
-    });
-    series.columns.template.events.on(
-        'hit',
-        function (ev) {
-            let url = 'fichaAdjudicatario.html?lang=' + $.i18n().locale;
-            url =
-                url +
-                '&id=' +
-                ev.target.dataItem.dataContext.id +
-                '&capaAnterior=inicio';
-
-            $('#iframeFichaAdjudicatario', window.parent.document).attr('src', url);
-            $('#iframeFichaAdjudicatario', window.parent.document).height(
-                FICHAS_HEIGHT
-            );
-
-            $('#capaBuscador', window.parent.document).hide();
-            $('#capaAyuda', window.parent.document).hide();
-            $('#capaFichaContrato', window.parent.document).hide();
-            $('#capaFichaAdjudicatario', window.parent.document).show();
-            $('#capaFichaOrganizacionContratante', window.parent.document).hide();
-
-            $('html,body', window.parent.document).scrollTop(0);
-        },
-        this
-    );
-
-    if(div=='chartAdjImp')
-    {
-        // Enable export
-        chart.exporting.menu = new am4core.ExportMenu();
-        chart.exporting.menu.container = document.getElementById("exportAdjImp");
-        chart.exporting.filePrefix = 'grafico';
-        /* Opciones: csv, gif, html, jpg, json, pdf, pdfdata, png, print, svg, xlsx
-        */
-        chart.exporting.menu.items = [
-            {
-                label: "<i class='fa fa-download fa-2'></i>",
-                menu: [
-                    { type: "csv", label: "CSV" },
-                    { type: "xlsx", label: "XLSX" },
-                    { type: "json", label: "JSON" },
-                ],
-            },
-        ];
-    }
-}
-
-/*
-Función que pinta el gráfico
-*/
-function pintaGraficoAwardNum(data, div) {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('pintaGraficoAwardNum');
-    }
-
-    am4core.useTheme(am4themes_frozen);
-    am4core.useTheme(am4themes_animated);
-
-    let chart = am4core.create(div, am4charts.XYChart);
-    chart.data = data;
-    chart.language.locale = am4lang_es_ES;
-
-    chart.hiddenState.properties.opacity = 0;
-
-    chart.focusFilter.stroke = am4core.color("#0f0");
-	chart.focusFilter.strokeWidth = 4;
-
-    let categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
-    categoryAxis.dataFields.category = 'nameCorto';
-    categoryAxis.renderer.grid.template.location = 0;
-    categoryAxis.renderer.minGridDistance = 1;
-    categoryAxis.renderer.inversed = true;
-    categoryAxis.renderer.grid.template.disabled = true;
-
-    let valueAxis = chart.xAxes.push(new am4charts.ValueAxis());
-    valueAxis.min = 0;
-
-    let series = chart.series.push(new am4charts.ColumnSeries());
-    series.dataFields.categoryY = 'nameCorto';
-    series.dataFields.valueX = 'value';
-    series.columns.template.properties.tooltipText = '{value}';
-    series.columns.template.cursorOverStyle = am4core.MouseCursorStyle.pointer;
-    series.columns.template.adapter.add('fill', function (fill, target) {
-        return chart.colors.getIndex(target.dataItem.index);
-    });
-    series.columns.template.events.on(
-        'hit',
-        function (ev) {
-            let url = 'fichaAdjudicatario.html?lang=' + $.i18n().locale;
-            url =
-                url +
-                '&id=' +
-                ev.target.dataItem.dataContext.id +
-                '&capaAnterior=inicio';
-
-            $('#iframeFichaAdjudicatario', window.parent.document).attr('src', url);
-            $('#iframeFichaAdjudicatario', window.parent.document).height(
-                FICHAS_HEIGHT
-            );
-
-            $('#capaBuscador', window.parent.document).hide();
-            $('#capaAyuda', window.parent.document).hide();
-            $('#capaFichaContrato', window.parent.document).hide();
-            $('#capaFichaAdjudicatario', window.parent.document).show();
-            $('#capaFichaOrganizacionContratante', window.parent.document).hide();
-
-            $('html,body', window.parent.document).scrollTop(0);
-        },
-        this
-    );
-
-    if(div=='chartAdjNum')
-    {
-        // Enable export
-        chart.exporting.menu = new am4core.ExportMenu();
-        chart.exporting.menu.container = document.getElementById("exportAdjNum");
-        chart.exporting.filePrefix = 'grafico';
-        /* Opciones: csv, gif, html, jpg, json, pdf, pdfdata, png, print, svg, xlsx
-        */
-        chart.exporting.menu.items = [
-            {
-                label: "<i class='fa fa-download fa-2'></i>",
-                menu: [
-                    { type: "csv", label: "CSV" },
-                    { type: "xlsx", label: "XLSX" },
-                    { type: "json", label: "JSON" },
-                ],
-            },
-        ];
-    }
-}
-
-/*
-Función que muestra u oculta la capa de la tabla de datos
-*/
-function mostrarDatosAwardImp() {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('mostrarDatosAwardImp');
-    }
-
-    $('#datos_subInfIzqAdj').toggle();
-    if (!heightInicial) {
-        heightInicial = $('#iframeBuscador', window.parent.document).height();
-    }
-
-    let isVisible = $('#datos_subInfIzqAdj').is(':visible');
-    if (isVisible) {
-        $('#iframeBuscador', window.parent.document).height($('body').height());
-    } else {
-        if ($('.table-responsive').is(':visible')) {
-            $('#iframeBuscador', window.parent.document).height(heightConTabla);
-        } else {
-            $('#iframeBuscador', window.parent.document).height(heightInicial);
-        }
-    }
-}
-
-/*
-Función que muestra u oculta la capa de la tabla de datos
-*/
-function mostrarDatosAwardNum() {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('mostrarDatosAwardNum');
-    }
-
-    $('#datos_subInfDerAdj').toggle();
-    if (!heightInicial) {
-        heightInicial = $('#iframeBuscador', window.parent.document).height();
-    }
-
-    let isVisible = $('#datos_subInfDerAdj').is(':visible');
-    if (isVisible) {
-        $('#iframeBuscador', window.parent.document).height($('body').height());
-    } else {
-        if ($('.table-responsive').is(':visible')) {
-            $('#iframeBuscador', window.parent.document).height(heightConTabla);
-        } else {
-            $('#iframeBuscador', window.parent.document).height(heightInicial);
-        }
-    }
-}
-
-/*
-
+cambioCapaGeneral
 */
 function cambioCapaGeneral() {
     if (LOG_DEGUB_BUSCADOR) {
-        console.log('cambioCapaGeneral');
+        console.log('INFO cambioCapaGeneral');
     }
 
     $('#capaGeneral').show();
@@ -3868,11 +4349,11 @@ function cambioCapaGeneral() {
 }
 
 /*
-
+cambioCapacLicitaciones
 */
 function cambioCapacLicitaciones() {
     if (LOG_DEGUB_BUSCADOR) {
-        console.log('cambioCapacLicitaciones');
+        console.log('INFO cambioCapacLicitaciones');
     }
 
     $('#capaGeneral').hide();
@@ -3891,11 +4372,11 @@ function cambioCapacLicitaciones() {
 }
 
 /*
-
+cambioCapaAdjudicatarios
 */
 function cambioCapaAdjudicatarios() {
     if (LOG_DEGUB_BUSCADOR) {
-        console.log('cambioCapaAdjudicatarios');
+        console.log('INFO cambioCapaAdjudicatarios');
     }
 
     $('#capaGeneral').hide();
@@ -3911,756 +4392,4 @@ function cambioCapaAdjudicatarios() {
 
     $('#iframeBuscador', window.parent.document).height(1563);
     heightInicial = 1563;
-}
-
-/*
-Función que pinta el gráfico ImpContratos
-*/
-function pintaGraficoTipAdj(data, div) {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('pintaGraficoTipAdj');
-    }
-
-    am4core.useTheme(am4themes_frozen);
-    am4core.useTheme(am4themes_animated);
-
-    let chart = am4core.create(div, am4charts.TreeMap);
-    chart.data = data;
-    chart.language.locale = am4lang_es_ES;
-    chart.layoutAlgorithm = chart.squarify;
-
-    chart.dataFields.value = 'importe';
-    chart.dataFields.name = 'tipo';
-
-    chart.focusFilter.stroke = am4core.color("#0f0");
-	chart.focusFilter.strokeWidth = 4;
-
-    let level1 = chart.seriesTemplates.create('0');
-    let level1_column = level1.columns.template;
-
-    level1_column.column.cornerRadius(2, 2, 2, 2);
-    level1_column.fillOpacity = 0.8;
-    level1_column.stroke = am4core.color('#fff');
-    level1_column.strokeWidth = 1;
-    level1_column.properties.tooltipText = '{parentName} {name}: {value} €';
-
-    let level1_bullet = level1.bullets.push(new am4charts.LabelBullet());
-    level1_bullet.locationY = 0.5;
-    level1_bullet.locationX = 0.5;
-    level1_bullet.label.text = '{name}\n{value}€';
-    level1_bullet.label.fill = am4core.color('#222');
-    level1_bullet.label.truncate = false;
-
-    level1_bullet.label.padding(4, 10, 4, 10);
-    level1_bullet.label.fontSize = 20;
-    level1_bullet.layout = 'absolute';
-    level1_bullet.label.isMeasured = true;
-
-    if(div=='chartTipAdj'){
-    level1_bullet.events.on('ready', function (event) {
-        let target = event.target;
-        if (target.parent) {
-            let pw = target.maxWidth;
-            let ph = target.maxHeight;
-
-            let label = target.children.getIndex(0);
-            let tw = label.measuredWidth;
-            let th = label.measuredHeight;
-
-            let scale = Math.min(pw / tw, ph / th);
-
-            if (!isNaN(scale) && scale != Infinity) {
-                if (scale > LIMITE_AGRANDAR_TEXTOS_TREEMAP) {
-                    scale = LIMITE_AGRANDAR_TEXTOS_TREEMAP;
-                }
-                target.scale = scale;
-            }
-            
-            if (scale < LIMITE_OCULTAR_TEXTOS_TREEMAP) {
-                target.disabled = true;
-            }
-            
-        }
-    });
-    }
-    
-    if(div=='chartTipAdj')
-    {
-        // Enable export
-        chart.exporting.menu = new am4core.ExportMenu();
-        chart.exporting.menu.container = document.getElementById("exportTipAdj");
-        chart.exporting.filePrefix = 'grafico';
-        /* Opciones: csv, gif, html, jpg, json, pdf, pdfdata, png, print, svg, xlsx
-        */
-        chart.exporting.menu.items = [
-            {
-                label: "<i class='fa fa-download fa-2'></i>",
-                menu: [
-                    { type: "csv", label: "CSV" },
-                    { type: "xlsx", label: "XLSX" },
-                    { type: "json", label: "JSON" },
-                ],
-            },
-        ];
-    }
-
-}
-
-function contruyeTipAdjImp(value, key) {
-    let data = {
-        tipo: key,
-        importe: value,
-    };
-    tipAdjCol.push(data);
-}
-
-/*
-Función que muestra u oculta la capa de la tabla de datos
-*/
-function mostrarDatosTipAdjImp() {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('mostrarDatosTipAdjImp');
-    }
-
-    $('#datos_tablaTipAdj').toggle();
-    if (!heightInicial) {
-        heightInicial = $('#iframeBuscador', window.parent.document).height();
-    }
-
-    let isVisible = $('#datos_tablaTipAdj').is(':visible');
-    if (isVisible) {
-        $('#iframeBuscador', window.parent.document).height(
-            $('body').height() + 10
-        );
-    } else {
-        if ($('.table-responsive').is(':visible')) {
-            $('#iframeBuscador', window.parent.document).height(heightConTabla);
-        } else {
-            $('#iframeBuscador', window.parent.document).height(heightInicial);
-        }
-    }
-}
-
-function contruyeTipoContNum(value, key) {
-    let data = {
-        name: ETIQUETA_TIP_CONT.get(key),
-        value: value,
-    };
-    tipoContNumCol.push(data);
-}
-
-/*
-Función que pinta el gráfico
-*/
-function pintaGraficoTipoContNum(importesTipos, div) {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('pintaGraficoTarta');
-    }
-
-    am4core.useTheme(am4themes_frozen);
-    am4core.useTheme(am4themes_animated);
-
-    let chart = am4core.create(div, am4charts.PieChart);
-    chart.data = importesTipos;
-    chart.language.locale = am4lang_es_ES;
-
-	chart.focusFilter.stroke = am4core.color("#0f0");
-	chart.focusFilter.strokeWidth = 4;
-
-    let series = chart.series.push(new am4charts.PieSeries());
-    series.dataFields.value = 'value';
-    series.dataFields.category = 'name';
-
-    series.labels.template.disabled = true;
-    series.ticks.template.disabled = true;
-
-    chart.legend = new am4charts.Legend();
-    chart.legend.position = 'bottom';
-    chart.legend.labels.template.maxWidth = 120;
-    chart.legend.labels.template.truncate = true;
-    chart.legend.itemContainers.template.tooltipText = '{category}';
-	
-    series.legendSettings.labelText = '{name}';
-    series.legendSettings.valueText = '{value}';
-    series.slices.template.tooltipText = '{name}: {value}';
-    series.slices.template.cursorOverStyle = am4core.MouseCursorStyle.pointer;
-
-    if(div=='chartTipoContNum')
-    {
-        // Enable export
-        chart.exporting.menu = new am4core.ExportMenu();
-        chart.exporting.menu.container = document.getElementById("exportTipoContNum");
-        chart.exporting.filePrefix = 'grafico';
-        /* Opciones: csv, gif, html, jpg, json, pdf, pdfdata, png, print, svg, xlsx
-        */
-        chart.exporting.menu.items = [
-            {
-                label: "<i class='fa fa-download fa-2'></i>",
-                menu: [
-                    { type: "csv", label: "CSV" },
-                    { type: "xlsx", label: "XLSX" },
-                    { type: "json", label: "JSON" },
-                ],
-            },
-        ];
-    }
-}
-
-/*
-Función que muestra u oculta la capa de la tabla de datos
-*/
-function mostrarDatosTipoContNum() {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('mostrarDatosTipoContNum');
-    }
-
-    $('#datos_tablaTipoContNum').toggle();
-    if (!heightInicial) {
-        heightInicial = $('#iframeBuscador', window.parent.document).height();
-    }
-
-    let isVisible = $('#datos_tablaTipoContNum').is(':visible');
-    if (isVisible) {
-        $('#iframeBuscador', window.parent.document).height(
-            $('body').height() + 10
-        );
-    } else {
-        if ($('.table-responsive').is(':visible')) {
-            $('#iframeBuscador', window.parent.document).height(heightConTabla);
-        } else {
-            $('#iframeBuscador', window.parent.document).height(heightInicial);
-        }
-    }
-}
-
-function contruyeTipoContImp(value, key) {
-    let data = {
-        name: ETIQUETA_TIP_CONT.get(key),
-        value: value,
-    };
-    tipoContImpCol.push(data);
-}
-
-/*
-Función que pinta el gráfico
-*/
-function pintaGraficoTipoContImp(importesTipos, div) {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('pintaGraficoTipoContImp');
-    }
-
-    am4core.useTheme(am4themes_frozen);
-    am4core.useTheme(am4themes_animated);
-
-    let chart = am4core.create(div, am4charts.PieChart);
-    chart.data = importesTipos;
-    chart.language.locale = am4lang_es_ES;
-
-    let series = chart.series.push(new am4charts.PieSeries());
-    series.dataFields.value = 'value';
-    series.dataFields.category = 'name';
-
-    series.labels.template.disabled = true;
-    series.ticks.template.disabled = true;
-
-    chart.focusFilter.stroke = am4core.color("#0f0");
-	chart.focusFilter.strokeWidth = 4;
-
-    chart.legend = new am4charts.Legend();
-    chart.legend.position = 'bottom';
-    chart.legend.labels.template.maxWidth = 120;
-    chart.legend.labels.template.truncate = true;
-    chart.legend.itemContainers.template.tooltipText = '{category}';
-
-    series.legendSettings.labelText = '{name}';
-    series.legendSettings.valueText = '{value}€';
-    series.slices.template.tooltipText = '{name}: {value} €';
-    series.slices.template.cursorOverStyle = am4core.MouseCursorStyle.pointer;
-
-    if(div=='chartTipoContImp')
-    {
-        // Enable export
-        chart.exporting.menu = new am4core.ExportMenu();
-        chart.exporting.menu.container = document.getElementById("exportTipoContImp");
-        chart.exporting.filePrefix = 'grafico';
-        /* Opciones: csv, gif, html, jpg, json, pdf, pdfdata, png, print, svg, xlsx
-        */
-        chart.exporting.menu.items = [
-            {
-                label: "<i class='fa fa-download fa-2'></i>",
-                menu: [
-                    { type: "csv", label: "CSV" },
-                    { type: "xlsx", label: "XLSX" },
-                    { type: "json", label: "JSON" },
-                ],
-            },
-        ];
-    }
-}
-
-/*
-Función que muestra u oculta la capa de la tabla de datos
-*/
-function mostrarDatosTipoContImp() {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('mostrarDatosTipoContImp');
-    }
-
-    $('#datos_tablaTipoContImp').toggle();
-    if (!heightInicial) {
-        heightInicial = $('#iframeBuscador', window.parent.document).height();
-    }
-
-    let isVisible = $('#datos_tablaTipoContImp').is(':visible');
-    if (isVisible) {
-        $('#iframeBuscador', window.parent.document).height(
-            $('body').height() + 10
-        );
-    } else {
-        if ($('.table-responsive').is(':visible')) {
-            $('#iframeBuscador', window.parent.document).height(heightConTabla);
-        } else {
-            $('#iframeBuscador', window.parent.document).height(heightInicial);
-        }
-    }
-}
-
-function contruyeTipoProcNum(value, key) {
-    let data = {
-        name: ETIQUETA_TIP_PROC.get(key),
-        value: value,
-    };
-    tipoProcNumCol.push(data);
-}
-
-/*
-Función que pinta el gráfico
-*/
-function pintaGraficoTipoProcNum(importesTipos, div) {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('pintaGraficoTipoProcNum');
-    }
-
-    am4core.useTheme(am4themes_frozen);
-    am4core.useTheme(am4themes_animated);
-
-    let chart = am4core.create(div, am4charts.PieChart);
-    chart.data = importesTipos;
-    chart.language.locale = am4lang_es_ES;
-
-    let series = chart.series.push(new am4charts.PieSeries());
-    series.dataFields.value = 'value';
-    series.dataFields.category = 'name';
-
-    series.labels.template.disabled = true;
-    series.ticks.template.disabled = true;
-
-    chart.focusFilter.stroke = am4core.color("#0f0");
-	chart.focusFilter.strokeWidth = 4;
-
-    chart.legend = new am4charts.Legend();
-    chart.legend.position = 'bottom';
-    chart.legend.labels.template.maxWidth = 120;
-    chart.legend.labels.template.truncate = true;
-    chart.legend.itemContainers.template.tooltipText = '{category}';
-	
-    series.legendSettings.labelText = '{name}';
-    series.legendSettings.valueText = '{value}';
-    series.slices.template.tooltipText = '{name}: {value}';
-    series.slices.template.cursorOverStyle = am4core.MouseCursorStyle.pointer;
-
-    if(div=='chartTipoProcNum')
-    {
-        // Enable export
-        chart.exporting.menu = new am4core.ExportMenu();
-        chart.exporting.menu.container = document.getElementById("exportTipoProcNum");
-        chart.exporting.filePrefix = 'grafico';
-        /* Opciones: csv, gif, html, jpg, json, pdf, pdfdata, png, print, svg, xlsx
-        */
-        chart.exporting.menu.items = [
-            {
-                label: "<i class='fa fa-download fa-2'></i>",
-                menu: [
-                    { type: "csv", label: "CSV" },
-                    { type: "xlsx", label: "XLSX" },
-                    { type: "json", label: "JSON" },
-                ],
-            },
-        ];
-    }
-}
-
-/*
-Función que muestra u oculta la capa de la tabla de datos
-*/
-function mostrarDatosTipoProcNum() {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('mostrarDatosTipoProcNum');
-    }
-
-    $('#datos_tablaTipoProcNum').toggle();
-    if (!heightInicial) {
-        heightInicial = $('#iframeBuscador', window.parent.document).height();
-    }
-
-    let isVisible = $('#datos_tablaTipoProcNum').is(':visible');
-    if (isVisible) {
-        $('#iframeBuscador', window.parent.document).height(
-            $('body').height() + 10
-        );
-    } else {
-        if ($('.table-responsive').is(':visible')) {
-            $('#iframeBuscador', window.parent.document).height(heightConTabla);
-        } else {
-            $('#iframeBuscador', window.parent.document).height(heightInicial);
-        }
-    }
-}
-
-function contruyeTipoProcImp(value, key) {
-    let data = {
-        name: ETIQUETA_TIP_PROC.get(key),
-        value: value,
-    };
-    tipoProcImpCol.push(data);
-}
-
-/*
-Función que pinta el gráfico
-*/
-function pintaGraficoTipoProcImp(importesTipos, div) {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('pintaGraficoTipoProcImp');
-    }
-
-    am4core.useTheme(am4themes_frozen);
-    am4core.useTheme(am4themes_animated);
-
-    let chart = am4core.create(div, am4charts.PieChart);
-    chart.data = importesTipos;
-    chart.language.locale = am4lang_es_ES;
-
-    let series = chart.series.push(new am4charts.PieSeries());
-    series.dataFields.value = 'value';
-    series.dataFields.category = 'name';
-
-    series.labels.template.disabled = true;
-    series.ticks.template.disabled = true;
-
-    chart.focusFilter.stroke = am4core.color("#0f0");
-	chart.focusFilter.strokeWidth = 4;
-
-    chart.legend = new am4charts.Legend();
-    chart.legend.position = 'bottom';
-    chart.legend.labels.template.maxWidth = 120;
-    chart.legend.labels.template.truncate = true;
-    chart.legend.itemContainers.template.tooltipText = '{category}';
-
-    series.legendSettings.labelText = '{name}';
-    series.legendSettings.valueText = '{value}€';
-    series.slices.template.tooltipText = '{name}: {value} €';
-    series.slices.template.cursorOverStyle = am4core.MouseCursorStyle.pointer;
-
-    if(div=='chartTipoProcImp')
-    {
-        // Enable export
-        chart.exporting.menu = new am4core.ExportMenu();
-        chart.exporting.menu.container = document.getElementById("exportTipoProcImp");
-        chart.exporting.filePrefix = 'grafico';
-        /* Opciones: csv, gif, html, jpg, json, pdf, pdfdata, png, print, svg, xlsx
-        */
-        chart.exporting.menu.items = [
-            {
-                label: "<i class='fa fa-download fa-2'></i>",
-                menu: [
-                    { type: "csv", label: "CSV" },
-                    { type: "xlsx", label: "XLSX" },
-                    { type: "json", label: "JSON" },
-                ],
-            },
-        ];
-    }
-}
-
-/*
-Función que muestra u oculta la capa de la tabla de datos
-*/
-function mostrarDatosTipoProcImp() {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('mostrarDatosTipoProcImp');
-    }
-
-    $('#datos_tablaTipoProcImp').toggle();
-    if (!heightInicial) {
-        heightInicial = $('#iframeBuscador', window.parent.document).height();
-    }
-
-    let isVisible = $('#datos_tablaTipoProcImp').is(':visible');
-    if (isVisible) {
-        $('#iframeBuscador', window.parent.document).height(
-            $('body').height() + 10
-        );
-    } else {
-        if ($('.table-responsive').is(':visible')) {
-            $('#iframeBuscador', window.parent.document).height(heightConTabla);
-        } else {
-            $('#iframeBuscador', window.parent.document).height(heightInicial);
-        }
-    }
-}
-
-function quitarAcentos(cadena) {
-    const acentos = {
-        á: 'a',
-        é: 'e',
-        í: 'i',
-        ó: 'o',
-        ú: 'u',
-        Á: 'A',
-        É: 'E',
-        Í: 'I',
-        Ó: 'O',
-        Ú: 'U',
-    };
-    return cadena
-        .split('')
-        .map((letra) => acentos[letra] || letra)
-        .join('')
-        .toString();
-}
-
-function quitaSeleccionAnyos() {
-    let e;
-    for (e = 0; e < anyoCol.length; e++) {
-        $('#anyo' + anyoCol[e]).prop('checked', false);
-    }
-}
-
-function obteneValoresAnyos() {
-    let e;
-    for (e = 0; e < anyoCol.length; e++) {
-        if ($('#anyo' + anyoCol[e]).prop('checked')) {
-            let anyoAux = $('#anyo' + anyoCol[e]).val();
-            anyoSelec.push(anyoAux);
-        }
-    }
-}
-
-function quitaSeleccionEstados() {
-    ETIQUETA_ESTADO.forEach((value, key) => {
-        $('#estado' + key).prop('checked', false);
-    });
-}
-
-function obteneValoresEstados() {
-    ETIQUETA_ESTADO.forEach((value, key) => {
-        if ($('#estado' + key).prop('checked')) {
-            let estadoAux = $('#estado' + key).val();
-            estadosSelec.push(estadoAux);
-        }
-    });
-}
-
-function quitaSeleccionCategorias() {
-    ETIQUETA_TIP_CONT.forEach((value, key) => {
-        $('#categoria' + key).prop('checked', false);
-    });
-}
-
-function obteneValoresCategorias() {
-    ETIQUETA_TIP_CONT.forEach((value, key) => {
-        if ($('#categoria' + key).prop('checked')) {
-            let categoriaAux = $('#categoria' + key).val();
-            categoriaSelec.push(categoriaAux);
-        }
-    });
-}
-
-function quitaSeleccionProcedimiento() {
-    ETIQUETA_TIP_PROC.forEach((value, key) => {
-        $('#procedimiento' + key).prop('checked', false);
-    });
-}
-
-function obteneValoresProcedimiento() {
-    ETIQUETA_TIP_PROC.forEach((value, key) => {
-        if ($('#procedimiento' + key).prop('checked')) {
-            let procedimientoAux = $('#procedimiento' + key).val();
-            procedimientoSelec.push(procedimientoAux);
-        }
-    });
-}
-
-function quitaSeleccionOrgContr() {
-    let d;
-    for (d = 0; d < organismoCIdTitleCol.length; d++) {
-        $('#checkNomOrgCont' + d).prop('checked', false);
-    }
-}
-
-function obteneValoresOrgContr() {
-    let d;
-    for (d = 0; d < organismoCIdTitleCol.length; d++) {
-        if ($('#checkNomOrgCont' + d).prop('checked')) {
-            let orgContrAux = $('#checkNomOrgCont' + d).val();
-            orgContrSelec.push(orgContrAux);
-        }
-    }
-}
-
-function searchOrganizacion() {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('mostrarDatosTipoProcImp');
-    }
-    let organizacion = $('#buscadorNomOrgContr').val();
-    if (organizacion.length >= 3) {
-        let d;
-        for (d = 0; d < organismoCIdTitleCol.length; d++) {
-            if (
-                quitarAcentos(organismoCIdTitleCol[d].title)
-                    .toLowerCase()
-                    .indexOf(quitarAcentos(organizacion).toLowerCase()) != -1
-            ) {
-                $('#checkNomOrgCont' + d).show();
-                $('#labelNomOrgCont' + d).show();
-                $('#checkNomOrgCont' + d).prop('checked', true);
-            } else {
-                $('#checkNomOrgCont' + d).hide();
-                $('#labelNomOrgCont' + d).hide();
-                $('#checkNomOrgCont' + d).prop('checked', false);
-            }
-        }
-    } else {
-        let d;
-        for (d = 0; d < organismoCIdTitleCol.length; d++) {
-            $('#checkNomOrgCont' + d).show();
-            $('#labelNomOrgCont' + d).show();
-            $('#checkNomOrgCont' + d).prop('checked', false);
-        }
-    }
-}
-
-function selececionarTodo(capa) {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('selececionarTodo');
-    }
-    $('#' + capa + ' .checkbox label input').prop('checked', true);
-}
-
-function quitarSeleccion(capa) {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('quitarSeleccion');
-    }
-    $('#' + capa + ' .checkbox label input').prop('checked', false);
-}
-
-/*
-Función que pinta el gráfico
-*/
-function pintaIndicadoresGlobales(indicadoresGlobales, div) {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('pintaIndicadoresGlobales');
-    }
-
-    let noSubvencionCadena2 = $.i18n('vol_adjudicatario2');
-    let anyoCadena2 = $.i18n('anyos2');
-    let noBeneficiarioCadena2 = $.i18n('num_adjudicatario2');
-    let importeCadena2 = $.i18n('importe_adjudicatario2');
-
-    let chart = am4core.create(div, am4charts.XYChart);
-
-    chart.data = indicadoresGlobales;
-    chart.language.locale._decimalSeparator = ',';
-    chart.language.locale._thousandSeparator = '.';
-
-    chart.focusFilter.stroke = am4core.color("#0f0");
-	chart.focusFilter.strokeWidth = 4;
-    
-    let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
-    categoryAxis.dataFields.category = 'anyo';
-    categoryAxis.renderer.opposite = true;
-    categoryAxis.title.text = anyoCadena2;
-
-    let valueAxis2 = chart.yAxes.push(new am4charts.ValueAxis());
-    let series2 = chart.series.push(new am4charts.LineSeries());
-    series2.dataFields.valueY = 'numAdj';
-    series2.dataFields.categoryX = 'anyo';
-    series2.name = noBeneficiarioCadena2;
-    valueAxis2.title.text = noBeneficiarioCadena2;
-    series2.yAxis = valueAxis2;
-    series2.strokeWidth = 3;
-    series2.bullets.push(new am4charts.CircleBullet());
-    series2.tooltipText = '{name} en {categoryX}: {valueY}';
-    series2.legendSettings.valueText = '{valueY}';
-
-    let valueAxis3 = chart.yAxes.push(new am4charts.ValueAxis());
-    let series3 = chart.series.push(new am4charts.LineSeries());
-    series3.dataFields.valueY = 'impAdj';
-    series3.dataFields.categoryX = 'anyo';
-    series3.name = importeCadena2;
-    valueAxis3.title.text = importeCadena2;
-    series3.yAxis = valueAxis3;
-    series3.strokeWidth = 3;
-    series3.bullets.push(new am4charts.CircleBullet());
-    series3.tooltipText = '{name} en {categoryX}: {valueY}';
-    series3.legendSettings.valueText = '{valueY}';
-
-    chart.cursor = new am4charts.XYCursor();
-    chart.cursor.behavior = 'zoomY';
-
-    chart.legend = new am4charts.Legend();
-
-    if(div=='chartdiv')
-    {
-        // Enable export
-        chart.exporting.menu = new am4core.ExportMenu();
-        chart.exporting.menu.container = document.getElementById("exportIndAnuales");
-        chart.exporting.filePrefix = 'grafico';
-        /* Opciones: csv, gif, html, jpg, json, pdf, pdfdata, png, print, svg, xlsx
-        */
-        chart.exporting.menu.items = [
-            {
-                label: "<i class='fa fa-download fa-2'></i>",
-                menu: [
-                    { type: "csv", label: "CSV" },
-                    { type: "xlsx", label: "XLSX" },
-                    { type: "json", label: "JSON" },
-                ],
-            },
-        ];
-    }
-}
-
-/*
-Función que muestra u oculta la capa de la tabla de datos
-*/
-function mostrarDatosIndAnuales() {
-    if (LOG_DEGUB_BUSCADOR) {
-        console.log('mostrarDatosIndAnuales');
-    }
-
-    $('#datosIndAnuales').toggle();
-    if (!heightInicial) {
-        heightInicial = $('#iframeBuscador', window.parent.document).height();
-    }
-
-    let isVisible = $('#datosIndAnuales').is(':visible');
-    if (isVisible) {
-        $('#iframeBuscador', window.parent.document).height(
-            $('body').height() + 10
-        );
-    } else {
-        if ($('.table-responsive').is(':visible')) {
-            $('#iframeBuscador', window.parent.document).height(heightConTabla);
-        } else {
-            $('#iframeBuscador', window.parent.document).height(heightInicial);
-        }
-    }
-}
-
-function compareTitle (a, b) {
-    if (a.titleClean < b.titleClean) return -1;
-    if (b.titleClean < a.titleClean) return 1;
-
-    return 0;
 }

@@ -70,7 +70,7 @@ function inicializaMultidiomaFichaContrato() {
 }
 
 /*
-                Función que invoca a todas las funciones que se realizan al inicializar el script
+Función que invoca a todas las funciones que se realizan al inicializar el script
 */
 function inicializaDatosFichaContrato() {
     if (LOG_DEGUB_FICHA_CONTRATO) {
@@ -81,7 +81,7 @@ function inicializaDatosFichaContrato() {
 }
 
 /*
-                Función que comprueba y captura si se han pasado parámetros a la web, en caso de haberlos ejecutará una búsqueda con ellos.
+Función que comprueba y captura si se han pasado parámetros a la web, en caso de haberlos ejecutará una búsqueda con ellos.
 */
 function capturaParam() {
     if (LOG_DEGUB_FICHA_CONTRATO) {
@@ -100,7 +100,7 @@ function capturaParam() {
 }
 
 /*
-                Función que iniciliza los datos que dependen de la API
+Función que iniciliza los datos que dependen de la API
 */
 function inicializaDatos() {
     if (LOG_DEGUB_FICHA_CONTRATO) {
@@ -112,14 +112,12 @@ function inicializaDatos() {
     $("#bloqueAdjudicacion").hide();
 
     if (paramId) {
-        obtieneDatosAPIProcess(
-            dameURL(PROCESS_URL_1 + "/" + paramId + PROCESS_URL_2)
-        );
+        obtieneDatosAPIProcess(dameURL(PROCESS_URL_1 + "/" + paramId + PROCESS_URL_2));
     }
 }
 
 /*
-                Función que iniciliza los datos que dependen de la API
+Función que iniciliza los datos que dependen de la API
 */
 function obtieneDatosAPIProcess(url) {
     if (LOG_DEGUB_FICHA_CONTRATO) {
@@ -169,7 +167,7 @@ function obtieneDatosAPIProcess(url) {
 }
 
 /*
-                Función que iniciliza los datos que dependen de la API
+Función que iniciliza los datos que dependen de la API
 */
 function obtieneDatosAPIOrganizationBuyer(url) {
     if (LOG_DEGUB_FICHA_CONTRATO) {
@@ -203,7 +201,7 @@ function obtieneDatosAPIOrganizationBuyer(url) {
 }
 
 /*
-                Función que iniciliza los datos que dependen de la API
+Función que iniciliza los datos que dependen de la API
 */
 function obtieneDatosAPIOrganizationAward(url, valueAmount, title) {
     if (LOG_DEGUB_FICHA_CONTRATO) {
@@ -287,7 +285,7 @@ function obtieneDatosAPIOrganizationAward(url, valueAmount, title) {
 }
 
 /*
-                Función que iniciliza los datos que dependen de la API
+Función que iniciliza los datos que dependen de la API
 */
 function obtieneDatosAPITender(url) {
     if (LOG_DEGUB_FICHA_CONTRATO) {
@@ -388,7 +386,7 @@ function obtieneDatosAPITender(url) {
 }
 
 /*
-                Función que iniciliza los datos que dependen de la API
+Función que iniciliza los datos que dependen de la API
 */
 function obtieneDatosAPIAward(url) {
     if (LOG_DEGUB_FICHA_CONTRATO) {
@@ -458,7 +456,7 @@ function obtieneDatosAPIAward(url) {
 }
 
 /*
-                Función que iniciliza los datos que dependen de la API 
+Función que iniciliza los datos que dependen de la API 
 */
 function obtieneDatosAPIAwardLot(url, lot) {
     if (LOG_DEGUB_FICHA_CONTRATO) {
@@ -506,7 +504,7 @@ function obtieneDatosAPIAwardLot(url, lot) {
 }
 
 /*
-                Función que iniciliza los datos que dependen de la API
+Función que iniciliza los datos que dependen de la API
 */
 function obtieneDatosAPIItem(url) {
     if (LOG_DEGUB_FICHA_CONTRATO) {
@@ -558,7 +556,7 @@ function obtieneDatosAPIItem(url) {
 }
 
 /*
-                Función que iniciliza los datos que dependen de la API
+Función que iniciliza los datos que dependen de la API
 */
 function obtieneDatosAPITenderRelItem(url) {
     if (LOG_DEGUB_FICHA_CONTRATO) {
@@ -605,7 +603,7 @@ function obtieneDatosAPITenderRelItem(url) {
 }
 
 /*
-                Función que iniciliza los datos que dependen de la API
+Función que iniciliza los datos que dependen de la API
 */
 function obtieneDatosAPILot(url) {
     if (LOG_DEGUB_FICHA_CONTRATO) {
@@ -679,8 +677,8 @@ function obtieneDatosAPILot(url) {
 }
 
 /*
-                Función que inserta los datos en la página web 
-*/
+Función que inserta los datos en la página web 
+
 function insertaDatos() {
     if (LOG_DEGUB_FICHA_CONTRATO) {
         console.log("insertaDatos");
@@ -705,10 +703,10 @@ function insertaDatos() {
     }
     $("#numLicitadores").html(tender.numberOfTenderers);
     $("#estadoPliego").html(ETIQUETA_ESTADO.get(tender.tenderStatus));
-}
+}*/
 
 /*
-                Función que permite ocultar la ficha
+Función que permite ocultar la ficha
 */
 function volverBusqueda() {
     if (LOG_DEGUB_FICHA_CONTRATO) {

@@ -72,7 +72,7 @@ See the Licence for the specific language governing permissions and limitations 
     </div>
 
     <!-- Barra de navegación -->
-    <nav class="navbar navbar-default navbar-static-top margin-bottom0 presentacion fondo_cabecera" aria-label="Barra de navegación">
+    <nav class="navbar navbar-default navbar-static-top fondo_cabecera margin-bottom0 presentacion" aria-label="Barra de navegación">
         <div class="presentacion-header row">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
@@ -85,12 +85,12 @@ See the Licence for the specific language governing permissions and limitations 
                 <div class="collapse navbar-collapse" id="myNavbar" role="tablist" aria-label="Pestañas">
                     <ol class="nav navbar-nav">
                         <li id="liBuscador">
-                            <button id="buttonBuscador" type="button" role="tab" aria-level="1" aria-selected="false" aria-controls="capaBuscador" class="btn btn-link btn-lg" data-i18n="inicio"  onclick="cambioCapaBuscador()">
+                            <button id="buttonBuscador" type="button" role="tab"  aria-selected="false" aria-controls="capaBuscador" class="btn btn-link btn-lg" data-i18n="inicio"  onclick="cambioCapaBuscador()">
                                 Inicio
                             </button>
                         </li>
                         <li id="liGlosario">
-                            <button id="buttonGlosario" type="button" role="tab" aria-level="1" aria-selected="false"  aria-controls="capaAyuda" class="btn btn-link btn-lg" data-i18n="ayuda"   onclick="cambioCapaAyuda()">
+                            <button id="buttonGlosario" type="button" role="tab"  aria-selected="false"  aria-controls="capaAyuda" class="btn btn-link btn-lg" data-i18n="ayuda"   onclick="cambioCapaAyuda()">
                                 Ayuda
                             </button>
                         </li>
@@ -102,10 +102,10 @@ See the Licence for the specific language governing permissions and limitations 
                             </button>
                             <ul class="dropdown-menu" role="menu">
                                 <li role="presentation">
-                                    <a role="menuitem" href="#" data-locale="en" data-i18n="ingles"  class="switch-locale">Ingles</a>
+                                    <a role="menuitem" href="#" data-locale="es" data-i18n="espanyol"  class="switch-locale">Español</a>
                                 </li>
                                 <li role="presentation">
-                                    <a role="menuitem" href="#" data-locale="es" data-i18n="espanyol"  class="switch-locale">Español</a>
+                                    <a role="menuitem" href="#" data-locale="en" data-i18n="ingles"  class="switch-locale">Ingles</a>
                                 </li>
                                 <li role="presentation">
                                     <a role="menuitem" href="#" data-locale="gl" data-i18n="gallego"  class="switch-locale">Gallego</a>
@@ -121,21 +121,21 @@ See the Licence for the specific language governing permissions and limitations 
         <div class="container">
             <div class="row">
                 <div class="col-sm-12">
-                    <h1 class="lineasActuacion__title datosAbiertos-color" role="heading" aria-level="2" data-i18n="que_es">Licitaciones y adjudicatarios</h1>
+                    <h1 class="lineasActuacion__title datosAbiertos-color"  aria-level="2" data-i18n="que_es">Licitaciones y adjudicatarios</h1>
                     <p class="home-header_text" data-i18n="texto_que_es"></p>
                 </div>
             </div>
 
             <div class="row" id="capaBuscador" role="tabpanel" aria-labelledby="buttonBuscador">
-                <div id="filtro" class="col-xs-12 col-sm-12 col-md-3">
-						<form role="form">
+                <div class="col-xs-12 col-sm-12 col-md-3 filtro">
+						<form >
 					    
 							<div class="col-sm-12 form-group ">
 								<div class="col-sm-5 form-group">
 									<p class="home-header_title" data-i18n="filtros">Filtros</p>
 								</div>
 								<div class="col-sm-7 form-group text-right">
-									<a href="#" onclick="limpiarFormulario();">
+									<a href="#" title="Limpiar formulario"  onclick="limpiarFormulario();">
 										<span class="fa fa-trash txOscuro"></span>
 										<span  class="txOscuro" data-i18n="limpiar"></span>
 									</a>
@@ -143,63 +143,63 @@ See the Licence for the specific language governing permissions and limitations 
 							</div>
 							
                             <div class="col-sm-12 form-group filtros">
-                                <a href="#collapseExpediente" data-toggle="collapse">
-                                    <p for="buscadorExpediente" class="label_ner" data-i18n="f_expedientes"><i class="fa fa-angle-down"></i></p>
+                                <a href="#collapseExpediente" title="Cerrar expediente" data-toggle="collapse">
+                                    <p  class="label_ner" data-i18n="f_expedientes"><i class="fa fa-angle-down"></i></p>
                                 </a>
                             </div>
                             <div id="collapseExpediente" class="col-sm-12 form-group collapse">
-                                <input class="form-control" id="buscadorExpediente" placeholder="Nº de expediente" title="Nº de expediente" />
-								<input class="form-control" id="buscadorNombre" placeholder="Nombre" title="Nombre"/>
+                                <label data-i18n="n_expediente"> </label><input class="form-control" id="buscadorExpediente"   title="Nº de expediente"  />
+								<label data-i18n="nombre"></label><input class="form-control" id="buscadorNombre"  title="Nombre"/>
                             </div>						
 							
                             <div class="col-sm-12 form-group filtros">
-                                <a href="#collapseCifLicitador" data-toggle="collapse">
-                                    <p for="buscadorCifLicitador" class="label_ner" data-i18n="f_adjudicatarios"><i class="fa fa-angle-down"></i></p>
+                                <a href="#collapseCifLicitador"  title="Cerrar licitador" data-toggle="collapse">
+                                    <p  class="label_ner" data-i18n="f_adjudicatarios"><i class="fa fa-angle-down"></i></p>
                                 </a>
                             </div>
                             <div id="collapseCifLicitador" class="col-sm-12 form-group collapse">
-                                <input class="form-control" id="buscadorCifLicitador" placeholder="NIF/CIF" title="NIF/CIF"/>
-								 <input class="form-control" id="buscadorLicitador" placeholder="Nombre del adjudicatario" title="Nombre del adjudicatario" />
+                                <label data-i18n="adjudicatario_cif"></label><input class="form-control" id="buscadorCifLicitador" title="NIF/CIF"/>
+								<label data-i18n="adjudicatario_nombre"></label> <input class="form-control" id="buscadorLicitador" title="Nombre del adjudicatario" />
                             </div>
 
 
                             <div class="col-sm-12 form-group filtros">
-                                <a href="#collapseFecha" data-toggle="collapse">
+                                <a href="#collapseFecha" title="Cerrar fecha" data-toggle="collapse">
                                     <p class="label_ner" data-i18n="f_licitaciones"><i class="fa fa-angle-down"></i></p>
                                 </a>
                             </div>
                             <div id="collapseFecha" class="collapse">
                                 <div class="col-sm-12">
-									<p class="col-form-label" data-i18n="fecha-licitacion">Fecha de la licitacion</p>
+									<p  data-i18n="fecha-licitacion">Fecha de la licitacion</p>
 								</div>
 								<div class="col-sm-6 form-group">
-                                     <input class="form-control" id="buscadorDesdeFecha" type="text" placeholder="Desde"  title="Desde" />
+                                     <input class="form-control" id="buscadorDesdeFecha" type="text"  title="Desde" />
                                 </div>
                                 <div class="col-sm-6 form-group">
-                                    <input class="form-control" id="buscadorHastaFecha" type="text" placeholder="Hasta" title="Hasta" />
+                                    <input class="form-control" id="buscadorHastaFecha" type="text" title="Hasta" />
                                 </div>
 								<div class="col-sm-12">
-									<p class="col-form-label" data-i18n="importe-licitacion">Importe licitación<</p>
+									<p  data-i18n="importe-licitacion">Importe licitación</p>
 								</div>
 								<div class="col-sm-6 form-group">
-                                    <input class="form-control" id="buscadorImporteDesde" placeholder="Desde" title="Desde"  />
+                                    <input class="form-control" id="buscadorImporteDesde"  title="Desde"  />
                                 </div>
 								<div class="col-sm-6 form-group">
-                                     <input class="form-control" id="buscadorImporteHasta" placeholder="Hasta" title="Hasta" />
+                                     <input class="form-control" id="buscadorImporteHasta"  title="Hasta" />
                                 </div>	
 								<div class="col-sm-12">
-									<p class="col-form-label" data-i18n="CPV:">CPV</p>
+									<p  data-i18n="CPV:">CPV</p>
 								</div>	
 								<div class="col-sm-12">
-                                     <input class="form-control" id="buscadorCPV" placeholder="Cumplimente el CPV" title="Cumplimente el CPV" />
+                                     <input class="form-control" id="buscadorCPV"  title="Cumplimente el CPV" />
                                 </div>									
                             </div>
 
 							
 							
                             <div class="col-sm-12 form-group filtros">
-                                <a href="#collapseAnyo" data-toggle="collapse">
-                                    <p for="selectAnyo" class="label_ner" data-i18n="anyo"><i class="fa fa-angle-down"></i></p>
+                                <a href="#collapseAnyo" title="Cerrar año" data-toggle="collapse">
+                                    <p  class="label_ner" data-i18n="anyo"><i class="fa fa-angle-down"></i></p>
                                 </a>
                             </div>
                             <div id="collapseAnyo" class="col-sm-12 form-group collapse">
@@ -211,8 +211,8 @@ See the Licence for the specific language governing permissions and limitations 
                             </div>
 
                             <div class="col-sm-12 form-group filtros">
-                                <a href="#collapseEstado" data-toggle="collapse">
-                                    <p for="selectEstado" class="label_ner" data-i18n="estado"><i class="fa fa-angle-down"></i></p>
+                                <a href="#collapseEstado" title="Cerrar estado" data-toggle="collapse">
+                                    <p  class="label_ner" data-i18n="estado"><i class="fa fa-angle-down"></i></p>
                                 </a>
                             </div>
                             <div id="collapseEstado" class="col-sm-12 form-group collapse">
@@ -224,8 +224,8 @@ See the Licence for the specific language governing permissions and limitations 
                             </div>
 
                             <div class="col-sm-12 form-group filtros">
-                                <a href="#collapseNomOrgContr" data-toggle="collapse">
-                                    <p for="selectNomOrgContr" class="label_ner"  data-i18n="organizacion_contratante"><i class="fa fa-angle-down"></i></p>
+                                <a href="#collapseNomOrgContr" title="Cerrar organismo" data-toggle="collapse">
+                                    <p  class="label_ner"  data-i18n="organizacion_contratante"><i class="fa fa-angle-down"></i></p>
                                 </a>
                             </div>
                             <div id="collapseNomOrgContr" class="col-sm-12 form-group collapse">
@@ -233,13 +233,13 @@ See the Licence for the specific language governing permissions and limitations 
 									<button type="button" class="btn btn-link bot_t_n" onclick="selececionarTodo('selectNomOrgContr')"><i class="fa fa-check"></i><span class="text_small" data-i18n="todas"></span></button>
 									<button type="button" class="btn btn-link bot_t_n" onclick="quitarSeleccion('selectNomOrgContr')"><i class="fa fa-times"></i><span class="text_small" data-i18n="ninguna"></span></button>
                                 </div>
-								<input class="form-control" id="buscadorNomOrgContr"   placeholder="Filtrar las organizaciones" title="Filtrar las organizaciones" oninput="searchOrganizacion()" />
+								<input class="form-control" id="buscadorNomOrgContr"    title="Filtrar las organizaciones" oninput="searchOrganizacion()" />
                                 <div id="selectNomOrgContr"></div>
                             </div>
 
                             <div class="col-sm-12 form-group filtros">
-                                <a href="#collapseCategoria" data-toggle="collapse">
-                                    <p for="selectCategoria" class="label_ner"  data-i18n="categoria"><i class="fa fa-angle-down"></i></p>
+                                <a href="#collapseCategoria" title="Cerrar categoria" data-toggle="collapse">
+                                    <p  class="label_ner"  data-i18n="categoria"><i class="fa fa-angle-down"></i></p>
                                 </a>
                             </div>
                             <div id="collapseCategoria" class="col-sm-12 form-group collapse">
@@ -251,8 +251,8 @@ See the Licence for the specific language governing permissions and limitations 
                             </div>
 
                             <div class="col-sm-12 form-group filtros">
-                                <a href="#collapseProcedimiento" data-toggle="collapse">
-                                    <p for="selectProcedimiento" class="label_ner" data-i18n="procedimiento"><i class="fa fa-angle-down"></i></p>
+                                <a href="#collapseProcedimiento" title="Cerrar procedimiento" data-toggle="collapse">
+                                    <p  class="label_ner" data-i18n="procedimiento"><i class="fa fa-angle-down"></i></p>
                                 </a>
                             </div>
                             <div id="collapseProcedimiento" class="col-sm-12 form-group collapse">
@@ -280,7 +280,7 @@ See the Licence for the specific language governing permissions and limitations 
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-9">
                     <div class="row cuerpo">
-                        <div class="col-sm-12">
+                        <div class="col-sm-12" role="tablist">
                             <ol class="nav navbar-nav navbar-nav_seg">
                                 <li id="liGeneral" class="w_menu">
                                     <button id="buttonGeneral" type="button" role="tab" aria-selected="true" aria-controls="capaGeneral" class="btn btn-link btn-lg" onclick="cambioCapaGeneral()" data-i18n="resumen">
@@ -292,8 +292,8 @@ See the Licence for the specific language governing permissions and limitations 
                                         Licitaciones
                                     </button>
                                 </li>
-                                <li id="liAdjudicatarios"class="w_menu">
-                                    <button id="buttonAdjudicatarios" type="button" role="tab" aria-selected="false"  aria-controls="adjudicatarios" class="btn btn-link btn-lg"   onclick="cambioCapaAdjudicatarios()" data-i18n="adjudicatarios">
+                                <li id="liAdjudicatarios" class="w_menu">
+                                    <button id="buttonAdjudicatarios" type="button" role="tab" aria-selected="false"   class="btn btn-link btn-lg"   onclick="cambioCapaAdjudicatarios()" data-i18n="adjudicatarios">
                                         Adjudicatarios
                                     </button>
                                 </li>
@@ -302,7 +302,7 @@ See the Licence for the specific language governing permissions and limitations 
                         <div class="col-sm-12">
                             <div class="tab-content" id="myTabContent">
                                 <div class="row">
-                                    <div  id="filtro" class="col-sm-12">
+                                    <div   class="col-sm-12 filtro">
                                         <p class="home-header_text" data-i18n="importes_sin">NOTA: Todos los importes son sin Impuestos</p>
                                     </div>
                                 </div>
@@ -395,7 +395,7 @@ See the Licence for the specific language governing permissions and limitations 
                                                                 <span id="indTipoProcedimiento2"></span>
                                                             </p>
                                                         </div>
-                                                        <div id="ind1" class="col-xs-12 col-sm-1">
+                                                        <div id="ind2" class="col-xs-12 col-sm-1">
                                                             <img class="img_ind" src="./dist/images/icon2.svg" title="img_ind2" alt="ind2">
                                                         </div>
                                                         <div id="indicador3" class="col-xs-12 col-sm-3">
@@ -405,7 +405,7 @@ See the Licence for the specific language governing permissions and limitations 
                                                                 <span data-i18n="indicador3_2"></span>
                                                             </p>
                                                         </div>
-                                                        <div id="ind1" class="col-xs-12 col-sm-1">
+                                                        <div id="ind3" class="col-xs-12 col-sm-1">
                                                             <img class="img_ind" src="./dist/images/icon3.svg" title="img_ind3" alt="ind3">
                                                         </div>
                                                         <div id="indicador4" class="col-xs-12 col-sm-3">
@@ -457,7 +457,7 @@ See the Licence for the specific language governing permissions and limitations 
                                                                 </div>
                                                             </div>
                                                             <div class="col-xs-1">
-                                                                <a id="mostarDatos" onclick="mostrarDatosIndAnuales()">
+                                                                <a  onclick="mostrarDatosIndAnuales()">
                                                                     <span class="fa fa-table n fa-3" aria-hidden="true"></span>
                                                                 </a>
                                                             </div>
@@ -478,7 +478,7 @@ See the Licence for the specific language governing permissions and limitations 
                                         <!-- Top organizacion contratante -->
                                         <div class="row">
                                             <div class="col-xs-12 col-sm-6">
-                                                <div class="panel panel-default" id="panelGraficoInferiorIzquierda">
+                                                <div class="panel panel-default" id="panelGraficoInferiorIzquierda1">
                                                     <div class="panel-heading">
                                                         <em class="fa fa-bar-chart-o fa-fw"></em>
                                                         <span data-i18n="importe_organizaciones"></span>
@@ -517,7 +517,7 @@ See the Licence for the specific language governing permissions and limitations 
                                                                 </div>
                                                             </div>
                                                             <div class="col-xs-2">
-                                                                <a id="mostarDatos" onclick="mostrarDatosOrgContImp()">
+                                                                <a  onclick="mostrarDatosOrgContImp()">
                                                                     <span class="fa fa-table n fa-3" aria-hidden="true"></span>
                                                                 </a>
                                                             </div>
@@ -532,7 +532,7 @@ See the Licence for the specific language governing permissions and limitations 
                                                 </div>
                                             </div>
                                             <div class="col-xs-12 col-sm-6">
-                                                <div class="panel panel-default" id="panelGraficoInferiorDerecha">
+                                                <div class="panel panel-default" id="panelGraficoInferiorDerecha1">
                                                     <div class="panel-heading">
                                                         <em class="fa fa-bar-chart-o fa-fw"></em>
                                                         <span data-i18n="numero_organizaciones"></span>
@@ -565,7 +565,7 @@ See the Licence for the specific language governing permissions and limitations 
                                                                 </div>
                                                             </div>
                                                             <div class="col-xs-2">
-                                                                <a id="mostarDatos" onclick="mostrarDatosOrgContNum()">
+                                                                <a  onclick="mostrarDatosOrgContNum()">
                                                                     <span class="fa fa-table n fa-3" aria-hidden="true"></span>
                                                                 </a>
                                                             </div>
@@ -583,7 +583,7 @@ See the Licence for the specific language governing permissions and limitations 
                                         <!-- Top adjudicatarios -->
                                         <div class="row">
                                             <div class="col-xs-12 col-sm-6">
-                                                <div class="panel panel-default" id="panelGraficoInferiorIzquierda">
+                                                <div class="panel panel-default" id="panelGraficoInferiorIzquierda2">
                                                     <div class="panel-heading">
                                                         <em class="fa fa-bar-chart-o fa-fw"></em>
                                                         <span data-i18n="importe_Adjudicatario"></span>
@@ -616,7 +616,7 @@ See the Licence for the specific language governing permissions and limitations 
                                                                 </div>
                                                             </div>
                                                             <div class="col-xs-2">
-                                                                <a id="mostarDatos" onclick="mostrarDatosAwardImp()">
+                                                                <a  onclick="mostrarDatosAwardImp()">
                                                                     <span class="fa fa-table n fa-3" aria-hidden="true"></span>
                                                                 </a>
                                                             </div>
@@ -631,7 +631,7 @@ See the Licence for the specific language governing permissions and limitations 
                                                 </div>
                                             </div>
                                             <div class="col-xs-12 col-sm-6">
-                                                <div class="panel panel-default" id="panelGraficoInferiorDerecha">
+                                                <div class="panel panel-default" id="panelGraficoInferiorDerecha2">
                                                     <div class="panel-heading">
                                                         <em class="fa fa-bar-chart-o fa-fw"></em>
                                                         <span data-i18n="numero_adjudicatario"></span>
@@ -664,7 +664,7 @@ See the Licence for the specific language governing permissions and limitations 
                                                                 </div>
                                                             </div>
                                                             <div class="col-xs-2">
-                                                                <a id="mostarDatos" onclick="mostrarDatosAwardNum()">
+                                                                <a  onclick="mostrarDatosAwardNum()">
                                                                     <span class="fa fa-table n fa-3" aria-hidden="true"></span>
                                                                 </a>
                                                             </div>
@@ -715,7 +715,7 @@ See the Licence for the specific language governing permissions and limitations 
                                                                 </div>
                                                             </div>
                                                             <div class="col-xs-1">
-                                                                <a id="mostarDatos" onclick="mostrarDatosTipAdjImp()">
+                                                                <a  onclick="mostrarDatosTipAdjImp()">
                                                                     <span class="fa fa-table n fa-3" aria-hidden="true"></span>
                                                                 </a>
                                                             </div>
@@ -766,7 +766,7 @@ See the Licence for the specific language governing permissions and limitations 
                                                                 </div>
                                                             </div>
                                                             <div class="col-xs-1">
-                                                                <a id="mostarDatos" onclick="mostrarDatosTipoContNum()">
+                                                                <a  onclick="mostrarDatosTipoContNum()">
                                                                     <span class="fa fa-table n fa-3" aria-hidden="true"></span>
                                                                 </a>
                                                             </div>
@@ -814,7 +814,7 @@ See the Licence for the specific language governing permissions and limitations 
                                                                 </div>
                                                             </div>
                                                             <div class="col-xs-1">
-                                                                <a id="mostarDatos" onclick="mostrarDatosTipoContImp()">
+                                                                <a  onclick="mostrarDatosTipoContImp()">
                                                                     <span class="fa fa-table n fa-3" aria-hidden="true"></span>
                                                                 </a>
                                                             </div>
@@ -865,7 +865,7 @@ See the Licence for the specific language governing permissions and limitations 
                                                                 </div>
                                                             </div>
                                                             <div class="col-xs-1">
-                                                                <a id="mostarDatos" onclick="mostrarDatosTipoProcNum()">
+                                                                <a  onclick="mostrarDatosTipoProcNum()">
                                                                     <span class="fa fa-table n fa-3" aria-hidden="true"></span>
                                                                 </a>
                                                             </div>
@@ -913,7 +913,7 @@ See the Licence for the specific language governing permissions and limitations 
                                                                 </div>
                                                             </div>
                                                             <div class="col-xs-1">
-                                                                <a id="mostarDatos" onclick="mostrarDatosTipoProcImp()">
+                                                                <a  onclick="mostrarDatosTipoProcImp()">
                                                                     <span class="fa fa-table n fa-3" aria-hidden="true"></span>
                                                                 </a>
                                                             </div>
@@ -931,11 +931,10 @@ See the Licence for the specific language governing permissions and limitations 
                                     </div>
 
                                     <div id="capaLicitaciones" role="tabpanel" aria-labelledby="buttonLicitaciones">
-                                        <div id="capaTabla" class="row table-responsive">
+                                        <div id="capaTablaLic" class="row table-responsive">
                                             <div class="col-sm-12">
-                                                <table class="table  table-hover table_m" id="tablaContratos" aria-describedby="Tabla de los resultados de la búsqueda">
+                                                <table class="table  table-hover table_m" id="tablaContratos" >
                                                     <thead>
-                                                        <tr id="tablaContratosTHead"></tr>
                                                     </thead>
                                                     <tbody id="tablaContratosBody"></tbody>
                                                     <tfoot></tfoot>
@@ -945,13 +944,13 @@ See the Licence for the specific language governing permissions and limitations 
                                     </div>
 
                                     <div id="capaAdjudicatarios" role="tabpanel" aria-labelledby="buttonAdjudicatarios">
-                                        <div id="capaTabla" class="row table-responsive">
+                                        <div id="capaTablaAdj" class="row table-responsive">
                                             <div class="col-sm-12">
-                                                <table class="table  table-hover" id="tablaAdjudicatarios" aria-describedby="Tabla de los resultados de la búsqueda">
+                                                <table class="table  table-hover" id="tablaAdjudicatarios" >
                                                     <thead>
-                                                        <tr id="tablaAdjudicatariosTHead"></tr>
                                                     </thead>
                                                     <tbody id="tablaAdjudicatariosBody"></tbody>
+
                                                     <tfoot></tfoot>
                                                 </table>
                                             </div>
@@ -969,10 +968,10 @@ See the Licence for the specific language governing permissions and limitations 
                 <div class="col-md-12" id="bloque_ayuda_que_es_contrato">
                     <div class="panel panel-default">
                         <div class="panel-heading" role="heading" aria-level="2">
-                            Texto 1
+                            <p data-i18n="ay_tx1"></p>
                         </div>
                         <div class="panel-body">
-                            <p>Texto 1</p>
+                            <p data-i18n="ay_tx2"></p>
                         </div>
                     </div>
                 </div>
@@ -981,7 +980,7 @@ See the Licence for the specific language governing permissions and limitations 
             <!-- Página de la ficha -->
             <div class="row" id="capaFichaContrato">
                 <div class="col-md-12">
-                    <iframe id="iframeFichaContrato" class="embed-responsive-item" src=""
+                    <iframe id="iframeFichaContrato" class="embed-responsive-item" src="fichaContrato.html"
                         title="Bloque para la ficha de contrato"></iframe>
                 </div>
             </div>
@@ -989,7 +988,7 @@ See the Licence for the specific language governing permissions and limitations 
             <!-- Página de la ficha -->
             <div class="row" id="capaFichaAdjudicatario">
                 <div class="col-md-12">
-                    <iframe id="iframeFichaAdjudicatario" class="embed-responsive-item" src=""
+                    <iframe id="iframeFichaAdjudicatario" class="embed-responsive-item" src="fichaAdjudicatario.html"
                         title="Bloque para la ficha de adjudicatario"></iframe>
                 </div>
             </div>
@@ -997,7 +996,7 @@ See the Licence for the specific language governing permissions and limitations 
             <!-- Página de la ficha -->
             <div class="row" id="capaFichaOrganizacionContratante">
                 <div class="col-md-12">
-                    <iframe id="iframeFichaOrganizacionContratante" class="embed-responsive-item" src=""
+                    <iframe id="iframeFichaOrganizacionContratante" class="embed-responsive-item" src="fichaOrganizacionContratante.html"
                         title="Bloque para la ficha de Organizacion Contratante"></iframe>
                 </div>
             </div>
@@ -1005,130 +1004,90 @@ See the Licence for the specific language governing permissions and limitations 
     </div>
 
     <!-- footer  -->
-    <footer class="novedades-footer">
-        <div class="footer__content">
-            <div class="footer__logos-container">
-                <div class="footer__logos-box">
-                    <ul class="footer__logos-top">
-                        <li class="footer__logos footer__logoGobEspaña">
-                            <a href="http://www.mineco.gob.es/portal/site/mineco/" target="_blank">
-                                <img title="Logo Gobierno de España. Abre una ventana nueva"
-                                    src="../comunV2/dist/images/gobEspana-logo.svg"
-                                    alt="Logo gobierno de España y Red.es. Abre una ventana nueva" />
-                            </a>
-                        </li>
-                        <li class="footer__logos footer__logoRed">
-                            <a href="https://www.red.es/redes/" target="_blank">
-                                <img title="Logo Red.es. Abre una ventana nueva" src="../comunV2/dist/images/red-logo.svg"
-                                    alt="Logo gobierno de España y Red.es. Abre una ventana nueva" />
-                            </a>
-                        </li>
-                        <li class="footer__logos footer__logoCiudadesInteligentes">
-                            <a href="http://www.red.es/redes/es/que-hacemos/ciudades-inteligentes" target="_blank">
-                                <img title="Logo del portal Ciudades e Islas Inteligentes. Abre una ventana nueva"
-                                    src="../comunV2/dist/images/ciudadesInteligentes-logo.svg"
-                                    alt="Logo del portal Ciudades e Islas Inteligentes. Abre una ventana nueva" />
-                            </a>
-                        </li>
-                        <li class="footer__logos footer__logoUnionEuropea">
-                            <a href="http://ec.europa.eu/regional_policy/es/funding/erdf/" target="_blank">
-                                <img title="Logo de la Unión Europea. Abre una ventana nueva"
-                                    src="../comunV2/dist/images/unionEuropea-logo.svg"
-                                    alt="Logo de la Unión Europea. Abre una ventana nueva" />
-                            </a>
-                        </li>
-                    </ul>
-                    <ul class="footer__logos-bottom">
-                        <li class="footer__logos footer__logoAcoruña">
-                            <a href="https://www.coruna.gal" target="_blank">
-                                <img title="Logo del Ayuntamiento de A Coruña. Abre una ventana nueva"
-                                    src="../comunV2/dist/images/ayuntAcoruna-logo.svg"
-                                    alt="Logo del Ayuntamiento de A coruña. Abre una ventana nueva" />
-                            </a>
-                        </li>
-                        <li class="footer__logos footer__logoMadrid">
-                            <a href="https://www.madrid.es/" target="_blank">
-                                <img title="Logo del Ayuntamiento de Madrid. Abre una ventana nueva"
-                                    src="../comunV2/dist/images/ayuntMadrid-logo.svg"
-                                    alt="Logo del Ayuntamiento de Madrid. Abre una ventana nueva" />
-                            </a>
-                        </li>
-                        <li class="footer__logos footer__logoSantiago">
-                            <a href="http://santiagodecompostela.gal/" target="_blank">
-                                <img title="Logo del Ayuntamiento de Santiago de Compostela. Abre una ventana nueva"
-                                    src="../comunV2/dist/images/ayuntSantiagoCompostela-logo.svg"
-                                    alt="Logo del Ayuntamiento de Santiago de Compostela. Abre una ventana nueva" />
-                            </a>
-                        </li>
-                        <li class="footer__logos footer__logoZaragoza">
-                            <a href="https://www.zaragoza.es/sedeelectronica/" target="_blank">
-                                <img title="Logo del Ayuntamiento de Zaragoza. Abre una ventana nueva"
-                                    src="../comunV2/dist/images/ayuntZaragoza-logo.svg"
-                                    alt="Logo del Ayuntamiento de Zaragoza. Abre una ventana nueva" />
-                            </a>
-                        </li>
-                    </ul>
+        <footer class="novedades-footer">
+            <div class="footer__content">
+                <div class="footer__logos-container">
+                    <div class="footer__logos-box">
+						<span class="footer_txtpie_top" data-i18n="esta_visualizacion1"></span>
+						<a href="https://ciudadesabiertas.es/"  target="_blank" class="footer_txtpie_top">Ciudades Abiertas,</a>
+						<span class="footer_txtpie_top" data-i18n="esta_visualizacion2"></span>
+                        <ul class="footer__logos-top">
+                            <li class="footer__logos footer__logoGobEspaña">
+                                <a href="http://www.mineco.gob.es/portal/site/mineco/" target="_blank">
+                                    <img title="Logo Gobierno de España. Abre una ventana nueva" src="../comunV2/dist/images/gobEspana-logo.svg" alt="Logo gobierno de España y Red.es. Abre una ventana nueva">
+                                </a>
+                            </li>
+                            <li class="footer__logos footer__logoRed">
+                                <a href="https://www.red.es/redes/" target="_blank">
+                                    <img title="Logo Red.es. Abre una ventana nueva" src="../comunV2/dist/images/red-logo.svg" alt="Logo gobierno de España y Red.es. Abre una ventana nueva">
+                                </a>
+                            </li>
+                            <li class="footer__logos footer__logoCiudadesAbiertas">
+                                <a href="https://ciudadesabiertas.es/"  target="_blank">
+                                    <img title="Logo de Ciudades abiertas. Abre una ventana nueva" src="../comunV2/dist/images/logo.svg" alt="Logo de Ciudades abiertas. Abre una ventana nueva">
+                                </a>
+                            </li>
+                            <li class="footer__logos footer__logoUnionEuropea">
+                                <a href="http://ec.europa.eu/regional_policy/es/funding/erdf/" target="_blank">
+                                    <img title="Logo de la Unión Europea. Abre una ventana nueva" src="../comunV2/dist/images/unionEuropea-logo.svg" alt="Logo de la Unión Europea. Abre una ventana nueva">
+                                </a>
+                            </li>
+                        </ul>
+						<span class="footer_txtpie_bottom" data-i18n="fondo_europeo"></span><span class="footer_txtpie_bottom_cursiva">"</span><span class="footer_txtpie_bottom_cursiva" data-i18n="hacer_europa"></span><span class="footer_txtpie_bottom_cursiva">"</span>
+                    </div>
                 </div>
             </div>
-            <div class="footer__bottom">
-                <div class="footer__logo-box">
-                    <img class="footer__logoCiudadesAbiertas" title="Logo de Ciudades abiertas. Ir a inicio"
-                        src="../comunV2/dist/images/logo.svg" alt="Logo de Ciudades abiertas. Ir a inicio" />
-                </div>
-            </div>
-        </div>
-    </footer>
+        </footer>
 
     <!-- jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" ></script>
 
     <!-- jQuery UI-->
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.9.2/i18n/jquery.ui.datepicker-es.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"  ></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"  ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.9.2/i18n/jquery.ui.datepicker-es.min.js" ></script>
 
     <!-- Bootstrap Core -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
         integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-        crossorigin="anonymous"></script>
+        crossorigin="anonymous" ></script>
 
     <!-- bootstrap-select -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.8.1/js/bootstrap-select.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-es_ES.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.8.1/js/bootstrap-select.min.js" ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-es_ES.min.js" ></script>
 
     <!-- Amcharts Visualizations-->
-    <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
-    <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
-    <script src="https://cdn.amcharts.com/lib/version/4.10.19/themes/frozen.js"></script>
-    <script src="https://cdn.amcharts.com/lib/version/4.10.19/themes/animated.js"></script>
-    <script src="https://cdn.amcharts.com/lib/version/4.10.19/lang/es_ES.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/core.js" ></script>
+    <script src="https://cdn.amcharts.com/lib/4/charts.js" ></script>
+    <script src="https://cdn.amcharts.com/lib/version/4.10.19/themes/frozen.js" ></script>
+    <script src="https://cdn.amcharts.com/lib/version/4.10.19/lang/es_ES.js" ></script>
 
     <!-- DataTables -->
-    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
-    <script src="https://cdn.datatables.net/responsive/1.0.6/js/dataTables.responsive.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js" type="text/javascript"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js" type="text/javascript"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js" type="text/javascript"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js" type="text/javascript"></script>
-    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js" type="text/javascript"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js" ></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap.min.js"  ></script>
+    <script src="https://cdn.datatables.net/responsive/1.0.6/js/dataTables.responsive.js" ></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"  ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"  ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"  ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"  ></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"  ></script>
     <script src="https://cdn.datatables.net/colreorder/1.5.4/js/dataTables.colReorder.min.js"
-        type="text/javascript"></script>
-    <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.colVis.min.js" type="text/javascript"></script>
+         ></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.colVis.min.js"  ></script>
 
     <!-- Normalización de datos -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
-    <script src="vendor/datejs/date-es-ES.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js" ></script>
+    <script src="vendor/datejs/date-es-ES.js"  ></script>
 
     <!-- Multiidoma -->
-    <script src="vendor/CLDRPluralRuleParser/CLDRPluralRuleParser.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.messagestore.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.fallbacks.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.language.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.parser.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.emitter.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.emitter.bidi.min.js"></script>
+    <script src="vendor/CLDRPluralRuleParser/CLDRPluralRuleParser.js" ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.min.js" ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.messagestore.min.js" ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.fallbacks.min.js" ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.language.min.js" ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.parser.min.js" ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.emitter.min.js" ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.emitter.bidi.min.js" ></script>
 
     <!-- Scripts internos -->
     <script src="dist/js/constantes.js"></script>
@@ -1142,8 +1101,9 @@ See the Licence for the specific language governing permissions and limitations 
             
             initComun();
             // cambioCapaInicio();
+			cambioCapaBuscador();
             inicializaBuscador();
-            cambioCapaBuscador();
+            
 
             let historicoInicial = 0;
             let contadorHistorico = 0;

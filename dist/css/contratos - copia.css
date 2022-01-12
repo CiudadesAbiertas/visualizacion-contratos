@@ -41,7 +41,7 @@ See the Licence for the specific language governing permissions and limitations 
     border-color: transparent;
 }
 
-#filtro {
+.filtro {
     background-color: #faf8f5;
 	border-radius: 8px;
 	box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);

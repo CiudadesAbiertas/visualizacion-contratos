@@ -81,7 +81,7 @@ function inicializaMultidiomaFichaOrgContratante() {
             .done(function () {
                 $("html").i18n();
                 inicializaDatosFichaOrgContratante();
-                preparaTablaFichaOrgCont();
+
             });
     });
 
@@ -89,7 +89,7 @@ function inicializaMultidiomaFichaOrgContratante() {
 }
 
 /*
-                Función que invoca a todas las funciones que se realizan al inicializar el script
+Función que invoca a todas las funciones que se realizan al inicializar el script
 */
 function inicializaDatosFichaOrgContratante() {
     if (LOG_DEGUB_FICHA_ORG_CONTRATANTE) {
@@ -97,15 +97,11 @@ function inicializaDatosFichaOrgContratante() {
     }
     capturaParam();
     inicializaDatos();
-    $("#buscarListado").click(function () {
-        buscar();
-        this.blur();
-    });
     $("#iframeFichaOrganizacionContratante", window.parent.document).height(1371);
 }
 
 /*
-                Función que comprueba y captura si se han pasado parámetros a la web, en caso de haberlos ejecutará una búsqueda con ellos.
+Función que comprueba y captura si se han pasado parámetros a la web, en caso de haberlos ejecutará una búsqueda con ellos.
 */
 function capturaParam() {
     if (LOG_DEGUB_FICHA_ORG_CONTRATANTE) {
@@ -122,29 +118,9 @@ function capturaParam() {
     }
 }
 
-/* Función que realiza la búsqueda de la tabla */
-function buscar() {
-    if (LOG_DEGUB_FICHA_ORG_CONTRATANTE) {
-        console.log("buscar");
-    }
-
-    let anyoBusqueda = "";
-    let estadoBusqueda = "";
-    if ($("#selectAnyo").val()) {
-        anyoBusqueda = $("#selectAnyo").val();
-    }
-    if ($("#selectEstado").val()) {
-        estadoBusqueda = $("#selectEstado").val();
-    }
-    creaDatasetTabla(paramId, anyoBusqueda, estadoBusqueda);
-    $(".table-responsive").show();
-    let table = $("#tablaOrgContr").DataTable();
-    table.clear();
-    table.rows.add(dataSet).draw();
-}
 
 /*
-                Función que iniciliza los datos que dependen de la API
+Función que iniciliza los datos que dependen de la API
 */
 function inicializaDatos() {
     if (LOG_DEGUB_FICHA_ORG_CONTRATANTE) {
@@ -157,11 +133,12 @@ function inicializaDatos() {
         obtieneDatosAPITender(TENDER_URL_1 + TENDER_URL_2);
         obtieneDatosAPIAward(dameURL(AWARD_URL_1 + AWARD_URL_2));
         obtieneDatosAPILot(dameURL(LOT_URL_1 + LOT_URL_2));
+		preparaTablaFichaOrgCont();
     }
 }
 
 /*
-                Función que iniciliza los datos que dependen de la API
+Función que iniciliza los datos que dependen de la API
 */
 function obtieneDatosAPIProcess(url) {
     if (LOG_DEGUB_FICHA_ORG_CONTRATANTE) {
@@ -207,7 +184,7 @@ function obtieneDatosAPIProcess(url) {
 }
 
 /*
-                Función que iniciliza los datos que dependen de la API
+Función que iniciliza los datos que dependen de la API
 */
 function obtieneDatosAPIOrganization(url) {
     if (LOG_DEGUB_FICHA_ORG_CONTRATANTE) {
@@ -244,7 +221,7 @@ function obtieneDatosAPIOrganization(url) {
 }
 
 /*
-                Función que iniciliza los datos que dependen de la API
+Función que iniciliza los datos que dependen de la API
 */
 function obtieneDatosAPITender(url) {
     if (LOG_DEGUB_FICHA_ORG_CONTRATANTE) {
@@ -306,14 +283,14 @@ function obtieneDatosAPITender(url) {
 }
 
 /*
-                Función que iniciliza los datos que dependen de la API
+Función que iniciliza los datos que dependen de la API
 */
 function obtieneDatosAPIAward(url) {
     if (LOG_DEGUB_FICHA_ORG_CONTRATANTE) {
         console.log("obtieneDatosAPIAward | " + url);
     }
 
-    if (LOG_DEGUB_BUSCADOR) {
+    if (LOG_DEGUB_FICHA_ORG_CONTRATANTE) {
         console.log("obtieneDatosAPIAward | " + url);
     }
     $.getJSON(dameURL(url))
@@ -346,10 +323,10 @@ function obtieneDatosAPIAward(url) {
 }
 
 /*
-                Función que iniciliza los datos que dependen de la API
+Función que iniciliza los datos que dependen de la API
 */
 function obtieneDatosAPILot(url) {
-    if (LOG_DEGUB_BUSCADOR) {
+    if (LOG_DEGUB_FICHA_ORG_CONTRATANTE) {
         console.log("obtieneDatosAPILot | " + url);
     }
     $.getJSON(dameURL(url))
@@ -429,11 +406,11 @@ function checkPeticionesIniciales() {
 
     setTimeout(function () {
         insertaDatosIniciales();
-    }, 500);
+    }, 0);
 }
 
 /*
-                Función que invoca a todas las funciones que se realizan al inicializar el script
+Función que invoca a todas las funciones que se realizan al inicializar el script
 */
 function insertaDatosIniciales() {
     if (LOG_DEGUB_FICHA_ORG_CONTRATANTE) {
@@ -527,7 +504,7 @@ function trataDatosPorAnyo() {
 }
 
 /*
-                Función que pinta el gráfico
+Función que pinta el gráfico
 */
 function pintaGráficoNumContratos(data1) {
     if (LOG_DEGUB_FICHA_ORG_CONTRATANTE) {
@@ -535,7 +512,6 @@ function pintaGráficoNumContratos(data1) {
     }
 
     am4core.useTheme(am4themes_frozen);
-    am4core.useTheme(am4themes_animated);
 
     let chart = am4core.create("chartdivTree1", am4charts.XYChart);
     chart.data = data1;
@@ -556,15 +532,13 @@ function pintaGráficoNumContratos(data1) {
     series.dataFields.valueY = "numContratos";
     series.dataFields.categoryX = "anyoIndicador";
     series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/]";
-    series.columns.template.fillOpacity = 0.8;
 
     let columnTemplate = series.columns.template;
     columnTemplate.strokeWidth = 2;
-    columnTemplate.strokeOpacity = 1;
 }
 
 /*
-                Función que pinta el gráfico
+Función que pinta el gráfico
 */
 function pintaGráficoImpContratos(data2) {
     if (LOG_DEGUB_FICHA_ORG_CONTRATANTE) {
@@ -572,7 +546,6 @@ function pintaGráficoImpContratos(data2) {
     }
 
     am4core.useTheme(am4themes_frozen);
-    am4core.useTheme(am4themes_animated);
 
     let chart = am4core.create("chartdivTree2", am4charts.XYChart);
     chart.data = data2;
@@ -593,16 +566,14 @@ function pintaGráficoImpContratos(data2) {
     series.dataFields.valueY = "importeContratos";
     series.dataFields.categoryX = "anyoIndicador";
     series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}€[/]";
-    series.columns.template.fillOpacity = 0.8;
 
     let columnTemplate = series.columns.template;
     columnTemplate.strokeWidth = 2;
-    columnTemplate.strokeOpacity = 1;
 }
 
 function creaDatasetTabla(organismoCIdBusqueda, anyoBusqueda, estadoBusqueda) {
     if (LOG_DEGUB_FICHA_ORG_CONTRATANTE) {
-        console.log("creaDatasetTabla | " + anyoBusqueda + " , " + estadoBusqueda);
+        console.log("creaDatasetTabla FOrg| " + anyoBusqueda + " , " + estadoBusqueda);
     }
 
     dataSet = [];
@@ -806,7 +777,7 @@ function creaDatasetTabla(organismoCIdBusqueda, anyoBusqueda, estadoBusqueda) {
 }
 
 /*
-                Función que inicializa la tabla de búsqueda
+Función que inicializa la tabla de búsqueda
 */
 function preparaTablaFichaOrgCont(segundaPasada) {
     if (LOG_DEGUB_FICHA_ORG_CONTRATANTE) {
@@ -1167,7 +1138,7 @@ function preparaTablaFichaOrgCont(segundaPasada) {
 }
 
 /*
-                Función que permite ocultar la ficha
+Función que permite ocultar la ficha
 */
 function volverBusqueda() {
     if (LOG_DEGUB_FICHA_ORG_CONTRATANTE) {

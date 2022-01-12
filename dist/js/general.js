@@ -18,18 +18,7 @@ var numFormato = "0,0.[00]";
 var importeFormato = "0,0.[00]";
 var importeFormatoSinDecimales = "0,0";
 var anyos = [];
-var mySlider;
-// estructura para saber cuando todas las peticiones ajax han finalizado
-var peticionesInicialesGraf = [
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-];
+
 
 /* 
                 Métodos para el arranque de la web
@@ -39,9 +28,10 @@ function initComun() {
         console.log("initComun");
     }
 
+    inicializaDatosInicio();
     multidiomaComun();
     numeralInit();
-    inicializaDatosInicio();
+    
 }
 
 /* 
@@ -56,8 +46,8 @@ function multidiomaComun() {
         //carga de los idiomas
         $.i18n()
             .load({
-                en: "dist/i18n/en.json",
                 es: "dist/i18n/es.json",
+                en: "dist/i18n/en.json",
                 gl: "dist/i18n/gl.json",
             })
             .done(function () {
@@ -80,32 +70,58 @@ function multidiomaComun() {
                 $("html").i18n();
                 document.documentElement.lang = $.i18n().locale;
 
+
+                let tableCon = $('#tablaContratos').DataTable();
+                tableCon.destroy();
+
+                let tableAdj = $('#tablaAdjudicatarios').DataTable();
+                tableAdj.destroy();
+
+                preparaTablaBuscadorCont();
+                preparaTablaBuscadorAdj();        
+                
+                // tableCon = $('#tablaContratos').DataTable();
+                // tableCont.clear().draw();
+                $('#tablaContratos').DataTable().rows.add(dataSet).draw();
+
+                // tableAdj = $('#tablaAdjudicatarios').DataTable();
+                // tableAdj.clear().draw();
+                $('#tablaAdjudicatarios').DataTable().rows.add(datasetAdj).draw();
+
                 url = $("#iframeFichaContrato").attr("src");
-                if(url!='')
+                if(url.indexOf('lang')!=-1)
                 {
                     pos = url.search("lang=");
                     url = url.substring(0, pos) + "lang=" + $(this).data("locale");
                     $("#iframeFichaContrato").attr("src", url);
+                }else{
+                    url = url + "?lang=" + $(this).data("locale");
+                    $("#iframeFichaContrato").attr("src", url);
                 }
 
                 url = $("#iframeFichaAdjudicatario").attr("src");
-                if(url!='')
+                if(url.indexOf('lang')!=-1)
                 {
                     pos = url.search("lang=");
                     url = url.substring(0, pos) + "lang=" + $(this).data("locale");
                     $("#iframeFichaAdjudicatario").attr("src", url);
+                }else{
+                    url = url + "?lang=" + $(this).data("locale");
+                    $("#iframeFichaAdjudicatario").attr("src", url);
                 }
 
                 url = $("#iframeFichaOrganizacionContratante").attr("src");
-                if(url!='')
+                if(url.indexOf('lang')!=-1)
                 {
                     pos = url.search("lang=");
                     url = url.substring(0, pos) + "lang=" + $(this).data("locale");
                     $("#iframeFichaOrganizacionContratante").attr("src", url);
+                }else{
+                    url = url + "?lang=" + $(this).data("locale");
+                    $("#iframeFichaOrganizacionContratante").attr("src", url);
                 }
                 
-                // inicializaBuscador();
-                $("#capaAyuda").hide();
+                cambioCapaBuscador();
             }
         });
     });
@@ -115,7 +131,7 @@ function multidiomaComun() {
 }
 
 /*
-                Función que iniciliza los datos que dependen de la API
+Función que iniciliza los datos que dependen de la API
 */
 function inicializaDatosInicio() {
     if (LOG_DEGUB_COMUN) {
@@ -130,58 +146,6 @@ function inicializaDatosInicio() {
             let authorization = sessionStorage.getItem("authorization");
             xhr.setRequestHeader("Accept", "application/json");
             xhr.setRequestHeader("Authorization", authorization);
-        },
-    });
-
-    let anyosNumber = [];
-    let anyosString = [];
-    let theURL = dameURL(QUERY_INI_ANYOS);
-    $.ajax({
-        type: "GET",
-        url: theURL,
-        dataType: "json",
-        crossDomain: true,
-        contentType: "application/json; charset=utf-8",
-        timeout: VAL_TIME_OUT,
-
-        success: function (data) {
-            if (data && data.records && data.records.length) {
-                let i;
-                for (i = 0; i < data.records.length; i++) {
-                    anyosString.push(data.records[i].anyo);
-                    anyosNumber.push(Number(data.records[i].anyo));
-                }
-            } else {
-                console.log(MSG_ERROR_API_RES_VACIO);
-            }
-        },
-
-        error: function (xhr, textStatus, errorThrown) {
-            console.error(xhr);
-            console.error(errorThrown);
-            console.error(textStatus);
-        },
-
-        complete: function (data) {
-            if (mySlider) {
-                anyosNumber.sort(function (a, b) {
-                    return a - b;
-                });
-                anyosString.sort();
-
-                let valorDefecto = anyosString[anyosString.length - 1];
-                mySlider = $("#filtroAnyoInicio").slider({
-                    ticks: anyosNumber,
-                    ticks_labels: anyosString,
-                    value: valorDefecto,
-                });
-
-                $("#filtroAnyoInicio").on("change", function (sliderValue) {
-                    filtraGraficosInicio(sliderValue.value.newValue);
-                });
-
-                filtraGraficosInicio(valorDefecto);
-            }
         },
     });
 }
@@ -216,7 +180,7 @@ function numeralInit() {
 }
 
 /* 
-                Función que permite cambiar a la capa de buscador 
+Función que permite cambiar a la capa de buscador 
 */
 function cambioCapaBuscador() {
     if (LOG_DEGUB_COMUN) {
@@ -234,7 +198,7 @@ function cambioCapaBuscador() {
 }
 
 /* 
-                Función que permite cambiar a la capa de buscador 
+Función que permite cambiar a la capa de buscador 
 */
 function cambioCapaBuscadorIframe() {
     if (LOG_DEGUB_COMUN) {
@@ -252,7 +216,7 @@ function cambioCapaBuscadorIframe() {
 }
 
 /* 
-                Función que permite cambiar a la capa de ayuda 
+Función que permite cambiar a la capa de ayuda 
 */
 function cambioCapaAyuda() {
     if (LOG_DEGUB_COMUN) {
@@ -304,7 +268,7 @@ function dameURL(URL) {
 }
 
 /*
-                Función que genera el token para realizar la autenticación con la API
+Función que genera el token para realizar la autenticación con la API
 */
 function generarToken() {
     if (LOG_DEGUB_COMUN) {
@@ -370,7 +334,7 @@ function getUrlVars() {
 
 /*
 Funcion que chequea si un array de booleans esta entero a true
-*/
+
 function checkBooleanArray(vector) {
     if (LOG_DEGUB_COMUN) {
         console.log("checkBooleanArray");
@@ -384,11 +348,11 @@ function checkBooleanArray(vector) {
         }
     }
     return true;
-}
+}*/
 
 /*
-                Función que devuelve true si se ejecuta dentro de un iframe
-*/
+Función que devuelve true si se ejecuta dentro de un iframe
+
 function inIframe() {
     if (LOG_DEGUB_COMUN) {
         console.log("inIframe");
@@ -399,11 +363,11 @@ function inIframe() {
     } catch (e) {
         return true;
     }
-}
+}*/
 
 /*
-                Función que calcula el porcentaje de un numero
-*/
+Función que calcula el porcentaje de un numero
+
 function porcentaje(numero, porc) {
     if (LOG_DEGUB_COMUN) {
         console.log("porcentaje");
@@ -412,7 +376,7 @@ function porcentaje(numero, porc) {
     let p = Math.floor(numero * porc) / 100;
     p = Math.round(p);
     return p;
-}
+}*/
 
 function scrollTop() {
     if (LOG_DEGUB_COMUN) {
@@ -424,7 +388,7 @@ function scrollTop() {
 
 /*
 Función que devuelve el tipo de adjudicatario pasando como parámetro el DNI / CIF
-*/
+
 function dameTipoEntidad(dniNif) {
     if (LOG_DEGUB_COMUN) {
         console.log("dameTipoEntidad");
@@ -449,4 +413,4 @@ function dameTipoEntidad(dniNif) {
         result = ETIQUETA_TIPO_ENT_PERSONA;
     }
     return result;
-}
+}*/

@@ -88,7 +88,6 @@ function inicializaMultidiomaFichaAdjudicatario() {
             .done(function () {
                 $("html").i18n();
                 inicializaDatosFichaAdjudicatario();
-                preparaTablaFichaOrgCont();
             });
     });
 
@@ -96,7 +95,7 @@ function inicializaMultidiomaFichaAdjudicatario() {
 }
 
 /*
-                Función que invoca a todas las funciones que se realizan al inicializar el script
+Función que invoca a todas las funciones que se realizan al inicializar el script
 */
 function inicializaDatosFichaAdjudicatario() {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
@@ -104,14 +103,10 @@ function inicializaDatosFichaAdjudicatario() {
     }
     capturaParam();
     inicializaDatos();
-    $("#buscarListado").click(function () {
-        buscar();
-        this.blur();
-    });
 }
 
 /*
-                Función que comprueba y captura si se han pasado parámetros a la web, en caso de haberlos ejecutará una búsqueda con ellos.
+Función que comprueba y captura si se han pasado parámetros a la web, en caso de haberlos ejecutará una búsqueda con ellos.
 */
 function capturaParam() {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
@@ -128,29 +123,9 @@ function capturaParam() {
     }
 }
 
-/* Función que realiza la búsqueda de la tabla */
-function buscar() {
-    if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
-        console.log("buscar");
-    }
-
-    let anyoBusqueda = "";
-    let estadoBusqueda = "";
-    if ($("#selectAnyo").val()) {
-        anyoBusqueda = $("#selectAnyo").val();
-    }
-    if ($("#selectEstado").val()) {
-        estadoBusqueda = $("#selectEstado").val();
-    }
-    creaDatasetTabla(paramId, anyoBusqueda, estadoBusqueda);
-    $(".table-responsive").show();
-    let table = $("#tablaAdjudicatario").DataTable();
-    table.clear();
-    table.rows.add(dataSet).draw();
-}
 
 /*
-                Función que iniciliza los datos que dependen de la API
+Función que iniciliza los datos que dependen de la API
 */
 function inicializaDatos() {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
@@ -159,22 +134,17 @@ function inicializaDatos() {
 
     if (paramId) {
         obtieneDatosAPIProcess(dameURL(PROCESS_URL_1 + PROCESS_URL_2));
-        obtieneDatosAPIOrganization(
-            dameURL(ORGANIZATION_URL_1 + ORGANIZATION_URL_2)
-        );
+        obtieneDatosAPIOrganization(dameURL(ORGANIZATION_URL_1 + ORGANIZATION_URL_2));
         obtieneDatosAPITender(dameURL(TENDER_URL_1 + TENDER_URL_2));
         obtieneDatosAPILot(dameURL(LOT_URL_1 + LOT_URL_2));
-        obtieneDatosAPIStatus(
-            dameURL(TENDER_DISTINCT_URL_1 + TENDER_DISTINCT_URL_2 + STATUS)
-        );
-        obtieneDatosAPIAward(
-            dameURL(AWARD_ORGANIZATION_URL1 + paramId + AWARD_ORGANIZATION_URL2)
-        );
+        obtieneDatosAPIStatus(dameURL(TENDER_DISTINCT_URL_1 + TENDER_DISTINCT_URL_2 + STATUS));
+        obtieneDatosAPIAward(dameURL(AWARD_ORGANIZATION_URL1 + paramId + AWARD_ORGANIZATION_URL2));
+		preparaTablaFichaAdj();
     }
 }
 
 /*
-                Función que iniciliza los datos que dependen de la API
+Función que iniciliza los datos que dependen de la API
 */
 function obtieneDatosAPIProcess(url) {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
@@ -219,7 +189,7 @@ function obtieneDatosAPIProcess(url) {
 }
 
 /*
-                Función que iniciliza los datos que dependen de la API
+Función que iniciliza los datos que dependen de la API
 */
 function obtieneDatosAPIOrganization(url) {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
@@ -258,7 +228,7 @@ function obtieneDatosAPIOrganization(url) {
 }
 
 /*
-                Función que iniciliza los datos que dependen de la API
+Función que iniciliza los datos que dependen de la API
 */
 function obtieneDatosAPITender(url) {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
@@ -308,10 +278,10 @@ function obtieneDatosAPITender(url) {
 }
 
 /*
-                Función que iniciliza los datos que dependen de la API
+Función que iniciliza los datos que dependen de la API
 */
 function obtieneDatosAPILot(url) {
-    if (LOG_DEGUB_BUSCADOR) {
+    if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
         console.log("obtieneDatosAPILot | " + url);
     }
     $.getJSON(dameURL(url))
@@ -358,7 +328,7 @@ function obtieneDatosAPILot(url) {
 }
 
 /*
-                Función que iniciliza los datos que dependen de la API
+Función que iniciliza los datos que dependen de la API
 */
 function obtieneDatosAPIAward(url) {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
@@ -416,7 +386,7 @@ function obtieneDatosAPIAward(url) {
 }
 
 /*
-                Función que iniciliza los datos que dependen de la API
+Función que iniciliza los datos que dependen de la API
 */
 function obtieneDatosAPIStatus(url) {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
@@ -502,11 +472,11 @@ function checkPeticionesIniciales() {
 
     setTimeout(function () {
         insertaDatosIniciales();
-    }, 500);
+    }, 0);
 }
 
 /*
-                Función que invoca a todas las funciones que se realizan al inicializar el script
+Función que invoca a todas las funciones que se realizan al inicializar el script
 */
 function insertaDatosIniciales() {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
@@ -520,7 +490,7 @@ function insertaDatosIniciales() {
     pintaGrafico2(importeContratosGrafCol);
     pintaGrafico3(orgContratanteCol);
     pintaGrafico4(procedimientoCol);
-    preparaTablaFichaOrgCont(false);
+    preparaTablaFichaAdj(false);
     creaDatasetTabla(paramId, "", "");
     $(".table-responsive").show();
     let table = $("#tablaAdjudicatario").DataTable();
@@ -531,7 +501,7 @@ function insertaDatosIniciales() {
 }
 
 /*
-                Función que crea las estructuras para los gráficos
+Función que crea las estructuras para los gráficos
 */
 function trataDatosPorAnyo() {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
@@ -579,7 +549,7 @@ function trataDatosPorAnyo() {
 }
 
 /*
-                Función que inserta los datos de los indocadores en la página web
+Función que inserta los datos de los indocadores en la página web
 */
 function inicializaIndicadores() {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
@@ -595,7 +565,7 @@ function inicializaIndicadores() {
 }
 
 /*
-                Función que pinta el gráfico NumContratos
+Función que pinta el gráfico NumContratos
 */
 function pintaGrafico(data1) {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
@@ -603,7 +573,6 @@ function pintaGrafico(data1) {
     }
 
     am4core.useTheme(am4themes_frozen);
-    am4core.useTheme(am4themes_animated);
 
     let chart = am4core.create("chartdivTree1", am4charts.XYChart);
     chart.data = data1;
@@ -625,15 +594,13 @@ function pintaGrafico(data1) {
     series.dataFields.valueY = "numContratos";
     series.dataFields.categoryX = "anyoIndicador";
     series.columns.template.tooltipText = "[bold]{valueY}[/]";
-    series.columns.template.fillOpacity = 0.8;
 
     let columnTemplate = series.columns.template;
     columnTemplate.strokeWidth = 2;
-    columnTemplate.strokeOpacity = 1;
 }
 
 /*
-                Función que pinta el gráfico ImpContratos
+Función que pinta el gráfico ImpContratos
 */
 function pintaGrafico2(data2) {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
@@ -641,7 +608,6 @@ function pintaGrafico2(data2) {
     }
 
     am4core.useTheme(am4themes_frozen);
-    am4core.useTheme(am4themes_animated);
 
     let chart = am4core.create("chartdivTree2", am4charts.XYChart);
     chart.data = data2;
@@ -663,11 +629,9 @@ function pintaGrafico2(data2) {
     series.dataFields.valueY = "importeContratos";
     series.dataFields.categoryX = "anyoIndicador";
     series.columns.template.tooltipText = "[bold]{valueY}€[/]";
-    series.columns.template.fillOpacity = 0.8;
 
     let columnTemplate = series.columns.template;
     columnTemplate.strokeWidth = 2;
-    columnTemplate.strokeOpacity = 1;
 }
 
 /*
@@ -676,7 +640,7 @@ function pintaGrafico2(data2) {
 function creaDatasetTabla(licitadorBusqueda, anyoBusqueda, estadoBusqueda) {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
         console.log(
-            "creaDatasetTabla | " +
+            "creaDatasetTabla FAdj| " +
                 licitadorBusqueda +
                 " , " +
                 anyoBusqueda +
@@ -825,23 +789,24 @@ function creaDatasetTabla(licitadorBusqueda, anyoBusqueda, estadoBusqueda) {
 }
 
 /*
-                Función que inicializa la tabla de búsqueda
+Función que inicializa la tabla de búsqueda
 */
-function preparaTablaFichaOrgCont(segundaPasada) {
+function preparaTablaFichaAdj(segundaPasada) {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
-        console.log("preparaTablaFichaOrgCont");
+        console.log("preparaTablaFichaAdj");
     }
 
     let expedienteCadena = $.i18n("n_expediente");
     let nombreCadena = $.i18n("nombre");
-    let categoriaCadena = $.i18n("categoria");
-    let organismoContratanteCadena = $.i18n("organismo_contratante");
-    let numeroLicitadoresCadena = $.i18n("numero_licitadores");
     let importePliegoCadena = $.i18n("importe-licitacion");
-    let importeLoteCadena = $.i18n("importe-lote");
-    let IMPORTE_ADJUDICATARIOCadena = $.i18n("importe-adjudicatario");
-    let fechaAdjudicatarioCadena = $.i18n("fecha_adjudicatario");
     let nombreLoteCadena = $.i18n("nombre-lote");
+	let importeLoteCadena = $.i18n("importe-lote");
+    let importe_adjudicatarioCadena = $.i18n("importe-adjudicatario");
+    let fechaAdjudicatarioCadena = $.i18n("fecha_adjudicatario");	
+    let categoriaCadena = $.i18n("categoria");
+    let organismoContratanteCadena = $.i18n("organismo_contratante");	
+    let numeroLicitadoresCadena = $.i18n("numero_licitadores");	
+
     let copyCadena = $.i18n("copiar");
     let modificarTablaCadena = $.i18n("modificar_tabla");
     let descargarCadena = $.i18n("descargar");
@@ -916,7 +881,7 @@ function preparaTablaFichaOrgCont(segundaPasada) {
                 },
             },
             {
-                title: IMPORTE_ADJUDICATARIOCadena,
+                title: importe_adjudicatarioCadena,
                 render: function (data, type, row) {
                     let num = $.fn.dataTable.render
                         .number(".", ",", 2, "", "€")
@@ -1175,7 +1140,7 @@ function preparaTablaFichaOrgCont(segundaPasada) {
 }
 
 /*
-                Función que permite ocultar la ficha
+Función que permite ocultar la ficha
 */
 function volverBusqueda() {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
@@ -1316,7 +1281,7 @@ function compareNumTotal(a, b) {
 }
 
 /*
-                Función que pinta el gráfico
+Función que pinta el gráfico
 */
 function pintaGrafico3(data) {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
@@ -1324,7 +1289,6 @@ function pintaGrafico3(data) {
     }
 
     am4core.useTheme(am4themes_frozen);
-    am4core.useTheme(am4themes_animated);
 
     let chart = am4core.create("chartdivTree3", am4charts.PieChart);
     chart.data = data;
@@ -1353,7 +1317,7 @@ function pintaGrafico3(data) {
 }
 
 /*
-                Función que pinta el gráfico
+Función que pinta el gráfico
 */
 function pintaGrafico4(data) {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
@@ -1361,7 +1325,6 @@ function pintaGrafico4(data) {
     }
 
     am4core.useTheme(am4themes_frozen);
-    am4core.useTheme(am4themes_animated);
 
     let chart = am4core.create("chartdivTree4", am4charts.PieChart);
     chart.data = data;
