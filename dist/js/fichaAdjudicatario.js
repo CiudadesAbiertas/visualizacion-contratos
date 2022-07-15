@@ -54,39 +54,39 @@ var procedimientoCol = [];
 var dataSet = [];
 
 /*
-                Función de inicialización del script
+Función de inicialización del script
 */
 function inicializaFichaAdjudicatario() {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
-        console.log("inicializaFichaAdjudicatario");
+        console.log('inicializaFichaAdjudicatario');
     }
     inicializaMultidiomaFichaAdjudicatario();
 }
 
 /* 
-                Función para inicializar el multidioma
+Función para inicializar el multidioma
 */
 function inicializaMultidiomaFichaAdjudicatario() {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
-        console.log("inicializaMultidiomaFichaAdjudicatario");
+        console.log('inicializaMultidiomaFichaAdjudicatario');
     }
-    let langUrl = getUrlVars()["lang"];
+    let langUrl = getUrlVars()['lang'];
     if (!langUrl) {
-        langUrl = "es";
+        langUrl = 'es';
     }
     $.i18n().locale = langUrl;
     document.documentElement.lang = $.i18n().locale;
-    $("html").i18n();
+    $('html').i18n();
 
     jQuery(function ($) {
         $.i18n()
             .load({
-                en: "./dist/i18n/en.json",
-                es: "./dist/i18n/es.json",
-                gl: "./dist/i18n/gl.json",
+                en: './dist/i18n/en.json',
+                es: './dist/i18n/es.json',
+                gl: './dist/i18n/gl.json',
             })
             .done(function () {
-                $("html").i18n();
+                $('html').i18n();
                 inicializaDatosFichaAdjudicatario();
             });
     });
@@ -99,7 +99,7 @@ Función que invoca a todas las funciones que se realizan al inicializar el scri
 */
 function inicializaDatosFichaAdjudicatario() {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
-        console.log("inicializaDatosFichaAdjudicatario");
+        console.log('inicializaDatosFichaAdjudicatario');
     }
     capturaParam();
     inicializaDatos();
@@ -110,14 +110,14 @@ Función que comprueba y captura si se han pasado parámetros a la web, en caso 
 */
 function capturaParam() {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
-        console.log("capturaParam");
+        console.log('capturaParam');
     }
 
-    if (getUrlVars()["id"]) {
-        paramId = getUrlVars()["id"];
+    if (getUrlVars()['id']) {
+        paramId = getUrlVars()['id'];
     }
 
-    paramCapaAnterior = getUrlVars()["capaAnterior"];
+    paramCapaAnterior = getUrlVars()['capaAnterior'];
     if (paramCapaAnterior) {
         paramCapaAnterior = decodeURI(paramCapaAnterior);
     }
@@ -129,7 +129,7 @@ Función que iniciliza los datos que dependen de la API
 */
 function inicializaDatos() {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
-        console.log("inicializaDatos");
+        console.log('inicializaDatos');
     }
 
     if (paramId) {
@@ -138,7 +138,7 @@ function inicializaDatos() {
         obtieneDatosAPITender(dameURL(TENDER_URL_1 + TENDER_URL_2));
         obtieneDatosAPILot(dameURL(LOT_URL_1 + LOT_URL_2));
         obtieneDatosAPIStatus(dameURL(TENDER_DISTINCT_URL_1 + TENDER_DISTINCT_URL_2 + STATUS));
-        obtieneDatosAPIAward(dameURL(AWARD_ORGANIZATION_URL1 + paramId + AWARD_ORGANIZATION_URL2));
+        obtieneDatosAPIAward(AWARD_ORGANIZATION_URL1 + paramId + AWARD_ORGANIZATION_URL2);
 		preparaTablaFichaAdj();
     }
 }
@@ -148,7 +148,7 @@ Función que iniciliza los datos que dependen de la API
 */
 function obtieneDatosAPIProcess(url) {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
-        console.log("obtieneDatosAPIProcess | " + url);
+        console.log('obtieneDatosAPIProcess | ' + url);
     }
 
     $.getJSON(dameURL(url))
@@ -183,8 +183,8 @@ function obtieneDatosAPIProcess(url) {
             }
         })
         .fail(function (jqxhr, textStatus, error) {
-            let err = textStatus + ", " + error;
-            console.error("Request Failed: " + err);
+            let err = textStatus + ', ' + error;
+            console.error('Request Failed: ' + err);
         });
 }
 
@@ -193,7 +193,7 @@ Función que iniciliza los datos que dependen de la API
 */
 function obtieneDatosAPIOrganization(url) {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
-        console.log("obtieneDatosAPIOrganization | " + url);
+        console.log('obtieneDatosAPIOrganization | ' + url);
     }
 
     $.getJSON(dameURL(url))
@@ -206,9 +206,9 @@ function obtieneDatosAPIOrganization(url) {
                         title: data.records[i].title,
                     };
                     if (organization.id == paramId) {
-                        $("#titulo").html(data.records[i].title);
+                        $('#titulo').html(data.records[i].title);
                         //cifadjudicatario
-                        $("#cifadjudicatario").html(data.records[i].id);
+                        $('#cifadjudicatario').html(data.records[i].id);
                     }
                     organizationCol[organization.id] = organization;
                 }
@@ -222,8 +222,8 @@ function obtieneDatosAPIOrganization(url) {
             }
         })
         .fail(function (jqxhr, textStatus, error) {
-            let err = textStatus + ", " + error;
-            console.error("Request Failed: " + err);
+            let err = textStatus + ', ' + error;
+            console.error('Request Failed: ' + err);
         });
 }
 
@@ -232,7 +232,7 @@ Función que iniciliza los datos que dependen de la API
 */
 function obtieneDatosAPITender(url) {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
-        console.log("obtieneDatosAPITender | " + url);
+        console.log('obtieneDatosAPITender | ' + url);
     }
 
     $.getJSON(dameURL(url))
@@ -253,11 +253,11 @@ function obtieneDatosAPITender(url) {
                         periodEndDate: data.records[i].periodEndDate,
                     };
                     if (tender.periodStartDate) {
-                        tender.anyo = Date.parse(tender.periodStartDate).toString("yyyy");
+                        tender.anyo = Date.parse(tender.periodStartDate).toString('yyyy');
                     } else if (tender.periodEndDate) {
-                        tender.anyo = Date.parse(tender.periodEndDate).toString("yyyy");
+                        tender.anyo = Date.parse(tender.periodEndDate).toString('yyyy');
                     } else {
-                        tender.anyo = "";
+                        tender.anyo = '';
                     }
                     tenderCol[tender.id] = tender;
                     tenderSupplier[tender.hasSupplier] = tender;
@@ -272,8 +272,8 @@ function obtieneDatosAPITender(url) {
             }
         })
         .fail(function (jqxhr, textStatus, error) {
-            let err = textStatus + ", " + error;
-            console.error("Request Failed: " + err);
+            let err = textStatus + ', ' + error;
+            console.error('Request Failed: ' + err);
         });
 }
 
@@ -282,7 +282,7 @@ Función que iniciliza los datos que dependen de la API
 */
 function obtieneDatosAPILot(url) {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
-        console.log("obtieneDatosAPILot | " + url);
+        console.log('obtieneDatosAPILot | ' + url);
     }
     $.getJSON(dameURL(url))
         .done(function (data) {
@@ -322,8 +322,8 @@ function obtieneDatosAPILot(url) {
             }
         })
         .fail(function (jqxhr, textStatus, error) {
-            let err = textStatus + ", " + error;
-            console.error("Request Failed: " + err);
+            let err = textStatus + ', ' + error;
+            console.error('Request Failed: ' + err);
         });
 }
 
@@ -332,10 +332,10 @@ Función que iniciliza los datos que dependen de la API
 */
 function obtieneDatosAPIAward(url) {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
-        console.log("obtieneDatosAPIAward | " + url);
+        console.log('obtieneDatosAPIAward | ' + url);
     }
 
-    $.getJSON(dameURL(url))
+    $.getJSON(url)
         .done(function (data) {
             if (data && data.records && data.records.length) {
                 let i;
@@ -348,19 +348,19 @@ function obtieneDatosAPIAward(url) {
                         description: data.records[i].description,
                     };
                     if (award.awardDate) {
-                        award.anyo = Date.parse(award.awardDate).toString("yyyy");
+                        award.anyo = Date.parse(award.awardDate).toString('yyyy');
                     }
                     awardCol.push(award);
 
                     let awardAnyoColAux = [];
-                    if (awardAnyoCol[award.anyo + ""]) {
+                    if (awardAnyoCol[award.anyo + '']) {
                         awardAnyoColAux = awardAnyoCol[award.anyo];
                     }
                     awardAnyoColAux.push(award);
-                    awardAnyoCol[award.anyo + ""] = awardAnyoColAux;
+                    awardAnyoCol[award.anyo + ''] = awardAnyoColAux;
 
                     if (!anyoCol.includes(award.anyo)) {
-                        anyoCol.push(award.anyo + "");
+                        anyoCol.push(award.anyo + '');
                     }
 
                     let awardSupplierForAux = [];
@@ -380,8 +380,8 @@ function obtieneDatosAPIAward(url) {
             }
         })
         .fail(function (jqxhr, textStatus, error) {
-            let err = textStatus + ", " + error;
-            console.error("Request Failed: " + err);
+            let err = textStatus + ', ' + error;
+            console.error('Request Failed: ' + err);
         });
 }
 
@@ -390,10 +390,10 @@ Función que iniciliza los datos que dependen de la API
 */
 function obtieneDatosAPIStatus(url) {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
-        console.log("obtieneDatosAPIStatus | " + url);
+        console.log('obtieneDatosAPIStatus | ' + url);
     }
 
-    $("#selectEstado")
+    $('#selectEstado')
         .empty()
         .append("<option value=''></option>")
         .attr("selected", "selected");
@@ -420,8 +420,8 @@ function obtieneDatosAPIStatus(url) {
             }
         })
         .fail(function (jqxhr, textStatus, error) {
-            let err = textStatus + ", " + error;
-            console.error("Request Failed: " + err);
+            let err = textStatus + ', ' + error;
+            console.error('Request Failed: ' + err);
         });
 }
 
@@ -430,7 +430,7 @@ Funcion que modifica un attributo del objeto taskmaster del padre (si existe)
 */
 function modificaPeticionesInicialesr(attr) {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
-        console.log("modificaPeticionesInicialesr | " + attr);
+        console.log('modificaPeticionesInicialesr | ' + attr);
     }
 
     if (peticionesIniciales) {
@@ -444,7 +444,7 @@ Funcion que chequea el objecto peticionesIniciales
 */
 function checkPeticionesIniciales() {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
-        console.log("checkPeticionesIniciales");
+        console.log('checkPeticionesIniciales');
     }
 
     if (!peticionesIniciales) {
@@ -480,7 +480,7 @@ Función que invoca a todas las funciones que se realizan al inicializar el scri
 */
 function insertaDatosIniciales() {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
-        console.log("insertaDatosIniciales");
+        console.log('insertaDatosIniciales');
     }
 
     trataDatosPorAnyo();
@@ -491,13 +491,13 @@ function insertaDatosIniciales() {
     pintaGrafico3(orgContratanteCol);
     pintaGrafico4(procedimientoCol);
     preparaTablaFichaAdj(false);
-    creaDatasetTabla(paramId, "", "");
-    $(".table-responsive").show();
-    let table = $("#tablaAdjudicatario").DataTable();
+    creaDatasetTabla(paramId, '', '');
+    $('.table-responsive').show();
+    let table = $('#tablaAdjudicatario').DataTable();
     table.clear();
     table.rows.add(dataSet).draw();
     scrollTop();
-    $(".modal").modal("hide");
+    $('.modal').modal('hide');
 }
 
 /*
@@ -505,12 +505,12 @@ Función que crea las estructuras para los gráficos
 */
 function trataDatosPorAnyo() {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
-        console.log("trataDatosPorAnyo");
+        console.log('trataDatosPorAnyo');
     }
 
     let awardAnyoColAux;
 
-    $("#selectAnyo")
+    $('#selectAnyo')
         .empty()
         .append("<option value=''></option>")
         .attr("selected", "selected");
@@ -553,15 +553,15 @@ Función que inserta los datos de los indocadores en la página web
 */
 function inicializaIndicadores() {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
-        console.log("inicializaIndicadores");
+        console.log('inicializaIndicadores');
     }
 
-    $("#numContratos").html(numContratosTotal);
+    $('#numContratos').html(numContratosTotal);
     let importe = numeral(importeContratosTotal).format(
         importeFormato,
         Math.ceil
     );
-    $("#impContratos").html(importe);
+    $('#impContratos').html(importe);
 }
 
 /*
@@ -569,20 +569,20 @@ Función que pinta el gráfico NumContratos
 */
 function pintaGrafico(data1) {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
-        console.log("pintaGráficoNumContratos");
+        console.log('pintaGráficoNumContratos');
     }
 
     am4core.useTheme(am4themes_frozen);
 
-    let chart = am4core.create("chartdivTree1", am4charts.XYChart);
+    let chart = am4core.create('chartdivTree1', am4charts.XYChart);
     chart.data = data1;
     chart.language.locale = am4lang_es_ES;
 
-    chart.focusFilter.stroke = am4core.color("#0f0");
+    chart.focusFilter.stroke = am4core.color('#0f0');
 	chart.focusFilter.strokeWidth = 4;
 
     let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
-    categoryAxis.dataFields.category = "anyoIndicador";
+    categoryAxis.dataFields.category = 'anyoIndicador';
     categoryAxis.renderer.inversed = true;
     categoryAxis.renderer.grid.template.location = 0;
     categoryAxis.renderer.minGridDistance = 1;
@@ -591,9 +591,9 @@ function pintaGrafico(data1) {
     valueAxis.min = 0;
 
     let series = chart.series.push(new am4charts.ColumnSeries());
-    series.dataFields.valueY = "numContratos";
-    series.dataFields.categoryX = "anyoIndicador";
-    series.columns.template.tooltipText = "[bold]{valueY}[/]";
+    series.dataFields.valueY = 'numContratos';
+    series.dataFields.categoryX = 'anyoIndicador';
+    series.columns.template.tooltipText = '[bold]{valueY}[/]';
 
     let columnTemplate = series.columns.template;
     columnTemplate.strokeWidth = 2;
@@ -604,20 +604,20 @@ Función que pinta el gráfico ImpContratos
 */
 function pintaGrafico2(data2) {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
-        console.log("pintaGráficoImpContratos");
+        console.log('pintaGráficoImpContratos');
     }
 
     am4core.useTheme(am4themes_frozen);
 
-    let chart = am4core.create("chartdivTree2", am4charts.XYChart);
+    let chart = am4core.create('chartdivTree2', am4charts.XYChart);
     chart.data = data2;
     chart.language.locale = am4lang_es_ES;
 
-    chart.focusFilter.stroke = am4core.color("#0f0");
+    chart.focusFilter.stroke = am4core.color('#0f0');
 	chart.focusFilter.strokeWidth = 4;
 
     let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
-    categoryAxis.dataFields.category = "anyoIndicador";
+    categoryAxis.dataFields.category = 'anyoIndicador';
     categoryAxis.renderer.inversed = true;
     categoryAxis.renderer.grid.template.location = 0;
     categoryAxis.renderer.minGridDistance = 1;
@@ -626,25 +626,25 @@ function pintaGrafico2(data2) {
     valueAxis.min = 0;
 
     let series = chart.series.push(new am4charts.ColumnSeries());
-    series.dataFields.valueY = "importeContratos";
-    series.dataFields.categoryX = "anyoIndicador";
-    series.columns.template.tooltipText = "[bold]{valueY}€[/]";
+    series.dataFields.valueY = 'importeContratos';
+    series.dataFields.categoryX = 'anyoIndicador';
+    series.columns.template.tooltipText = '[bold]{valueY}€[/]';
 
     let columnTemplate = series.columns.template;
     columnTemplate.strokeWidth = 2;
 }
 
 /*
-                Crea una estractura que será insertada en la tabla de la página web
+Crea una estractura que será insertada en la tabla de la página web
 */
 function creaDatasetTabla(licitadorBusqueda, anyoBusqueda, estadoBusqueda) {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
         console.log(
-            "creaDatasetTabla FAdj| " +
+            'creaDatasetTabla FAdj| ' +
                 licitadorBusqueda +
-                " , " +
+                ' , ' +
                 anyoBusqueda +
-                " , " +
+                ' , ' +
                 estadoBusqueda
         );
     }
@@ -657,22 +657,22 @@ function creaDatasetTabla(licitadorBusqueda, anyoBusqueda, estadoBusqueda) {
     let restuadolicitador = true;
     let l;
     for (l = 0; l < awardCol.length; l++) {
-        let id = "";
-        let identifier = "";
-        let nombre = "";
-        let nombreCompl = "";
-        let anyo = "";
-        let awardDate = "";
-        let categoria = "";
-        let estado = "";
-        let organismoCId = "";
-        let organismoCTitle = "";
-        let nlicitadores = "";
-        let importePliego = "";
-        let licitador = "";
-        let importeLote = "";
-        let nombreLote = "";
-        let importeAdjudicado = "";
+        let id = '';
+        let identifier = '';
+        let nombre = '';
+        let nombreCompl = '';
+        let anyo = '';
+        let awardDate = '';
+        let categoria = '';
+        let estado = '';
+        let organismoCId = '';
+        let organismoCTitle = '';
+        let nlicitadores = '';
+        let importePliego = '';
+        let licitador = '';
+        let importeLote = '';
+        let nombreLote = '';
+        let importeAdjudicado = '';
 
         let tenderEncontrado = true;
         let lotEncontrado = true;
@@ -762,7 +762,7 @@ function creaDatasetTabla(licitadorBusqueda, anyoBusqueda, estadoBusqueda) {
 
         if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
             if (!lotEncontrado && !tenderEncontrado) {
-                console.log("Tender y Lot no encontrado. Award.id " + awardCol[l].id);
+                console.log('Tender y Lot no encontrado. Award.id ' + awardCol[l].id);
             }
         }
 
@@ -793,52 +793,55 @@ Función que inicializa la tabla de búsqueda
 */
 function preparaTablaFichaAdj(segundaPasada) {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
-        console.log("preparaTablaFichaAdj");
+        console.log('preparaTablaFichaAdj');
     }
 
-    let expedienteCadena = $.i18n("n_expediente");
-    let nombreCadena = $.i18n("nombre");
-    let importePliegoCadena = $.i18n("importe-licitacion");
-    let nombreLoteCadena = $.i18n("nombre-lote");
-	let importeLoteCadena = $.i18n("importe-lote");
-    let importe_adjudicatarioCadena = $.i18n("importe-adjudicatario");
-    let fechaAdjudicatarioCadena = $.i18n("fecha_adjudicatario");	
-    let categoriaCadena = $.i18n("categoria");
-    let organismoContratanteCadena = $.i18n("organismo_contratante");	
-    let numeroLicitadoresCadena = $.i18n("numero_licitadores");	
+    let expedienteCadena = $.i18n('n_expediente');
+    let nombreCadena = $.i18n('nombre');
+    let importePliegoCadena = $.i18n('importe-licitacion');
+    let nombreLoteCadena = $.i18n('nombre-lote');
+	let importeLoteCadena = $.i18n('importe-lote');
+    let importe_adjudicatarioCadena = $.i18n('importe-adjudicatario');
+    let fechaAdjudicatarioCadena = $.i18n('fecha_adjudicatario');	
+    let categoriaCadena = $.i18n('categoria');
+    let organismoContratanteCadena = $.i18n('organismo_contratante');	
+    let numeroLicitadoresCadena = $.i18n('numero_licitadores');	
 
-    let copyCadena = $.i18n("copiar");
-    let modificarTablaCadena = $.i18n("modificar_tabla");
-    let descargarCadena = $.i18n("descargar");
-    let showHideCadena = $.i18n("Oculta columnas");
-    let urlLanguaje = "vendor/datatables/i18n/" + $.i18n().locale + ".json";
+    let copyCadena = $.i18n('copiar');
+    let modificarTablaCadena = $.i18n('modificar_tabla');
+    let descargarCadena = $.i18n('descargar');
+    let showHideCadena = $.i18n('Oculta columnas');
+    let urlLanguaje = 'vendor/datatables/i18n/' + $.i18n().locale + '.json';
 
-    let tablaAdjudicatario = $("#tablaAdjudicatario").DataTable({
+    let tablaAdjudicatario = $('#tablaAdjudicatario').DataTable({
+        responsive: true,
+        colReorder: true,
         searching: false,
+        autoWidth: false,
         pageLength: REGISTROS_TABLA_BUSQUEDA,
         formatNumber: function (toFormat) {
-            return toFormat.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            return toFormat.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
         },
         formatNumber: function (toFormat) {
-            return toFormat.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            return toFormat.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
         },
         language: {
-            decimal: ",",
-            thousands: ".",
+            decimal: ',',
+            thousands: '.',
             url: urlLanguaje,
         },
         data: dataSet,
-        order: [0, "asc"],
+        order: [[0, 'asc']],
         columnDefs: [
-            { width: "40", targets: 0 },
-            { width: "140", targets: 1 },
-            { width: "5", targets: 2 },
-            { width: "40", targets: 3 },
-            { width: "5", targets: 4 },
-            { width: "5", targets: 5 },
-            { width: "5", targets: 6 },
-            { width: "10", targets: 7 },
-            { width: "5", targets: 8 },
+            { width: '40', targets: 0 },
+            { width: '140', targets: 1 },
+            { width: '5', targets: 2 },
+            { width: '40', targets: 3 },
+            { width: '5', targets: 4 },
+            { width: '5', targets: 5 },
+            { width: '5', targets: 6 },
+            { width: '10', targets: 7 },
+            { width: '5', targets: 8 },
         ],
         columns: [
             {
@@ -848,7 +851,7 @@ function preparaTablaFichaAdj(segundaPasada) {
                         '<a id="fichaContrato" aria-label="Abrir ficha" >' + row[1] + "</a>"
                     );
                 },
-                className: "details-control",
+                className: 'details-control',
             },
             {
                 title: nombreCadena,
@@ -859,10 +862,7 @@ function preparaTablaFichaAdj(segundaPasada) {
             {
                 title: importePliegoCadena,
                 render: function (data, type, row) {
-                    let num = $.fn.dataTable.render
-                        .number(".", ",", 2, "", "€")
-                        .display(row[3]);
-                    return num;
+                    return row[3];
                 },
             },
             {
@@ -874,25 +874,19 @@ function preparaTablaFichaAdj(segundaPasada) {
             {
                 title: importeLoteCadena,
                 render: function (data, type, row) {
-                    let num = $.fn.dataTable.render
-                        .number(".", ",", 2, "", "€")
-                        .display(row[11]);
-                    return num;
+                    return row[11];
                 },
             },
             {
                 title: importe_adjudicatarioCadena,
                 render: function (data, type, row) {
-                    let num = $.fn.dataTable.render
-                        .number(".", ",", 2, "", "€")
-                        .display(row[9]);
-                    return num;
+                    return row[9];
                 },
             },
             {
                 title: fechaAdjudicatarioCadena,
                 render: function (data, type, row) {
-                    return Date.parse(row[12]).toString("dd-MM-yyyy");
+                    return Date.parse(row[12]).toString('dd-MM-yyyy');
                 },
             },
             {
@@ -910,7 +904,7 @@ function preparaTablaFichaAdj(segundaPasada) {
                         "</a>"
                     );
                 },
-                className: "details-control",
+                className: 'details-control',
             },
             {
                 title: numeroLicitadoresCadena,
@@ -919,25 +913,25 @@ function preparaTablaFichaAdj(segundaPasada) {
                 },
             },
         ],
-		dom: '<"row panel-footer"<"col-sm-offset-1 col-sm-5"l><"col-sm-5"B>>rt<"row"<"col-sm-offset-1 col-sm-5"fi><"col-sm-5"p>>',
+		dom: '<"row panel-footer"<"col-sm-6"l><"col-sm-6"B>>rt<"row"<"col-sm-6"fi><"col-sm-6"p>>',
         buttons: [
            {
                 extend: 'colvis',
-                text: modificarTablaCadena+' <span class="fa fa-angle-down"></span>',
+                text: '<i class="fa fa-columns">&nbsp;</i>'+ modificarTablaCadena,
                 title: 'modificar tabla',
                 className: 'btn btn-light'
             },
             {
                 extend: 'collection',
-                text: descargarCadena+' <span class="fa fa-angle-down"></span>',
+                text: '<i class="fa fa-download">&nbsp;</i>' + descargarCadena,
                 title: 'descargar',
-                className: 'btn btn-primary',
+                className: 'btn btn-light',
                 buttons: [
                     {
                         extend: 'csv',
-                        text: 'CSV <span class="fa fa-table"></span>',
+                        text: '<span class="fa-fw fa fa-table"></span> CSV ',
                         title: 'adjudicatario',
-                        className: 'btn btn-primary',
+                        className: '',
                         exportOptions: {
                             search: 'applied',
                             order: 'applied',
@@ -946,18 +940,18 @@ function preparaTablaFichaAdj(segundaPasada) {
                     },
                     {
                         extend: 'excel',
-                        text: 'EXCEL <span class="fa fa-file-excel-o"></span>',
+                        text: '<span class="fa-fw fa fa-file-excel-o"></span> EXCEL ',
                         title: '',
-                        className: 'btn btn-primary',
+                        className: '',
                         exportOptions: {
                             search: 'applied',
                             order: 'applied',
                         },
                     },
                     {
-                        text: 'JSON <span class="fa fa-list-alt "></span>',
+                        text: '<span class="fa-fw fa fa-list-alt "></span> JSON ',
                         title: 'adjudicatario',
-                        className: 'btn btn-primary',
+                        className: '',
                         exportOptions: {
                             search: 'applied',
                             order: 'applied',
@@ -972,30 +966,30 @@ function preparaTablaFichaAdj(segundaPasada) {
 						},
 					},
 					{
-						text: 'PDF <span class="fa fa-file-pdf-o"></span>',
-						className: "btn btn-primary",
-						extend: "pdfHtml5",
-						filename: "adjudicatario",
-						orientation: "landscape",
-						pageSize: "A4",
+						text: '<span class="fa-fw fa fa-file-pdf-o"></span> PDF ',
+						className: '',
+						extend: 'pdfHtml5',
+						filename: 'adjudicatario',
+						orientation: 'landscape',
+						pageSize: 'A4',
 						exportOptions: {
-							search: "applied",
-							order: "applied",
+							search: 'applied',
+							order: 'applied',
 						},
 						customize: function (doc) {
 							doc.content.splice(0, 1);
 							let now = new Date();
 							let jsDate =
 								now.getDate() +
-								"-" +
+								'-' +
 								(now.getMonth() + 1) +
-								"-" +
+								'-' +
 								now.getFullYear();
 							let logo = LOGO_BASE_64;
 							doc.pageMargins = [20, 60, 20, 30];
 							doc.defaultStyle.fontSize = 7;
 							doc.styles.tableHeader.fontSize = 7;
-							doc["header"] = function () {
+							doc['header'] = function () {
 								return {
 									columns: [
 										{
@@ -1003,27 +997,27 @@ function preparaTablaFichaAdj(segundaPasada) {
 											width: 96,
 										},
 										{
-											alignment: "center",
-											fontSize: "14",
-											text: ["Ficha de adjudicatario"],
+											alignment: 'center',
+											fontSize: '14',
+											text: ['Ficha de adjudicatario'],
 										},
 									],
 									margin: 20,
 								};
 							};
-							doc["footer"] = function (page, pages) {
+							doc['footer'] = function (page, pages) {
 								return {
 									columns: [
 										{
-											alignment: "left",
-											text: ["Created on: ", { text: jsDate.toString() }],
+											alignment: 'left',
+											text: ['Created on: ', { text: jsDate.toString() }],
 										},
 										{
-											alignment: "right",
+											alignment: 'right',
 											text: [
-												"page ",
+												'page ',
 												{ text: page.toString() },
-												" of ",
+												' of ',
 												{ text: pages.toString() },
 											],
 										},
@@ -1032,22 +1026,22 @@ function preparaTablaFichaAdj(segundaPasada) {
 								};
 							};
 							let objLayout = {};
-							objLayout["hLineWidth"] = function (i) {
+							objLayout['hLineWidth'] = function (i) {
 								return 0.5;
 							};
-							objLayout["vLineWidth"] = function (i) {
+							objLayout['vLineWidth'] = function (i) {
 								return 0.5;
 							};
-							objLayout["hLineColor"] = function (i) {
-								return "#aaa";
+							objLayout['hLineColor'] = function (i) {
+								return '#aaa';
 							};
-							objLayout["vLineColor"] = function (i) {
-								return "#aaa";
+							objLayout['vLineColor'] = function (i) {
+								return '#aaa';
 							};
-							objLayout["paddingLeft"] = function (i) {
+							objLayout['paddingLeft'] = function (i) {
 								return 4;
 							};
-							objLayout["paddingRight"] = function (i) {
+							objLayout['paddingRight'] = function (i) {
 								return 4;
 							};
 							doc.content[0].layout = objLayout;
@@ -1060,13 +1054,13 @@ function preparaTablaFichaAdj(segundaPasada) {
                 extend: 'collection',
                 text: '...',
                 title: 'otros',
-                className: 'btn btn-primary',
+                className: 'btn btn-light dropdown-menu-right button-right',
                 buttons: [
                     {
                         extend: 'copy',
-                        text: copyCadena + ' <span class="fa fa-copy"></span>',
+                        text: ' <span class="fa fa-files-o"></span>' + copyCadena ,
                         title: 'adjudicatario',
-                        className: 'btn btn-primary',
+                        className: '',
                         exportOptions: {
                             search: 'applied',
                             order: 'applied',
@@ -1088,51 +1082,51 @@ function preparaTablaFichaAdj(segundaPasada) {
 	
 
     //Esta linea es para que no haya warnings en dataTables
-    $.fn.dataTable.ext.errMode = "none";
+    $.fn.dataTable.ext.errMode = 'none';
 
     if (!segundaPasada) {
-        $("#tablaAdjudicatario tbody").on(
-            "click",
-            "td.details-control",
+        $('#tablaAdjudicatario tbody').on(
+            'click',
+            'td.details-control',
             function () {
-                let td = $(this).closest("td").html();
-                let tr = $(this).closest("tr");
+                let td = $(this).closest('td').html();
+                let tr = $(this).closest('tr');
                 let row = tablaAdjudicatario.row(tr);
                 let url;
-                if (td.includes("fichaContrato")) {
-                    url = "fichaContrato.html?lang=" + $.i18n().locale;
+                if (td.includes('fichaContrato')) {
+                    url = 'fichaContrato.html?lang=' + $.i18n().locale;
                     url =
-                        url + "&id=" + row.data()[0] + "&capaAnterior=fichaAdjudicatario";
+                        url + '&id=' + row.data()[0] + '&capaAnterior=fichaAdjudicatario';
 
-                    $("#iframeFichaContrato", window.parent.document).attr("src", url);
-                    $("#iframeFichaContrato", window.parent.document).height(
+                    $('#iframeFichaContrato', window.parent.document).attr('src', url);
+                    $('#iframeFichaContrato', window.parent.document).height(
                         $(document).height()
                     );
 
-                    $("#capaBuscador", window.parent.document).hide();
-                    $("#capaAyuda", window.parent.document).hide();
-                    $("#capaFichaContrato", window.parent.document).show();
-                    $("#capaFichaAdjudicatario", window.parent.document).hide();
-                    $("#capaFichaOrganizacionContratante", window.parent.document).hide();
-                } else if (td.includes("fichaOrganizacionContratante")) {
-                    url = "fichaOrganizacionContratante.html?lang=" + $.i18n().locale;
+                    $('#capaBuscador', window.parent.document).hide();
+                    $('#capaAyuda', window.parent.document).hide();
+                    $('#capaFichaContrato', window.parent.document).show();
+                    $('#capaFichaAdjudicatario', window.parent.document).hide();
+                    $('#capaFichaOrganizacionContratante', window.parent.document).hide();
+                } else if (td.includes('fichaOrganizacionContratante')) {
+                    url = 'fichaOrganizacionContratante.html?lang=' + $.i18n().locale;
                     url =
-                        url + "&id=" + row.data()[7] + "&capaAnterior=fichaAdjudicatario";
+                        url + '&id=' + row.data()[7] + '&capaAnterior=fichaAdjudicatario';
 
-                    $("#iframeFichaOrganizacionContratante", window.parent.document).attr(
-                        "src",
+                    $('#iframeFichaOrganizacionContratante', window.parent.document).attr(
+                        'src',
                         url
                     );
                     $(
-                        "#iframeFichaOrganizacionContratante",
+                        '#iframeFichaOrganizacionContratante',
                         window.parent.document
                     ).height($(document).height());
 
-                    $("#capaBuscador", window.parent.document).hide();
-                    $("#capaAyuda", window.parent.document).hide();
-                    $("#capaFichaContrato", window.parent.document).hide();
-                    $("#capaFichaAdjudicatario", window.parent.document).hide();
-                    $("#capaFichaOrganizacionContratante", window.parent.document).show();
+                    $('#capaBuscador', window.parent.document).hide();
+                    $('#capaAyuda', window.parent.document).hide();
+                    $('#capaFichaContrato', window.parent.document).hide();
+                    $('#capaFichaAdjudicatario', window.parent.document).hide();
+                    $('#capaFichaOrganizacionContratante', window.parent.document).show();
                 }
             }
         );
@@ -1144,49 +1138,52 @@ Función que permite ocultar la ficha
 */
 function volverBusqueda() {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
-        console.log("volverBusqueda");
+        console.log('volverBusqueda');
     }
 
-    if (paramCapaAnterior == "buscador") {
-        $("#capaBuscador", window.parent.document).show();
-        $("#capaAyuda", window.parent.document).hide();
-        $("#capaFichaContrato", window.parent.document).hide();
-        $("#capaFichaAdjudicatario", window.parent.document).hide();
-        $("#capaFichaOrganizacionContratante", window.parent.document).hide();
+    if (paramCapaAnterior == 'buscador') {
+        $('#capaBuscador', window.parent.document).show();
+        $('#capaAyuda', window.parent.document).hide();
+        $('#capaFichaContrato', window.parent.document).hide();
+        $('#capaFichaAdjudicatario', window.parent.document).hide();
+        $('#capaFichaOrganizacionContratante', window.parent.document).hide();
     }
-    if (paramCapaAnterior == "inicio") {
-        $("#capaBuscador", window.parent.document).show();
-        $("#capaAyuda", window.parent.document).hide();
-        $("#capaFichaContrato", window.parent.document).hide();
-        $("#capaFichaAdjudicatario", window.parent.document).hide();
-        $("#capaFichaOrganizacionContratante", window.parent.document).hide();
+    if (paramCapaAnterior == 'inicio') {
+        $('#capaBuscador', window.parent.document).show();
+        $('#capaAyuda', window.parent.document).hide();
+        $('#capaFichaContrato', window.parent.document).hide();
+        $('#capaFichaAdjudicatario', window.parent.document).hide();
+        $('#capaFichaOrganizacionContratante', window.parent.document).hide();
     }
-    if (paramCapaAnterior == "fichaAdjudicatario") {
-        $("#capaBuscador", window.parent.document).hide();
-        $("#capaAyuda", window.parent.document).hide();
-        $("#capaFichaContrato", window.parent.document).hide();
-        $("#capaFichaAdjudicatario", window.parent.document).show();
-        $("#capaFichaOrganizacionContratante", window.parent.document).hide();
+    if (paramCapaAnterior == 'fichaAdjudicatario') {
+        $('#capaBuscador', window.parent.document).hide();
+        $('#capaAyuda', window.parent.document).hide();
+        $('#capaFichaContrato', window.parent.document).hide();
+        $('#capaFichaAdjudicatario', window.parent.document).show();
+        $('#capaFichaOrganizacionContratante', window.parent.document).hide();
     }
-    if (paramCapaAnterior == "fichaContrato") {
-        $("#capaBuscador", window.parent.document).hide();
-        $("#capaAyuda", window.parent.document).hide();
-        $("#capaFichaContrato", window.parent.document).show();
-        $("#capaFichaAdjudicatario", window.parent.document).hide();
-        $("#capaFichaOrganizacionContratante", window.parent.document).hide();
+    if (paramCapaAnterior == 'fichaContrato') {
+        $('#capaBuscador', window.parent.document).hide();
+        $('#capaAyuda', window.parent.document).hide();
+        $('#capaFichaContrato', window.parent.document).show();
+        $('#capaFichaAdjudicatario', window.parent.document).hide();
+        $('#capaFichaOrganizacionContratante', window.parent.document).hide();
     }
-    if (paramCapaAnterior == "fichaOrganizacionContratante") {
-        $("#capaBuscador", window.parent.document).hide();
-        $("#capaAyuda", window.parent.document).hide();
-        $("#capaFichaContrato", window.parent.document).hide();
-        $("#capaFichaAdjudicatario", window.parent.document).hide();
-        $("#capaFichaOrganizacionContratante", window.parent.document).show();
+    if (paramCapaAnterior == 'fichaOrganizacionContratante') {
+        $('#capaBuscador', window.parent.document).hide();
+        $('#capaAyuda', window.parent.document).hide();
+        $('#capaFichaContrato', window.parent.document).hide();
+        $('#capaFichaAdjudicatario', window.parent.document).hide();
+        $('#capaFichaOrganizacionContratante', window.parent.document).show();
     }
 }
 
+/*
+creaDatosGrafico3y4
+*/
 function creaDatosGrafico3y4() {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
-        console.log("creaDatosGrafico3y4");
+        console.log('creaDatosGrafico3y4');
     }
 
     let awardSupplierForAux = awardSupplierFor.get(paramId);
@@ -1273,7 +1270,13 @@ function creaDatosGrafico3y4() {
     procedimientoCol.sort(compareNumTotal);
 }
 
+/*
+compareNumTotal
+*/
 function compareNumTotal(a, b) {
+    if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
+        console.log('compareNumTotal');
+    }
     if (a.numTotal > b.numTotal) return -1;
     if (b.numTotal > a.numTotal) return 1;
 
@@ -1285,34 +1288,34 @@ Función que pinta el gráfico
 */
 function pintaGrafico3(data) {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
-        console.log("pintaGrafico3");
+        console.log('pintaGrafico3');
     }
 
     am4core.useTheme(am4themes_frozen);
 
-    let chart = am4core.create("chartdivTree3", am4charts.PieChart);
+    let chart = am4core.create('chartdivTree3', am4charts.PieChart);
     chart.data = data;
     chart.language.locale = am4lang_es_ES;
 
-    chart.focusFilter.stroke = am4core.color("#0f0");
+    chart.focusFilter.stroke = am4core.color('#0f0');
 	chart.focusFilter.strokeWidth = 4;
 
     let series = chart.series.push(new am4charts.PieSeries());
-    series.dataFields.value = "value";
-    series.dataFields.category = "nameCorto";
+    series.dataFields.value = 'value';
+    series.dataFields.category = 'nameCorto';
 
     series.labels.template.disabled = true;
     series.ticks.template.disabled = true;
 
     chart.legend = new am4charts.Legend();
-    chart.legend.position = "right";
+    chart.legend.position = 'right';
     chart.legend.labels.template.maxWidth = 120;
     chart.legend.labels.template.truncate = true;
-    chart.legend.itemContainers.template.tooltipText = "{category}";
+    chart.legend.itemContainers.template.tooltipText = '{category}';
 
-    series.legendSettings.labelText = "{nameCorto}";
-    series.legendSettings.valueText = "{value}";
-    series.slices.template.tooltipText = "{nameCorto}: {value}";
+    series.legendSettings.labelText = '{nameCorto}';
+    series.legendSettings.valueText = '{value}';
+    series.slices.template.tooltipText = '{nameCorto}: {value}';
     series.slices.template.cursorOverStyle = am4core.MouseCursorStyle.pointer;
 }
 
@@ -1321,33 +1324,33 @@ Función que pinta el gráfico
 */
 function pintaGrafico4(data) {
     if (LOG_DEGUB_FICHA_ADJUDICATARIO) {
-        console.log("pintaGrafico4");
+        console.log('pintaGrafico4');
     }
 
     am4core.useTheme(am4themes_frozen);
 
-    let chart = am4core.create("chartdivTree4", am4charts.PieChart);
+    let chart = am4core.create('chartdivTree4', am4charts.PieChart);
     chart.data = data;
     chart.language.locale = am4lang_es_ES;
 
-    chart.focusFilter.stroke = am4core.color("#0f0");
+    chart.focusFilter.stroke = am4core.color('#0f0');
 	chart.focusFilter.strokeWidth = 4;
     
     let series = chart.series.push(new am4charts.PieSeries());
-    series.dataFields.value = "value";
-    series.dataFields.category = "name";
+    series.dataFields.value = 'value';
+    series.dataFields.category = 'name';
 
     series.labels.template.disabled = true;
     series.ticks.template.disabled = true;
 
     chart.legend = new am4charts.Legend();
-    chart.legend.position = "right";
+    chart.legend.position = 'right';
     chart.legend.labels.template.maxWidth = 120;
     chart.legend.labels.template.truncate = true;
-    chart.legend.itemContainers.template.tooltipText = "{category}";
+    chart.legend.itemContainers.template.tooltipText = '{category}';
 
-    series.legendSettings.labelText = "{name}";
-    series.legendSettings.valueText = "{value}";
-    series.slices.template.tooltipText = "{name}: {value}";
+    series.legendSettings.labelText = '{name}';
+    series.legendSettings.valueText = '{value}';
+    series.slices.template.tooltipText = '{name}: {value}';
     series.slices.template.cursorOverStyle = am4core.MouseCursorStyle.pointer;
 }

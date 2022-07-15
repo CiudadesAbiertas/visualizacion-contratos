@@ -23,32 +23,32 @@ See the Licence for the specific language governing permissions and limitations 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="Visualización del contratos" />
     <meta name="author" content="Localidata" />
+    <meta http-equiv="content-encoding" content="gzip" />
+
     <title data-i18n="contratos">Contratos</title>
 
     <!-- Bootstrap Core CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
 
     <!-- Bootstrap Select CSS -->
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.8.1/css/bootstrap-select.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
 
     <!-- JQUERY UI CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet" />
-
+    
     <!-- Custom Fonts -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.css" rel="stylesheet"
-        type="text/css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.css" rel="stylesheet" type="text/css">
 
     <!-- DATATABLES CSS -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css" />
 	<link rel="stylesheet" type="text/css"
-        href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.bootstrap.min.css" />
+        href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.bootstrap4.min.css" />
     <link rel="stylesheet" type="text/css"
-        href="https://cdn.datatables.net/colreorder/1.5.4/css/colReorder.bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css"
-        href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" />
+        href="https://cdn.datatables.net/colreorder/1.5.5/css/colReorder.bootstrap4.min.css" />
+    <!-- <link rel="stylesheet" type="text/css"
+        href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css" /> -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+    <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap4.min.css"> -->
 
     <!-- Hojas de estilos internos -->
     <link rel="stylesheet" href="../comunV2/dist/css/main.css" />
@@ -58,243 +58,300 @@ See the Licence for the specific language governing permissions and limitations 
 
     <!--Favicon-->
     <link rel="shortcut icon" type="image/x-icon" href="../comunV2/dist/images/favicon.ico" />
+
 </head>
 
 <body>
-    <div class="modal fade bd-loading-modal-lg" id="modalCargaInicial" data-backdrop="static" data-keyboard="false" tabindex="-1"
-        role="dialog">
+    
+    <div class="modal fade bd-loading-modal-lg" id="modalCargaInicial" data-backdrop="static" data-keyboard="false"
+        tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content modal-loading">
-                <span class="fa fa-spinner fa-spin fa-5x"></span>
-                <span class="home-header_title">Cargando. Espere, por favor</span>
+                <div class="col-sm-12">
+                    <span class="loader"></span>
+                    <br> <br>
+                    <span data-i18n="cargando" class="home-header_title">Cargando datos</span>
+                    <br> <br>
+                    <span data-i18n="espere">Espere, el proceso podría tardar unos segundos</span>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- Cabecera corporativa con logo -- a meter en hoja de estilos -->
+    <div class="logo row" style="background:linear-gradient(90deg,#00587d 0,#009fe3 15%,#00587d)">
+        <div class="col-sm-4 my-auto">
+            <!-- <img src="https://estaticos.coruna.es/images2019/logo2020_cabeceraIndexPortal.png"
+                style="padding:10px; width: 250px"> -->
+            <img src="https://www.madrid.es/assets/images/logo-madrid.png"
+                style="padding:10px; width: 200px">
+            <!-- <img src="https://www.zaragoza.es/cont/paginas/img/sede/logo_escudo.png"
+                style="padding:10px; height: 50px;"> -->
+            <!-- <img src="http://santiagodecompostela.gal/auxiliarV2/images/logo.png"
+                style="padding:10px; width: 250px"> -->
+        </div>
+        <div class="col-sm-8 my-auto" style="color:white">
+            <h1 data-i18n="contratosabiertos">CONTRATOS ABIERTOS</h1>
+        </div>
+    </div>
+
     <!-- Barra de navegación -->
-    <nav class="navbar navbar-default navbar-static-top fondo_cabecera margin-bottom0 presentacion" aria-label="Barra de navegación">
-        <div class="presentacion-header row">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                </div>
-                <div class="collapse navbar-collapse" id="myNavbar" role="tablist" aria-label="Pestañas">
-                    <ol class="nav navbar-nav">
-                        <li id="liBuscador">
-                            <button id="buttonBuscador" type="button" role="tab"  aria-selected="false" aria-controls="capaBuscador" class="btn btn-link btn-lg" data-i18n="inicio"  onclick="cambioCapaBuscador()">
-                                Inicio
-                            </button>
-                        </li>
-                        <li id="liGlosario">
-                            <button id="buttonGlosario" type="button" role="tab"  aria-selected="false"  aria-controls="capaAyuda" class="btn btn-link btn-lg" data-i18n="ayuda"   onclick="cambioCapaAyuda()">
-                                Ayuda
-                            </button>
-                        </li>
-                    </ol>
-                    <ol class="nav navbar-nav navbar-right">
-                        <li>
-                            <button type="button" id="menuIdioma" class="btn btn-link btn-lg dropdown-toggle" data-toggle="dropdown" data-i18n="idioma">
-                                Idioma <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu" role="menu">
-                                <li role="presentation">
-                                    <a role="menuitem" href="#" data-locale="es" data-i18n="espanyol"  class="switch-locale">Español</a>
-                                </li>
-                                <li role="presentation">
-                                    <a role="menuitem" href="#" data-locale="en" data-i18n="ingles"  class="switch-locale">Ingles</a>
-                                </li>
-                                <li role="presentation">
-                                    <a role="menuitem" href="#" data-locale="gl" data-i18n="gallego"  class="switch-locale">Gallego</a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ol>
-                </div>
+    <nav class="navbar navbar-expand-lg navbar-light presentacion fondo_cabecera" aria-label="Barra de navegación">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#" role="menuitem" onclick="cambioCapaBuscador()"><i
+                            class="fa fa-home">&nbsp;</i><span data-i18n="inicio">Inicio</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" role="menuitem" onclick="cambioCapaAyuda()"><i
+                            class="fa fa-info-circle">&nbsp;</i><span data-i18n="ayuda">Ayuda</span></a>
+                </li>
+                <li class="nav-item dropdown ml-auto">
+                    <a class="nav-link dropdown-toggle" role="menuitem" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-globe">&nbsp;</i><span data-i18n="idioma">Idioma</span>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="nav-link switch-locale" href="#" role="menuitem" data-locale="es"
+                            data-i18n="espanyol">Español</a>
+                        <a class="nav-link switch-locale" href="#" role="menuitem" data-locale="gl"
+                            data-i18n="gallego">Gallego</a>
+                    </div>
+                </li>
+            </ul>
         </div>
     </nav>
 
     <div class="cuerpo">
-        <div class="container">
+        <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-12">
                     <h1 class="lineasActuacion__title datosAbiertos-color"  aria-level="2" data-i18n="que_es">Licitaciones y adjudicatarios</h1>
                     <p class="home-header_text" data-i18n="texto_que_es"></p>
+                    <p class="home-header_text"><i class="fa fa-exclamation-triangle"></i>&nbsp;&nbsp;<span data-i18n="importes_sin">Todos los importes son sin Impuestos</span></p>
                 </div>
             </div>
 
             <div class="row" id="capaBuscador" role="tabpanel" aria-labelledby="buttonBuscador">
-                <div class="col-xs-12 col-sm-12 col-md-3 filtro">
-						<form >
-					    
-							<div class="col-sm-12 form-group ">
-								<div class="col-sm-5 form-group">
-									<p class="home-header_title" data-i18n="filtros">Filtros</p>
-								</div>
-								<div class="col-sm-7 form-group text-right">
-									<a href="#" title="Limpiar formulario"  onclick="limpiarFormulario();">
-										<span class="fa fa-trash txOscuro"></span>
-										<span  class="txOscuro" data-i18n="limpiar"></span>
-									</a>
-								</div>
-							</div>
-							
-                            <div class="col-sm-12 form-group filtros">
-                                <a href="#collapseExpediente" title="Cerrar expediente" data-toggle="collapse">
-                                    <p  class="label_ner" data-i18n="f_expedientes"><i class="fa fa-angle-down"></i></p>
+                <div id="filtro" class="col-sm-12 col-md-3 pegadizo">
+                    <form role="form">
+                        <div class="col-sm-12 form-group ">
+                            <i class="fa fa-filter n fa-3 home-header_title">&nbsp;</i>
+                            <label class="home-header_title" data-i18n="filtros">Filtros</label>
+                            <span style="float:right">
+                                <a href="#" class="btn btn-light" onclick="limpiarFormulario();">
+                                    <span class="fa fa-times"></span>
                                 </a>
-                            </div>
-                            <div id="collapseExpediente" class="col-sm-12 form-group collapse">
-                                <label data-i18n="n_expediente"> </label><input class="form-control" id="buscadorExpediente"   title="Nº de expediente"  />
-								<label data-i18n="nombre"></label><input class="form-control" id="buscadorNombre"  title="Nombre"/>
-                            </div>						
-							
-                            <div class="col-sm-12 form-group filtros">
-                                <a href="#collapseCifLicitador"  title="Cerrar licitador" data-toggle="collapse">
-                                    <p  class="label_ner" data-i18n="f_adjudicatarios"><i class="fa fa-angle-down"></i></p>
+                                &nbsp;
+                                <a href="#" class="btn btn-light" onclick="javascript:$('#filtro .panel-collapse').collapse('toggle');"> 
+                                    <span class="fa fa-arrows-v"></span>
                                 </a>
+                            </span>
+                        </div>
+            
+                        <div class="col-sm-12 form-group filtros">
+                            <a href="#collapseExpediente" data-toggle="collapse">
+                                <span data-toggle="popover" data-html="true" data-trigger="hover focus" data-placement="right" class="info"
+                                    data-i18n="[data-content]popover_exptes" title="Expedientes">
+                                    <i class="fa fa-info-circle  fa-2xl"></i>
+                                </span>
+                                <label for="buscadorExpediente" class="label_ner control-label" data-i18n="f_expedientes">Expedientes</label>
+                                <i class="fa fa-angle-down"></i>
+                            </a>
+                        </div>
+                        <div id="collapseExpediente" class="col-sm-12 form-group collapse">
+                            <input class="form-control" id="buscadorExpediente" placeholder="Nº de expediente" title="Nº de expediente" />
+							<input class="form-control" id="buscadorNombre" data-i18n="[placeholder]nombre" title="Nombre"/>
+                        </div>
+            
+                        <div class="col-sm-12 form-group filtros">
+                            <a href="#collapseCifLicitador" data-toggle="collapse">
+                                <span data-toggle="popover" data-html="true" data-trigger="hover focus" data-placement="right" class="info"
+                                    data-i18n="[data-content]popover_adjudicatarios" data-i18n="[title]filtro_title_adjudicatarios">
+                                    <i class="fa fa-info-circle fa-2xl"></i>
+                                </span>
+                                <label for="buscadorCifLicitador" class="label_ner" data-i18n="f_adjudicatarios">Adjudicatario</label>
+                                <i class="fa fa-angle-down"></i>
+                            </a>
+                        </div>
+                        <div id="collapseCifLicitador" class="col-sm-12 form-group collapse">
+                            <input class="form-control" id="buscadorCifLicitador" placeholder="NIF/CIF" title="NIF/CIF" />
+                            <input class="form-control" id="buscadorLicitador" data-i18n="[placeholder]nombreadjudicatario"
+                                title="Nombre del adjudicatario" />
+                        </div>
+            
+            
+                        <div class="col-sm-12 form-group filtros">
+                            <a href="#collapseFecha" data-toggle="collapse">
+                                <span data-toggle="popover" data-html="true" data-trigger="hover focus" data-placement="right" class="info"
+                                    data-i18n="[data-content]popover_fech_imp">
+                                    <i class="fa fa-info-circle fa-2xl"></i>
+                                </span>
+                                <label class="label_ner" data-i18n="f_licitaciones">Licitaciones</label>
+                            
+                                <i class="fa fa-angle-down"></i>
+                            </a>
+                        </div>
+                        <div id="collapseFecha" class="collapse">
+                            <div class="col-sm-12">
+                                <label class="col-form-label" data-i18n="fecha-licitacion">Fecha de la licitacion</label>
                             </div>
-                            <div id="collapseCifLicitador" class="col-sm-12 form-group collapse">
-                                <label data-i18n="adjudicatario_cif"></label><input class="form-control" id="buscadorCifLicitador" title="NIF/CIF"/>
-								<label data-i18n="adjudicatario_nombre"></label> <input class="form-control" id="buscadorLicitador" title="Nombre del adjudicatario" />
-                            </div>
-
-
-                            <div class="col-sm-12 form-group filtros">
-                                <a href="#collapseFecha" title="Cerrar fecha" data-toggle="collapse">
-                                    <p class="label_ner" data-i18n="f_licitaciones"><i class="fa fa-angle-down"></i></p>
-                                </a>
-                            </div>
-                            <div id="collapseFecha" class="collapse">
-                                <div class="col-sm-12">
-									<p  data-i18n="fecha-licitacion">Fecha de la licitacion</p>
-								</div>
-								<div class="col-sm-6 form-group">
-                                     <input class="form-control" id="buscadorDesdeFecha" type="text"  title="Desde" />
+                            <div class="row col-sm-12">
+                                <div class="col-sm-6 form-group">
+                                    <input class="form-control"  id="buscadorDesdeFecha" type="text" data-i18n="[placeholder]desde" title="Desde" />
                                 </div>
                                 <div class="col-sm-6 form-group">
-                                    <input class="form-control" id="buscadorHastaFecha" type="text" title="Hasta" />
+                                    <input class="form-control"  id="buscadorHastaFecha" type="text"  title="Hasta" data-i18n="[placeholder]hasta" />
                                 </div>
-								<div class="col-sm-12">
-									<p  data-i18n="importe-licitacion">Importe licitación</p>
-								</div>
-								<div class="col-sm-6 form-group">
-                                    <input class="form-control" id="buscadorImporteDesde"  title="Desde"  />
+                            </div>
+                            <div class="col-sm-12">
+                                <label class="col-form-label" data-i18n="importe-licitacion">Importe licitación<</label>
+                            </div>
+
+                            <div class="row col-sm-12">
+                                <div class="col-sm-6 form-group">
+                                    <input class="form-control" data-inputmask="'alias': 'euro'"  id="buscadorImporteDesde"  data-i18n="[placeholder]desde" title="Desde"  inputmode="numeric" />
                                 </div>
-								<div class="col-sm-6 form-group">
-                                     <input class="form-control" id="buscadorImporteHasta"  title="Hasta" />
-                                </div>	
-								<div class="col-sm-12">
-									<p  data-i18n="CPV:">CPV</p>
-								</div>	
-								<div class="col-sm-12">
-                                     <input class="form-control" id="buscadorCPV"  title="Cumplimente el CPV" />
-                                </div>									
-                            </div>
-
-							
-							
-                            <div class="col-sm-12 form-group filtros">
-                                <a href="#collapseAnyo" title="Cerrar año" data-toggle="collapse">
-                                    <p  class="label_ner" data-i18n="anyo"><i class="fa fa-angle-down"></i></p>
-                                </a>
-                            </div>
-                            <div id="collapseAnyo" class="col-sm-12 form-group collapse">
-								<div class="text-right">
-									<button type="button" class="btn btn-link bot_t_n" onclick="selececionarTodo('selectAnyo')"><i class="fa fa-check"></i><span class="text_small" data-i18n="todas"></span></button>
-									<button type="button" class="btn btn-link bot_t_n" onclick="quitarSeleccion('selectAnyo')"><i class="fa fa-times"></i><span class="text_small" data-i18n="ninguna"></span></button>
-								 </div>
-								 <div id="selectAnyo"></div>
-                            </div>
-
-                            <div class="col-sm-12 form-group filtros">
-                                <a href="#collapseEstado" title="Cerrar estado" data-toggle="collapse">
-                                    <p  class="label_ner" data-i18n="estado"><i class="fa fa-angle-down"></i></p>
-                                </a>
-                            </div>
-                            <div id="collapseEstado" class="col-sm-12 form-group collapse">
-                                <div class="text-right">
-									<button type="button" class="btn btn-link bot_t_n" onclick="selececionarTodo('selectEstado')"><i class="fa fa-check"></i><span class="text_small" data-i18n="todas"></span></button>
-									<button type="button" class="btn btn-link bot_t_n"  onclick="quitarSeleccion('selectEstado')"><i class="fa fa-times"></i><span class="text_small" data-i18n="ninguna"></span></button>
-								 </div>
-								 <div id="selectEstado"></div>
-                            </div>
-
-                            <div class="col-sm-12 form-group filtros">
-                                <a href="#collapseNomOrgContr" title="Cerrar organismo" data-toggle="collapse">
-                                    <p  class="label_ner"  data-i18n="organizacion_contratante"><i class="fa fa-angle-down"></i></p>
-                                </a>
-                            </div>
-                            <div id="collapseNomOrgContr" class="col-sm-12 form-group collapse">
-								<div class="text-right">
-									<button type="button" class="btn btn-link bot_t_n" onclick="selececionarTodo('selectNomOrgContr')"><i class="fa fa-check"></i><span class="text_small" data-i18n="todas"></span></button>
-									<button type="button" class="btn btn-link bot_t_n" onclick="quitarSeleccion('selectNomOrgContr')"><i class="fa fa-times"></i><span class="text_small" data-i18n="ninguna"></span></button>
+                                <div class="col-sm-6 form-group">
+                                    <input class="form-control" data-inputmask="'alias': 'euro'"  id="buscadorImporteHasta" data-i18n="[placeholder]hasta" title="Hasta" inputmode="numeric" />
                                 </div>
-								<input class="form-control" id="buscadorNomOrgContr"    title="Filtrar las organizaciones" oninput="searchOrganizacion()" />
-                                <div id="selectNomOrgContr"></div>
                             </div>
+                        </div>
 
-                            <div class="col-sm-12 form-group filtros">
-                                <a href="#collapseCategoria" title="Cerrar categoria" data-toggle="collapse">
-                                    <p  class="label_ner"  data-i18n="categoria"><i class="fa fa-angle-down"></i></p>
-                                </a>
+                        <div class="col-sm-12 form-group filtros">
+                            <a href="#collapseAnyo" data-toggle="collapse">
+                                <span data-toggle="popover" data-html="true" data-trigger="hover focus" data-placement="right" class="info"
+                                    data-i18n="[data-content]popover_ano_inicio">
+                                    <i class="fa fa-info-circle fa-2xl"></i>
+                                </span>
+                                <label for="selectAnyo" class="label_ner" data-i18n="anyo">Año</label>
+                                <i class="fa fa-angle-down"></i>
+                            </a>
+                        </div>
+                        <div id="collapseAnyo" class="col-sm-12 form-group collapse">
+                            <div class="text-right">
+                                <button type="button" class="btn btn-link bot_t_n" onclick="selececionarTodo('selectAnyo')"><i
+                                        class="fa fa-check"></i><span class="text_small" data-i18n="todas"></span></button>
+                                <button type="button" class="btn btn-link bot_t_n" onclick="quitarSeleccion('selectAnyo')"><i
+                                        class="fa fa-times"></i><span class="text_small" data-i18n="ninguna"></span></button>
                             </div>
-                            <div id="collapseCategoria" class="col-sm-12 form-group collapse">
-                                <div class="text-right">
-									<button type="button" class="btn btn-link bot_t_n"  onclick="selececionarTodo('selectCategoria')"><i class="fa fa-check"></i><span class="text_small" data-i18n="todas"></span></button>
-									<button type="button" class="btn btn-link bot_t_n"  onclick="quitarSeleccion('selectCategoria')"><i class="fa fa-times"></i><span class="text_small" data-i18n="ninguna"></span></button>
-								</div>
-								<div id="selectCategoria"></div>
+                            <div id="selectAnyo"></div>
+                        </div>
+            
+                        <div class="col-sm-12 form-group filtros">
+                            <a href="#collapseEstado" data-toggle="collapse">
+                                <span data-toggle="popover" data-html="true" data-trigger="hover focus" data-placement="right" class="info"
+                                    data-i18n="[data-content]popover_estado"><i class="fa fa-info-circle fa-2xl"></i></span>
+                                <label for="selectEstado" class="label_ner" data-i18n="estado"></label>
+                                <i class="fa fa-angle-down"></i>
+                            </a>
+                        </div>
+                        <div id="collapseEstado" class="panel-collapse col-sm-12 form-group collapse">
+                        
+                            <div class="text-right">
+                                <button type="button" class="btn btn-link bot_t_n" onclick="selececionarTodo('selectEstado')"><i
+                                        class="fa fa-check"></i><span class="text_small" data-i18n="todas"></span></button>
+                                <button type="button" class="btn btn-link bot_t_n" onclick="quitarSeleccion('selectEstado')"><i
+                                        class="fa fa-times"></i><span class="text_small" data-i18n="ninguna"></span></button>
                             </div>
+                            <div id="selectEstado"></div>
+                        </div>
 
-                            <div class="col-sm-12 form-group filtros">
-                                <a href="#collapseProcedimiento" title="Cerrar procedimiento" data-toggle="collapse">
-                                    <p  class="label_ner" data-i18n="procedimiento"><i class="fa fa-angle-down"></i></p>
-                                </a>
+                        <div class="col-sm-12 form-group filtros">
+                            <a href="#collapseNomOrgContr" data-toggle="collapse">
+                                <span data-toggle="popover" data-html="true" data-trigger="hover focus" data-placement="right" class="info"
+                                    title="Organización contratante"><i class="fa fa-info-circle fa-2xl"></i></span>
+                                <label for="selectNomOrgContr" class="label_ner" data-i18n="organizacion_contratante"></label>
+                                <i class="fa fa-angle-down"></i>
+                            </a>
+                        </div>
+                        <div id="collapseNomOrgContr" class="panel-collapse col-sm-12 form-group collapse">
+                        
+                            <div class="text-right">
+                                <button type="button" class="btn btn-link bot_t_n" onclick="selececionarTodo('selectNomOrgContr')"><i
+                                        class="fa fa-check"></i><span class="text_small" data-i18n="todas"></span></button>
+                                <button type="button" class="btn btn-link bot_t_n" onclick="quitarSeleccion('selectNomOrgContr')"><i
+                                        class="fa fa-times"></i><span class="text_small" data-i18n="ninguna"></span></button>
                             </div>
-                            <div id="collapseProcedimiento" class="col-sm-12 form-group collapse">
-								<div class="text-right">
-									<button type="button" class="btn btn-link bot_t_n"  onclick="selececionarTodo('selectProcedimiento')"><i class="fa fa-check"></i><span class="text_small" data-i18n="todas"></span></button>
-									<button type="button" class="btn btn-link bot_t_n" onclick="quitarSeleccion('selectProcedimiento')"><i class="fa fa-times"></i><span class="text_small" data-i18n="ninguna"></span></button>
-								</div>
-								<div id="selectProcedimiento"></div>
+                            <input class="form-control" id="buscadorNomOrgContr" placeholder="Filtrar las organizaciones"
+                                title="Filtrar las organizaciones" oninput="searchOrganizacion()" />
+                            <div id="selectNomOrgContr"></div>
+                        </div>
+            
+                        <div class="col-sm-12 form-group filtros">
+                            <a href="#collapseCategoria" data-toggle="collapse">
+                                <span data-toggle="popover" data-html="true" data-trigger="hover focus" data-placement="right" class="info"
+                                    data-i18n="[data-content]popover_tipo_cont"><i class="fa fa-info-circle fa-2xl"></i></span>
+                                <label for="selectCategoria" class="label_ner" data-i18n="categoria"></label>
+                                <i class="fa fa-angle-down"></i>
+                            </a>
+                        </div>
+                        <div id="collapseCategoria" class="panel-collapse  col-sm-12 form-group collapse">
+                        
+                            <div class="text-right">
+                                <button type="button" class="btn btn-link bot_t_n" onclick="selececionarTodo('selectCategoria')"><i
+                                        class="fa fa-check"></i><span class="text_small" data-i18n="todas"></span></button>
+                                <button type="button" class="btn btn-link bot_t_n" onclick="quitarSeleccion('selectCategoria')"><i
+                                        class="fa fa-times"></i><span class="text_small" data-i18n="ninguna"></span></button>
                             </div>
-
-
-
-
-
-
-
-                            <div class="col-sm-12 form-group filtros">
-                                <button type="button" class="btn btn-primary bot-filtrar" id="buscarListado">
-								   <span data-i18n="buscar"></span>
-                                </button>
+                            <div id="selectCategoria"></div>
+                        </div>
+            
+                        <div class="col-sm-12 form-group filtros">
+                            <a href="#collapseProcedimiento" data-toggle="collapse">
+                                <span data-toggle="popover" data-html="true" data-trigger="hover focus" data-placement="right" class="info"
+                                    data-i18n="[data-content]popover_tipo_proc"><i class="fa fa-info-circle fa-2xl"></i></span>
+                                <label for="selectProcedimiento" class="label_ner" data-i18n="procedimiento"></label>
+                                <i class="fa fa-angle-down"></i>
+                            </a>
+                        </div>
+                        <div id="collapseProcedimiento" class="panel-collapse  col-sm-12 form-group collapse">
+                        
+                            <div class="text-right">
+                                <button type="button" class="btn btn-link bot_t_n" onclick="selececionarTodo('selectProcedimiento')"><i
+                                        class="fa fa-check"></i><span class="text_small" data-i18n="todas"></span></button>
+                                <button type="button" class="btn btn-link bot_t_n" onclick="quitarSeleccion('selectProcedimiento')"><i
+                                        class="fa fa-times"></i><span class="text_small" data-i18n="ninguna"></span></button>
                             </div>
-						 
-						</form>
-
+                            <div id="selectProcedimiento"></div>
+                        </div>
+            
+                        <div class="col-sm-12 form-group filtros">
+                            <button type="button" class="btn btn-primary bot-filtrar disabled" id="buscarListado" onclick="searchWithFilters(this);" disabled>
+                               <i class="fa fa-filter">&nbsp;</i><span data-i18n="buscar"></span>
+                            </button>
+                        </div>
+                    </form>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-9">
+
+                <div class="col-sm-12 col-md-9">
                     <div class="row cuerpo">
                         <div class="col-sm-12" role="tablist">
-                            <ol class="nav navbar-nav navbar-nav_seg">
-                                <li id="liGeneral" class="w_menu">
-                                    <button id="buttonGeneral" type="button" role="tab" aria-selected="true" aria-controls="capaGeneral" class="btn btn-link btn-lg" onclick="cambioCapaGeneral()" data-i18n="resumen">
-                                        Resumen
+                            <ol id="menusecundario" class="nav navbar-nav navbar-nav_seg col-sm-12">
+                                <li id="liGeneral" class="col-sm-3">
+                                    <button id="buttonGeneral" type="button" role="tab" aria-selected="true" aria-controls="capaGeneral" class="btn btn-link btn-lg" onclick="cambioCapaGeneral()">
+                                        <i class="fa fa-bar-chart">&nbsp;</i><span data-i18n="resumen"> Resumen</span>
                                     </button>
                                 </li>
-                                <li id="liLicitaciones" class="w_menu">
-                                    <button id="buttonLicitaciones" type="button" role="tab" aria-selected="false" aria-controls="capaLicitaciones" class="btn btn-link btn-lg"  onclick="cambioCapacLicitaciones()" data-i18n="f_licitaciones">
-                                        Licitaciones
+                                <li id="liLicitaciones" class="col-sm-3">
+                                    <button id="buttonLicitaciones" type="button" role="tab" aria-selected="false" aria-controls="capaLicitaciones" class="btn btn-link btn-lg disabled"  onclick="cambioCapacLicitaciones()" disabled>
+                                        <i class="fa fa-folder">&nbsp;</i><span data-i18n="licitaciones"> Licitaciones</span>
                                     </button>
                                 </li>
-                                <li id="liAdjudicatarios" class="w_menu">
-                                    <button id="buttonAdjudicatarios" type="button" role="tab" aria-selected="false"   class="btn btn-link btn-lg"   onclick="cambioCapaAdjudicatarios()" data-i18n="adjudicatarios">
-                                        Adjudicatarios
+                                <li id="liAdjudicatarios" class="col-sm-3">
+                                    <button id="buttonAdjudicatarios" type="button" role="tab" aria-selected="false"   class="btn btn-link btn-lg disabled"   onclick="cambioCapaAdjudicatarios()" disabled>
+                                        <i class="fa fa-file-text">&nbsp;</i><span data-i18n="adjudicatarios">  Adjudicatarios</span>
+                                    </button>
+                                </li>
+                                <li id="liGraficosInd" class="col-sm-3">
+                                    <button id="buttonGraficosInd" type="button" role="tab" aria-selected="false"   class="btn btn-link btn-lg disabled"   onclick="cambioCapaGraficosInd()" disabled>
+                                        <i class="fa fa-area-chart">&nbsp;</i><span data-i18n="f_GraficosInd"> Gráficos e Indicadores</span>
                                     </button>
                                 </li>
                             </ol>
@@ -302,8 +359,14 @@ See the Licence for the specific language governing permissions and limitations 
                         <div class="col-sm-12">
                             <div class="tab-content" id="myTabContent">
                                 <div class="row">
-                                    <div   class="col-sm-12 filtro">
-                                        <p class="home-header_text" data-i18n="importes_sin">NOTA: Todos los importes son sin Impuestos</p>
+                                    <div id="filtro" class="col-sm-12 filtro-resultados">
+                                        <a class="btn" data-toggle="collapse" href="#textoBusquedaGraficosCont" role="button" aria-expanded="false"
+                                            aria-controls="textoBusquedaGraficosCont">
+                                            <i class="fa fa-filter-list">&nbsp;</i>&nbsp;<label class="label_ner control-label">Filtros
+                                                aplicados</label>
+                                            <i class="fa fa-angle-down" aria-hidden="true"></i>
+                                        </a>
+                                        <div id="textoBusquedaGraficosCont" class="collapse col-sm-12"></div>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -311,119 +374,72 @@ See the Licence for the specific language governing permissions and limitations 
                                         <!-- Indicadores -->
                                         <div class="row">
                                             <!-- licitaciones -->
-                                                <div class="col-xs-12 col-sm-6 text-center">
+                                                <div class="col-sm-6 text-center">
                                                     <div class="category-line lin_1"></div>
                                                     <div class="panel panel_indi">
                                                         <div class="panel-heading">
                                                             <div class="row">
-                                                                <div class="row">
-                                                                    <p class="panel_indi_tit" data-i18n="licitaciones">LICITACIONES</p>
+                                                                <div class="col-sm-12">
+                                                                    <h3 class="panel_indi_tit" data-i18n="licitaciones">LICITACIONES</h3>
                                                                 </div>
-                                                                <div class="row">
+                                                                <div class="col-sm-12">
                                                                     <div class="img_fondo_1 ">
-                                                                        <p class="ind_img_texto" id="numLicitaciones"></p>
+                                                                        <h3 class="ind_img_texto" id="numLicitaciones"></h3>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-xs-12 col-sm-6 ind_peq">
-                                                                    <p class="fontmed" data-i18n="importe_licitaciones">Importe licitaciones</p>
+                                                                <div class="col-sm-6 ind_peq">
+                                                                    <h4 class="fontmed" data-i18n="importe_licitaciones">Importe licitaciones</h4>
                                                                 </div>
-                                                                <div class="col-xs-12 col-sm-6 ind_peq">
-                                                                    <p class="fontmed" data-i18n="importe_medio_licitaciones">Importe medio licitaciones</p>
+                                                                <div class="col-sm-6 ind_peq">
+                                                                    <h4 class="fontmed" data-i18n="importe_medio_licitaciones">Importe medio licitaciones</h4>
                                                                 </div>
-                                                                <div class="col-xs-12 col-sm-6">
-                                                                    <p class="fontgra" id="importeLicitaciones"></p>
+                                                                <div class="col-sm-6">
+                                                                    <h4 class="fontgra" id="importeLicitaciones"></h4>
                                                                 </div>
-                                                                <div class="col-xs-12 col-sm-6">
-                                                                    <p class="fontgra" id="importeMedLicitaciones"></p>
+                                                                <div class="col-sm-6">
+                                                                    <h4 class="fontgra" id="importeMedLicitaciones"></h4>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             <!-- contratos -->
-                                                <div class="col-xs-12 col-sm-6 text-center">
+                                                <div class="col-sm-6 text-center">
                                                     <div class="category-line lin_2"></div>
                                                     <div class="panel panel_indi">
                                                         <div class="panel-heading">
                                                             <div class="row">
-                                                                <div class="row">
-                                                                     <p class="panel_indi_tit" data-i18n="adjudicatarios_mayusculas">CONTRATOS</p>
+                                                                <div class="col-sm-12">
+                                                                     <h3 class="panel_indi_tit" data-i18n="adjudicatarios_mayusculas">CONTRATOS</h3>
                                                                 </div>
-                                                                <div class="row">
+                                                                <div class="col-sm-12">
                                                                     <div class="img_fondo_2 ">
-                                                                        <p class="ind_img_texto" id="numAdjudicatarios"></p>
+                                                                        <h3 class="ind_img_texto" id="numAdjudicatarios"></h3>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-xs-12 col-sm-6 ind_peq">
-                                                                    <p class="fontmed" data-i18n="importe_adjudicatarios_2">Importe adjudicatarios</p>
+                                                                <div class="col-sm-6 ind_peq">
+                                                                    <h4 class="fontmed" data-i18n="importe_adjudicatarios_2">Importe adjudicatarios</h4>
                                                                 </div>
-                                                                <div class="col-xs-12 col-sm-6 ind_peq">
-                                                                    <p class="fontmed" data-i18n="importe_medio_adjudicatarios">Importe medio adjudicatarios</p>
+                                                                <div class="col-sm-6 ind_peq">
+                                                                    <h4 class="fontmed" data-i18n="importe_medio_adjudicatarios">Importe medio adjudicatarios</h4>
                                                                 </div>
-                                                                <div class="col-xs-12 col-sm-6">
-                                                                    <p class="fontgra" id="importeAdjudicatarios"></p>
+                                                                <div class="col-sm-6">
+                                                                    <h4 class="fontgra" id="importeAdjudicatarios"></h4>
                                                                 </div>
-                                                                <div class="col-xs-12 col-sm-6">
-                                                                    <p class="fontgra" id="importeMedAdjudicatarios"></p>
+                                                                <div class="col-sm-6">
+                                                                    <h4 class="fontgra" id="importeMedAdjudicatarios"></h4>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                         </div>
-                                        <!-- numeros -->
-                                        <div class="row">										
-                                                <div class="col-xs-12 col-sm-12 fondo_gris ">
-
-                                                <div class="row text-center">
-                                                        <div id="indicador1" class="col-xs-12 col-sm-4">
-															<p class="fontmed">
-                                                                <span data-i18n="indicador1_1"></span>
-                                                                <span id="porcentajeProcemimento1"></span>
-                                                                <span data-i18n="indicador1_2"></span>
-                                                                <span id="indTipoProcedimiento1"></span>
-															</p>
-                                                        </div>
-                                                        <div id="ind1" class="col-xs-12 col-sm-1">
-                                                            <img class="img_ind" src="./dist/images/icon1.svg" title="img_ind1" alt="ind1">
-                                                        </div>
-                                                        <div id="indicador2" class="col-xs-12 col-sm-3">
-                                                            <p class="fontmed">
-                                                                <span data-i18n="indicador2_1"></span>
-                                                                <span id="porcentajeProcemimento2"></span>
-                                                                <span data-i18n="indicador2_2"></span>
-                                                                <span id="indTipoProcedimiento2"></span>
-                                                            </p>
-                                                        </div>
-                                                        <div id="ind2" class="col-xs-12 col-sm-1">
-                                                            <img class="img_ind" src="./dist/images/icon2.svg" title="img_ind2" alt="ind2">
-                                                        </div>
-                                                        <div id="indicador3" class="col-xs-12 col-sm-3">
-                                                            <p class="fontmed">
-                                                                <span data-i18n="indicador3_1"></span>
-                                                                <span id="porcentajeDiezContratosMayor"></span>
-                                                                <span data-i18n="indicador3_2"></span>
-                                                            </p>
-                                                        </div>
-                                                        <div id="ind3" class="col-xs-12 col-sm-1">
-                                                            <img class="img_ind" src="./dist/images/icon3.svg" title="img_ind3" alt="ind3">
-                                                        </div>
-                                                        <div id="indicador4" class="col-xs-12 col-sm-3">
-                                                            <p class="fontmed">
-                                                                <span data-i18n="indicador4_1"></span>
-                                                                <span id="nombreOrgContrMayor"></span>
-                                                                <span data-i18n="indicador4_2"></span>
-                                                                <span id="porcentajeOrgContrMayor"></span>
-                                                                <span data-i18n="indicador4_3"></span>
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                        </div>
+                                        
 
 
                                         <div class="row">
-                                            <div class="col-xs-12">
+                                            <div class="col-sm-12">
+                                                <h2 class="lineasActuacion__title datosAbiertos-color"><span data-i18n="indicadores_globales">Indicadores globales</span></h2>
                                                 <div class="panel panel-default" id="panelGraficoAnyos">
                                                     <div class="panel-heading">
                                                         <em class="fa fa-bar-chart-o fa-fw"></em>
@@ -450,18 +466,18 @@ See the Licence for the specific language governing permissions and limitations 
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="panel-footer text-right">
-                                                        <div class="row">
-                                                            <div class="col-xs-1 col-sm-offset-9">
+                                                    <div class="panel-footer text-right" id="panel-footer15">
+                                                        <div class="row" style="justify-content:flex-end;">
+                                                            <div class="offset-sm-9 col-sm-1">
                                                                 <div id="exportIndAnuales">
                                                                 </div>
                                                             </div>
-                                                            <div class="col-xs-1">
+                                                            <div class="col-sm-1">
                                                                 <a  onclick="mostrarDatosIndAnuales()">
                                                                     <span class="fa fa-table n fa-3" aria-hidden="true"></span>
                                                                 </a>
                                                             </div>
-                                                            <div class="col-xs-1">
+                                                            <div class="col-sm-1">
                                                                 <a data-toggle="modal" data-target="#modalIndAnuales">
                                                                     <span class="fa  fa-arrows-alt fa-3" aria-hidden="true"></span>
                                                                 </a>
@@ -473,11 +489,720 @@ See the Licence for the specific language governing permissions and limitations 
                                             </div>
                                         </div>
 
+                                        <!-- Top adjudicatarios -->
+                                        <div class="row">
+                                            <h2 class="lineasActuacion__title datosAbiertos-color"><span data-i18n="top_adjudicatarios">Top adjudicatarios</span></h2>
+                                            <div class="col-sm-12">
+                                                <div class="panel panel-default" id="panelGraficoInferiorIzquierda2">
+                                                    <div class="panel-heading">
+                                                        <em class="fa fa-bar-chart-o fa-fw"></em>
+                                                        <span data-i18n="importe_Adjudicatario"></span>
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <div id="chartAdjImp" class="chart350"></div>
+
+                                                        <!-- Modal -->
+                                                        <div class="modal fullscreen-modal fade" id="modalAdjImp" tabindex="-1" role="dialog"
+                                                            aria-labelledby="modalAdjImpLabel" aria-hidden="true">
+                                                            <div class="modal-dialog" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <p class="modal-title" id="modalAdjImpLabel"><span data-i18n="importe_Adjudicatario"></span></p>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div id="chartAdjImp2" class="chart700"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="panel-footer text-right"  id="panel-footer14">
+                                                        <div class="row" style="justify-content:flex-end;">
+                                                            <div class="offset-sm-9 col-sm-1">
+                                                                <div id="exportAdjImp">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-1">
+                                                                <a  onclick="mostrarDatosAwardImp()">
+                                                                    <span class="fa  fa-table n fa-3" aria-hidden="true"></span>
+                                                                </a>
+                                                            </div>
+                                                            <div class="col-sm-1">
+                                                                <a data-toggle="modal" data-target="#modalAdjImp">
+                                                                    <span class="fa  fa-arrows-alt fa-3" aria-hidden="true"></span>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                        <div id="datos_subInfIzqAdj" class="datos-cont"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="panel panel-default" id="panelGraficoInferiorDerecha2">
+                                                    <div class="panel-heading">
+                                                        <em class="fa fa-bar-chart-o fa-fw"></em>
+                                                        <span data-i18n="numero_adjudicatario"></span>
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <div id="chartAdjNum" class="chart350"></div>
+
+                                                        <!-- Modal -->
+                                                        <div class="modal fullscreen-modal fade" id="modalAdjNum" tabindex="-1" role="dialog"
+                                                            aria-labelledby="modalAdjNumLabel" aria-hidden="true">
+                                                            <div class="modal-dialog" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <p class="modal-title" id="modalAdjNumLabel"><span data-i18n="numero_adjudicatario"></span></p>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div id="chartAdjNum2" class="chart700"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="panel-footer text-right" id="panel-footer13">
+                                                        <div class="row" style="justify-content:flex-end;">
+                                                            <div class=" offset-sm-9 col-sm-1 ">
+                                                                <div id="exportAdjNum">
+                                                                </div>
+                                                            </div>
+                                                            <div class=" col-sm-1">
+                                                                <a  onclick="mostrarDatosAwardNum()">
+                                                                    <span class="fa  fa-table n fa-3" aria-hidden="true"></span>
+                                                                </a>
+                                                            </div>
+                                                            <div class=" col-sm-1">
+                                                                <a data-toggle="modal" data-target="#modalAdjNum">
+                                                                    <span class="fa  fa-arrows-alt fa-3" aria-hidden="true"></span>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                        <div id="datos_subInfDerAdj" class="datos-cont"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Tipo de adjudicatario -->
+                                        <div class="row">
+                                            <h2 class="lineasActuacion__title datosAbiertos-color"><span data-i18n="top_tipo_adjudicatario">Tipo adjudicatario</span></h2>
+                                            <div class="col-sm-12">
+                                                <div class="panel panel-default">
+                                                    <div class="panel-heading">
+                                                        <em class="fa fa-bar-chart-o fa-fw"></em>
+                                                        <span id="importe_tipo_adjudicatario" data-i18n="importe_tipo_adjudicatario"></span>   
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <div id="chartTipAdj" class="chart350"></div>
+
+                                                        <!-- Modal -->
+                                                        <div class="modal fullscreen-modal fade" id="modalTipAdjImp" tabindex="-1" role="dialog"
+                                                            aria-labelledby="modalTipAdjImpLabel" aria-hidden="true">
+                                                            <div class="modal-dialog" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <p class="modal-title" id="modalTipAdjImpLabel"><span data-i18n="importe_tipo_adjudicatario"></span></p>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div id="chartTipAdj2" class="chart700"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="panel-footer text-right" id="panel-footer12">
+                                                        <div class="row" style="justify-content:flex-end;">
+                                                            <div class=" offset-sm-9 col-sm-1">
+                                                                <div id="exportTipAdj">
+                                                                </div>
+                                                            </div>
+                                                            <div class=" col-sm-1">
+                                                                <a  onclick="mostrarDatosTipAdjImp()">
+                                                                    <span class="fa  fa-table n fa-3" aria-hidden="true"></span>
+                                                                </a>
+                                                            </div>
+                                                            <div class=" col-sm-1">
+                                                                <a data-toggle="modal" data-target="#modalTipAdjImp">
+                                                                    <span class="fa  fa-arrows-alt fa-3" aria-hidden="true"></span>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                        <div id="datos_tablaTipAdj" class="datos-cont"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+
+                                    <div id="capaLicitaciones" role="tabpanel" aria-labelledby="buttonLicitaciones">
+                                        <div id="capaTabla" class="row table-responsive">
+                                            <div class="col-sm-12">
+                                                <table class="table  table-hover table_m" id="tablaContratos" aria-describedby="Tabla de los resultados de la búsqueda" >
+                                                    <thead id="tablaContratosHead">
+                                                        <tr id="tablaContratosTHead"></tr>
+                                                    </thead>
+                                                    <tbody id="tablaContratosBody"></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div id="capaAdjudicatarios" role="tabpanel" aria-labelledby="buttonAdjudicatarios">
+                                        <div id="capaTabla" class="row table-responsive">
+                                            <div class="col-sm-12">
+                                                <table class="table table-hover" id="tablaAdjudicatarios" aria-describedby="Tabla de los resultados de la búsqueda" >
+                                                    <thead id="tablaAdjudicatariosHead">
+                                                        <tr id="tablaAdjudicatariosTHead"></tr>
+                                                    </thead>
+                                                    <tbody id="tablaAdjudicatariosBody"></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div id="capaGraficosInd" role="tabpanel" aria-labelledby="buttonGraficosInd">
+                                        <!-- Indicadores -->
+                                        <div class="row">
+                                            <!-- licitaciones -->
+                                                <div class="col-sm-6 text-center">
+                                                    <div class="category-line lin_1"></div>
+                                                    <div class="panel panel_indi">
+                                                        <div class="panel-heading">
+                                                            <div class="row">
+                                                                <div class="col-sm-12">
+                                                                    <h3 class="panel_indi_tit" data-i18n="licitaciones">LICITACIONES</h3>
+                                                                </div>
+                                                                <div class="col-sm-12">
+                                                                    <div class="img_fondo_1 ">
+                                                                        <h3 class="ind_img_texto" id="numLicitacionesGI"></h3>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-6 ind_peq">
+                                                                    <h4 class="fontmed" data-i18n="importe_licitaciones">Importe licitaciones</h4>
+                                                                </div>
+                                                                <div class="col-sm-6 ind_peq">
+                                                                    <h4 class="fontmed" data-i18n="importe_medio_licitaciones">Importe medio licitaciones</h4>
+                                                                </div>
+                                                                <div class="col-sm-6">
+                                                                    <h4 class="fontgra" id="importeLicitacionesGI"></h4>
+                                                                </div>
+                                                                <div class="col-sm-6">
+                                                                    <h4 class="fontgra" id="importeMedLicitacionesGI"></h4>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <!-- contratos -->
+                                                <div class="col-sm-6 text-center">
+                                                    <div class="category-line lin_2"></div>
+                                                    <div class="panel panel_indi">
+                                                        <div class="panel-heading">
+                                                            <div class="row">
+                                                                <div class="col-sm-12">
+                                                                     <h3 class="panel_indi_tit" data-i18n="adjudicatarios_mayusculas">CONTRATOS</h3>
+                                                                </div>
+                                                                <div class="col-sm-12">
+                                                                    <div class="img_fondo_2 ">
+                                                                        <h3 class="ind_img_texto" id="numAdjudicatariosGI"></h3>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-6 ind_peq">
+                                                                    <h4 class="fontmed" data-i18n="importe_adjudicatarios_2">Importe adjudicatarios</h4>
+                                                                </div>
+                                                                <div class="col-sm-6 ind_peq">
+                                                                    <h4 class="fontmed" data-i18n="importe_medio_adjudicatarios">Importe medio adjudicatarios</h4>
+                                                                </div>
+                                                                <div class="col-sm-6">
+                                                                    <h4 class="fontgra" id="importeAdjudicatariosGI"></h4>
+                                                                </div>
+                                                                <div class="col-sm-6">
+                                                                    <h4 class="fontgra" id="importeMedAdjudicatariosGI"></h4>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                        </div>
+                                        
+                                        <!-- numeros -->
+                                        <div class="row" style="padding-bottom:30px; border-bottom: 1px solid silver; margin: 5px; margin-bottom:10px">										
+                                            <div class="col-sm-12">
+
+                                                <div class="row text-center">
+                                                    <div id="indicador1" class="col-sm-3">
+                                                        <p class="fontmed">
+                                                            <span data-i18n="indicador1_1"></span>
+                                                            <span id="porcentajeProcemimento1"></span>
+                                                            <span data-i18n="indicador1_2"></span>
+                                                            <span id="indTipoProcedimiento1"></span>
+                                                        </p>
+                                                    </div>
+                                                    <div id="ind1" class="col-sm-1">
+                                                        <img class="img_ind" src="./dist/images/icon1.svg" title="img_ind1" alt="ind1">
+                                                    </div>
+                                                    <div id="indicador2" class="col-sm-3">
+                                                        <p class="fontmed">
+                                                            <span data-i18n="indicador2_1"></span>
+                                                            <span id="porcentajeProcemimento2"></span>
+                                                            <span data-i18n="indicador2_2"></span>
+                                                            <span id="indTipoProcedimiento2"></span>
+                                                        </p>
+                                                    </div>
+                                                    <div id="ind2" class="col-sm-1">
+                                                        <img class="img_ind" src="./dist/images/icon2.svg" title="img_ind2" alt="ind2">
+                                                    </div>
+                                                    <div id="indicador3" class="col-sm-3">
+                                                        <p class="fontmed">
+                                                            <span data-i18n="indicador3_1"></span>
+                                                            <span id="porcentajeDiezContratosMayor"></span>
+                                                            <span data-i18n="indicador3_2"></span>
+                                                        </p>
+                                                    </div>
+                                                    <div id="ind3" class="col-sm-1">
+                                                        <img class="img_ind" src="./dist/images/icon3.svg" title="img_ind3" alt="ind3">
+                                                    </div>
+                                                    <div id="indicador4" class="col-sm-3">
+                                                        <p class="fontmed">
+                                                            <span data-i18n="indicador4_1"></span>
+                                                            <span id="nombreOrgContrMayor"></span>
+                                                            <span data-i18n="indicador4_2"></span>
+                                                            <span id="porcentajeOrgContrMayor"></span>
+                                                            <span data-i18n="indicador4_3"></span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <h2 class="lineasActuacion__title datosAbiertos-color"><span data-i18n="indicadores_globales">Indicadores globales</span></h2>
+                                            <div class="col-sm-12">
+                                                <div class="panel panel-default" id="panelGraficoAnyos">
+                                                    <div class="panel-heading">
+                                                        <em class="fa fa-bar-chart-o fa-fw"></em>
+                                                        <span data-i18n="indicadores_anuales"></span>
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <div id="chartdivGI" class="chart350"></div>
+                                                        
+                                                        <!-- Modal -->
+                                                        <div class="modal fullscreen-modal fade" id="modalIndAnualesGI" tabindex="-1" role="dialog"
+                                                            aria-labelledby="modalIndAnualesLabelGI" aria-hidden="true">
+                                                            <div class="modal-dialog" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <p class="modal-title" id="modalIndAnualesLabelGI">Indicadores anuales</p>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div id="chartdiv2GI" class="chart700"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="panel-footer text-right" id="panel-footer11">
+                                                        <div class="row" style="justify-content:flex-end;">
+                                                            <div class=" offset-sm-9 col-sm-1">
+                                                                <div id="exportIndAnualesGI">
+                                                                </div>
+                                                            </div>
+                                                            <div class=" col-sm-1">
+                                                                <a  onclick="mostrarDatosIndAnualesGI()">
+                                                                    <span class="fa  fa-table n fa-3" aria-hidden="true"></span>
+                                                                </a>
+                                                            </div>
+                                                            <div class=" col-sm-1">
+                                                                <a data-toggle="modal" data-target="#modalIndAnualesGI">
+                                                                    <span class="fa  fa-arrows-alt fa-3" aria-hidden="true"></span>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                        <div id="datosIndAnualesGI" class="datos-cont"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
 
+
+                                        
+                                        <!-- Top adjudicatarios -->
+                                        <div class="row">
+                                            <h2 class="lineasActuacion__title datosAbiertos-color"><span data-i18n="top_adjudicatarios">Top adjudicatarios</span></h2>
+                                            <div class="col-sm-12">
+                                                <div class="panel panel-default" id="panelGraficoInferiorIzquierda2">
+                                                    <div class="panel-heading">
+                                                        <em class="fa fa-bar-chart-o fa-fw"></em>
+                                                        <span data-i18n="importe_Adjudicatario"></span>
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <div id="chartAdjImpGI" class="chart350"></div>
+
+                                                        <!-- Modal -->
+                                                        <div class="modal fullscreen-modal fade" id="modalAdjImpGI" tabindex="-1" role="dialog"
+                                                            aria-labelledby="modalAdjImpLabelGI" aria-hidden="true">
+                                                            <div class="modal-dialog" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <p class="modal-title" id="modalAdjImpLabelGI"><span data-i18n="importe_Adjudicatario"></span></p>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div id="chartAdjImp2GI" class="chart700"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="panel-footer text-right" id="panel-footer10">
+                                                        <div class="row" style="justify-content:flex-end;">
+                                                            <div class=" offset-sm-9 col-sm-1">
+                                                                <div id="exportAdjImpGI">
+                                                                </div>
+                                                            </div>
+                                                            <div class=" col-sm-1">
+                                                                <a  onclick="mostrarDatosAwardImpGI()">
+                                                                    <span class="fa  fa-table n fa-3" aria-hidden="true"></span>
+                                                                </a>
+                                                            </div>
+                                                            <div class=" col-sm-1">
+                                                                <a data-toggle="modal" data-target="#modalAdjImpGI">
+                                                                    <span class="fa  fa-arrows-alt fa-3" aria-hidden="true"></span>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                        <div id="datos_subInfIzqAdjGI" class="datos-cont"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="panel panel-default" id="panelGraficoInferiorDerecha2">
+                                                    <div class="panel-heading">
+                                                        <em class="fa fa-bar-chart-o fa-fw"></em>
+                                                        <span data-i18n="numero_adjudicatario"></span>
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <div id="chartAdjNumGI" class="chart350"></div>
+
+                                                        <!-- Modal -->
+                                                        <div class="modal fullscreen-modal fade" id="modalAdjNumGI" tabindex="-1" role="dialog"
+                                                            aria-labelledby="modalAdjNumLabelGI" aria-hidden="true">
+                                                            <div class="modal-dialog" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <p class="modal-title" id="modalAdjNumLabelGI"><span data-i18n="numero_adjudicatario"></span></p>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div id="chartAdjNum2GI" class="chart700"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="panel-footer text-right" id="panel-footer9">
+                                                        <div class="row" style="justify-content:flex-end;">
+                                                            <div class=" offset-sm-9 col-sm-1">
+                                                                <div id="exportAdjNumGI">
+                                                                </div>
+                                                            </div>
+                                                            <div class=" col-sm-1">
+                                                                <a  onclick="mostrarDatosAwardNumGI()">
+                                                                    <span class="fa  fa-table n fa-3" aria-hidden="true"></span>
+                                                                </a>
+                                                            </div>
+                                                            <div class=" col-sm-1">
+                                                                <a data-toggle="modal" data-target="#modalAdjNumGI">
+                                                                    <span class="fa  fa-arrows-alt fa-3" aria-hidden="true"></span>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                        <div id="datos_subInfDerAdjGI" class="datos-cont"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Tipo de adjudicatario -->
+                                        <div class="row">
+                                            <h2 class="lineasActuacion__title datosAbiertos-color"><span data-i18n="top_tipo_adjudicatario">Tipo adjudicatario</span></h2>
+                                            <div class="col-sm-12">
+                                                <div class="panel panel-default">
+                                                    <div class="panel-heading">
+                                                        <em class="fa fa-bar-chart-o fa-fw"></em>
+                                                        <span id="importe_tipo_adjudicatarioGI" data-i18n="importe_tipo_adjudicatario"></span>   
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <div id="chartTipAdjGI" class="chart350"></div>
+
+                                                        <!-- Modal -->
+                                                        <div class="modal fullscreen-modal fade" id="modalTipAdjImpGI" tabindex="-1" role="dialog"
+                                                            aria-labelledby="modalTipAdjImpLabelGI" aria-hidden="true">
+                                                            <div class="modal-dialog" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <p class="modal-title" id="modalTipAdjImpLabelGI"><span data-i18n="importe_tipo_adjudicatario"></span></p>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div id="chartTipAdj2GI" class="chart700"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="panel-footer text-right" id="panel-footer8">
+                                                        <div class="row" style="justify-content:flex-end;">
+                                                            <div class="  offset-sm-9 col-sm-1">
+                                                                <div id="exportTipAdjGI">
+                                                                </div>
+                                                            </div>
+                                                            <div class=" col-sm-1">
+                                                                <a  onclick="mostrarDatosTipAdjImpGI()">
+                                                                    <span class="fa  fa-table n fa-3" aria-hidden="true"></span>
+                                                                </a>
+                                                            </div>
+                                                            <div class=" col-sm-1">
+                                                                <a data-toggle="modal" data-target="#modalTipAdjImpGI">
+                                                                    <span class="fa  fa-arrows-alt fa-3" aria-hidden="true"></span>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                        <div id="datos_tablaTipAdjGI" class="datos-cont"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Tipo de contrato -->
+                                        <div class="row">
+                                            <h2 class="lineasActuacion__title datosAbiertos-color"><span data-i18n="tipo_contrato">Tipo de contrato</span></h2>
+                                            <div class="col-sm-12">
+                                                <div class="panel panel-default">
+                                                    <div class="panel-heading">
+                                                        <em class="fa fa-bar-chart-o fa-fw"></em>
+                                                        <span id="textoCabeceraTipoContNum" data-i18n="numero_tipo"></span>
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <div id="chartTipoContNum" class="chart350"></div>
+
+                                                        <!-- Modal -->
+                                                        <div class="modal fullscreen-modal fade" id="modalTipoContNum" tabindex="-1" role="dialog"
+                                                            aria-labelledby="modalTipoContNumLabel" aria-hidden="true">
+                                                            <div class="modal-dialog" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <p class="modal-title" id="modalTipoContNumLabel"><span data-i18n="numero_tipo"></span></p>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div id="chartTipoContNum2" class="chart700"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="panel-footer text-right" id="panel-footer6">
+                                                        <div class="row" style="justify-content:flex-end;"> 
+                                                            <div class=" offset-sm-9 col-sm-1">
+                                                                <div id="exportTipoContNum">
+                                                                </div>
+                                                            </div>
+                                                            <div class=" col-sm-1">
+                                                                <a  onclick="mostrarDatosTipoContNum()">
+                                                                    <span class="fa  fa-table n fa-3" aria-hidden="true"></span>
+                                                                </a>
+                                                            </div>
+                                                            <div class=" col-sm-1">
+                                                                <a data-toggle="modal" data-target="#modalTipoContNum">
+                                                                    <span class="fa  fa-arrows-alt fa-3" aria-hidden="true"></span>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                        <div id="datos_tablaTipoContNum" class="datos-cont"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="panel panel-default">
+                                                    <div class="panel-heading">
+                                                        <em class="fa fa-bar-chart-o fa-fw"></em>
+                                                        <span id="textoCabeceraTipoContImp" data-i18n="importe_tipo"></span>
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <div id="chartTipoContImp" class="chart350"></div>
+
+                                                        <!-- Modal -->
+                                                        <div class="modal fullscreen-modal fade" id="modalTipoContImp" tabindex="-1" role="dialog"
+                                                            aria-labelledby="modalTipoContImpLabel" aria-hidden="true">
+                                                            <div class="modal-dialog" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <p class="modal-title" id="modalTipoContImpLabel"><span data-i18n="importe_tipo"></span></p>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div id="chartTipoContImp2" class="chart700"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="panel-footer text-right" id="panel-footer5">
+                                                        <div class="row" style="justify-content:flex-end;">
+                                                            <div class="offset-sm-9 col-sm-1">
+                                                                <div id="exportTipoContImp">
+                                                                </div>
+                                                            </div>
+                                                            <div class=" col-sm-1">
+                                                                <a  onclick="mostrarDatosTipoContImp()">
+                                                                    <span class="fa  fa-table n fa-3" aria-hidden="true"></span>
+                                                                </a>
+                                                            </div>
+                                                            <div class=" col-sm-1">
+                                                                <a data-toggle="modal" data-target="#modalTipoContImp">
+                                                                    <span class="fa  fa-arrows-alt fa-3" aria-hidden="true"></span>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                        <div id="datos_tablaTipoContImp" class="datos-cont"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Tipo de procedimiento -->
+                                        <div class="row">
+                                            <h2 class="lineasActuacion__title datosAbiertos-color"><span data-i18n="tipo_procedimiento">Tipo de procedimiento</span></h2>
+                                            <div class="col-sm-12">
+                                                <div class="panel panel-default">
+                                                    <div class="panel-heading">
+                                                        <em class="fa fa-bar-chart-o fa-fw"></em>
+                                                        <span id="textoCabeceraTipoProcNum" data-i18n="numero_procedimiento"></span>
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <div id="chartTipoProcNum" class="chart350"></div>
+
+                                                        <!-- Modal -->
+                                                        <div class="modal fullscreen-modal fade" id="modalTipoProcNum" tabindex="-1" role="dialog"
+                                                            aria-labelledby="modalTipoProcNumLabel" aria-hidden="true">
+                                                            <div class="modal-dialog" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <p class="modal-title" id="modalTipoProcNumLabel"><span data-i18n="numero_procedimiento"></span></p>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div id="chartTipoProcNum2" class="chart700"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="panel-footer text-right" id="panel-footer4">
+                                                        <div class="row" style="justify-content:flex-end;">
+                                                            <div class=" offset-sm-9 col-sm-1">
+                                                                <div id="exportTipoProcNum">
+                                                                </div>
+                                                            </div>
+                                                            <div class=" col-sm-1">
+                                                                <a  onclick="mostrarDatosTipoProcNum()">
+                                                                    <span class="fa  fa-table n fa-3" aria-hidden="true"></span>
+                                                                </a>
+                                                            </div>
+                                                            <div class=" col-sm-1">
+                                                                <a data-toggle="modal" data-target="#modalTipoProcNum">
+                                                                    <span class="fa  fa-arrows-alt fa-3" aria-hidden="true"></span>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                        <div id="datos_tablaTipoProcNum" class="datos-cont"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="panel panel-default">
+                                                    <div class="panel-heading">
+                                                        <em class="fa fa-bar-chart-o fa-fw"></em>
+                                                        <span id="textoCabeceraTipoProcImp" data-i18n="importe_procedimiento"></span>
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <div id="chartTipoProcImp" class="chart350"></div>
+
+                                                        <!-- Modal -->
+                                                        <div class="modal fullscreen-modal fade" id="modalTipoProcImp" tabindex="-1" role="dialog"
+                                                            aria-labelledby="modalTipoProcImpLabel" aria-hidden="true">
+                                                            <div class="modal-dialog" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <p class="modal-title" id="modalTipoProcImpLabel"><span data-i18n="importe_procedimiento"></span></p>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div id="chartTipoProcImp2" class="chart700"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="panel-footer text-right" id="panel-footer3">
+                                                        <div class="row" style="justify-content:flex-end;">
+                                                            <div class=" offset-sm-9 col-sm-1">
+                                                                <div id="exportTipoProcImp">
+                                                                </div>
+                                                            </div>
+                                                            <div class=" col-sm-1">
+                                                                <a  onclick="mostrarDatosTipoProcImp()">
+                                                                    <span class="fa  fa-table n fa-3" aria-hidden="true"></span>
+                                                                </a>
+                                                            </div>
+                                                            <div class=" col-sm-1">
+                                                                <a data-toggle="modal" data-target="#modalTipoProcImp">
+                                                                    <span class="fa  fa-arrows-alt fa-3" aria-hidden="true"></span>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                        <div id="datos_tablaTipoProcImp" class="datos-cont"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
                                         <!-- Top organizacion contratante -->
                                         <div class="row">
-                                            <div class="col-xs-12 col-sm-6">
+                                            <h2 class="lineasActuacion__title datosAbiertos-color"><span data-i18n="top_adjudicatarios">Top adjudicatarios</span></h2>
+                                            <div class="col-sm-12">
                                                 <div class="panel panel-default" id="panelGraficoInferiorIzquierda1">
                                                     <div class="panel-heading">
                                                         <em class="fa fa-bar-chart-o fa-fw"></em>
@@ -511,17 +1236,17 @@ See the Licence for the specific language governing permissions and limitations 
                                                         </div>
                                                     </div>
                                                     <div class="panel-footer text-right" id="panel-footer1">
-                                                        <div class="row">
-                                                            <div class="col-xs-2 col-sm-offset-6">
+                                                        <div class="row" style="justify-content:flex-end;">
+                                                            <div class=" offset-sm-9 col-sm-1">
                                                                 <div id="exportOrgContImp">
                                                                 </div>
                                                             </div>
-                                                            <div class="col-xs-2">
+                                                            <div class=" col-sm-1">
                                                                 <a  onclick="mostrarDatosOrgContImp()">
-                                                                    <span class="fa fa-table n fa-3" aria-hidden="true"></span>
+                                                                    <span class="fa  fa-table n fa-3" aria-hidden="true"></span>
                                                                 </a>
                                                             </div>
-                                                            <div class="col-xs-2">
+                                                            <div class=" col-sm-1">
                                                                 <a data-toggle="modal" data-target="#modalOrgContImp">
                                                                     <span class="fa  fa-arrows-alt fa-3" aria-hidden="true"></span>
                                                                 </a>
@@ -531,7 +1256,9 @@ See the Licence for the specific language governing permissions and limitations 
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-xs-12 col-sm-6">
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12">
                                                 <div class="panel panel-default" id="panelGraficoInferiorDerecha1">
                                                     <div class="panel-heading">
                                                         <em class="fa fa-bar-chart-o fa-fw"></em>
@@ -559,17 +1286,17 @@ See the Licence for the specific language governing permissions and limitations 
                                                         </div>
                                                     </div>
                                                     <div class="panel-footer text-right" id="panel-footer2">
-                                                        <div class="row">
-                                                            <div class="col-xs-2 col-sm-offset-6">
+                                                        <div class="row" style="justify-content:flex-end;">
+                                                            <div class="offset-sm-9 col-sm-1">
                                                                 <div id="exportOrgContNum">
                                                                 </div>
                                                             </div>
-                                                            <div class="col-xs-2">
+                                                            <div class="col-sm-1">
                                                                 <a  onclick="mostrarDatosOrgContNum()">
-                                                                    <span class="fa fa-table n fa-3" aria-hidden="true"></span>
+                                                                    <span class="fa  fa-table n fa-3" aria-hidden="true"></span>
                                                                 </a>
                                                             </div>
-                                                            <div class="col-xs-2">
+                                                            <div class="col-sm-1">
                                                                 <a data-toggle="modal" data-target="#modalOrgContNum">
                                                                     <span class="fa  fa-arrows-alt fa-3" aria-hidden="true"></span>
                                                                 </a>
@@ -578,381 +1305,6 @@ See the Licence for the specific language governing permissions and limitations 
                                                         <div id="datosOrgContNum" class="datos-cont"></div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <!-- Top adjudicatarios -->
-                                        <div class="row">
-                                            <div class="col-xs-12 col-sm-6">
-                                                <div class="panel panel-default" id="panelGraficoInferiorIzquierda2">
-                                                    <div class="panel-heading">
-                                                        <em class="fa fa-bar-chart-o fa-fw"></em>
-                                                        <span data-i18n="importe_Adjudicatario"></span>
-                                                    </div>
-                                                    <div class="panel-body">
-                                                        <div id="chartAdjImp" class="chart350"></div>
-
-                                                        <!-- Modal -->
-                                                        <div class="modal fullscreen-modal fade" id="modalAdjImp" tabindex="-1" role="dialog"
-                                                            aria-labelledby="modalAdjImpLabel" aria-hidden="true">
-                                                            <div class="modal-dialog" role="document">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <p class="modal-title" id="modalAdjImpLabel"><span data-i18n="importe_Adjudicatario"></span></p>
-                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                            <span aria-hidden="true">&times;</span>
-                                                                        </button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        <div id="chartAdjImp2" class="chart700"></div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="panel-footer text-right" >
-                                                        <div class="row">
-                                                            <div class="col-xs-2 col-sm-offset-6">
-                                                                <div id="exportAdjImp">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-xs-2">
-                                                                <a  onclick="mostrarDatosAwardImp()">
-                                                                    <span class="fa fa-table n fa-3" aria-hidden="true"></span>
-                                                                </a>
-                                                            </div>
-                                                            <div class="col-xs-2">
-                                                                <a data-toggle="modal" data-target="#modalAdjImp">
-                                                                    <span class="fa  fa-arrows-alt fa-3" aria-hidden="true"></span>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                        <div id="datos_subInfIzqAdj" class="datos-cont"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-xs-12 col-sm-6">
-                                                <div class="panel panel-default" id="panelGraficoInferiorDerecha2">
-                                                    <div class="panel-heading">
-                                                        <em class="fa fa-bar-chart-o fa-fw"></em>
-                                                        <span data-i18n="numero_adjudicatario"></span>
-                                                    </div>
-                                                    <div class="panel-body">
-                                                        <div id="chartAdjNum" class="chart350"></div>
-
-                                                        <!-- Modal -->
-                                                        <div class="modal fullscreen-modal fade" id="modalAdjNum" tabindex="-1" role="dialog"
-                                                            aria-labelledby="modalAdjNumLabel" aria-hidden="true">
-                                                            <div class="modal-dialog" role="document">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <p class="modal-title" id="modalAdjNumLabel"><span data-i18n="numero_adjudicatario"></span></p>
-                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                            <span aria-hidden="true">&times;</span>
-                                                                        </button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        <div id="chartAdjNum2" class="chart700"></div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="panel-footer text-right">
-                                                        <div class="row">
-                                                            <div class="col-xs-2 col-sm-offset-6">
-                                                                <div id="exportAdjNum">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-xs-2">
-                                                                <a  onclick="mostrarDatosAwardNum()">
-                                                                    <span class="fa fa-table n fa-3" aria-hidden="true"></span>
-                                                                </a>
-                                                            </div>
-                                                            <div class="col-xs-2">
-                                                                <a data-toggle="modal" data-target="#modalAdjNum">
-                                                                    <span class="fa  fa-arrows-alt fa-3" aria-hidden="true"></span>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                        <div id="datos_subInfDerAdj" class="datos-cont"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- Tipo de adjudicatario -->
-                                        <div class="row">
-                                            <div class="col-xs-12">
-                                                <div class="panel panel-default">
-                                                    <div class="panel-heading">
-                                                        <em class="fa fa-bar-chart-o fa-fw"></em>
-                                                        <span id="importe_tipo_adjudicatario" data-i18n="importe_tipo_adjudicatario"></span>   
-                                                    </div>
-                                                    <div class="panel-body">
-                                                        <div id="chartTipAdj" class="chart350"></div>
-
-                                                        <!-- Modal -->
-                                                        <div class="modal fullscreen-modal fade" id="modalTipAdjImp" tabindex="-1" role="dialog"
-                                                            aria-labelledby="modalTipAdjImpLabel" aria-hidden="true">
-                                                            <div class="modal-dialog" role="document">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <p class="modal-title" id="modalTipAdjImpLabel"><span data-i18n="importe_tipo_adjudicatario"></span></p>
-                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                            <span aria-hidden="true">&times;</span>
-                                                                        </button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        <div id="chartTipAdj2" class="chart700"></div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="panel-footer text-right">
-                                                        <div class="row">
-                                                            <div class="col-xs-1 col-sm-offset-9">
-                                                                <div id="exportTipAdj">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-xs-1">
-                                                                <a  onclick="mostrarDatosTipAdjImp()">
-                                                                    <span class="fa fa-table n fa-3" aria-hidden="true"></span>
-                                                                </a>
-                                                            </div>
-                                                            <div class="col-xs-1">
-                                                                <a data-toggle="modal" data-target="#modalTipAdjImp">
-                                                                    <span class="fa  fa-arrows-alt fa-3" aria-hidden="true"></span>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                        <div id="datos_tablaTipAdj" class="datos-cont"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- Tipo de contrato -->
-                                        <div class="row">
-                                            <div class="col-xs-12 col-sm-12">
-                                                <div class="panel panel-default">
-                                                    <div class="panel-heading">
-                                                        <em class="fa fa-bar-chart-o fa-fw"></em>
-                                                        <span id="textoCabeceraTipoContNum" data-i18n="numero_tipo"></span>
-                                                    </div>
-                                                    <div class="panel-body">
-                                                        <div id="chartTipoContNum" class="chart350"></div>
-
-                                                        <!-- Modal -->
-                                                        <div class="modal fullscreen-modal fade" id="modalTipoContNum" tabindex="-1" role="dialog"
-                                                            aria-labelledby="modalTipoContNumLabel" aria-hidden="true">
-                                                            <div class="modal-dialog" role="document">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <p class="modal-title" id="modalTipoContNumLabel"><span data-i18n="numero_tipo"></span></p>
-                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                            <span aria-hidden="true">&times;</span>
-                                                                        </button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        <div id="chartTipoContNum2" class="chart700"></div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="panel-footer text-right">
-                                                        <div class="row">
-                                                            <div class="col-xs-1 col-sm-offset-9">
-                                                                <div id="exportTipoContNum">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-xs-1">
-                                                                <a  onclick="mostrarDatosTipoContNum()">
-                                                                    <span class="fa fa-table n fa-3" aria-hidden="true"></span>
-                                                                </a>
-                                                            </div>
-                                                            <div class="col-xs-1">
-                                                                <a data-toggle="modal" data-target="#modalTipoContNum">
-                                                                    <span class="fa  fa-arrows-alt fa-3" aria-hidden="true"></span>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                        <div id="datos_tablaTipoContNum" class="datos-cont"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-xs-12 col-sm-12">
-                                                <div class="panel panel-default">
-                                                    <div class="panel-heading">
-                                                        <em class="fa fa-bar-chart-o fa-fw"></em>
-                                                        <span id="textoCabeceraTipoContImp" data-i18n="importe_tipo"></span>
-                                                    </div>
-                                                    <div class="panel-body">
-                                                        <div id="chartTipoContImp" class="chart350"></div>
-
-                                                        <!-- Modal -->
-                                                        <div class="modal fullscreen-modal fade" id="modalTipoContImp" tabindex="-1" role="dialog"
-                                                            aria-labelledby="modalTipoContImpLabel" aria-hidden="true">
-                                                            <div class="modal-dialog" role="document">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <p class="modal-title" id="modalTipoContImpLabel"><span data-i18n="importe_tipo"></span></p>
-                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                            <span aria-hidden="true">&times;</span>
-                                                                        </button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        <div id="chartTipoContImp2" class="chart700"></div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="panel-footer text-right">
-                                                        <div class="row">
-                                                            <div class="col-xs-1 col-sm-offset-9">
-                                                                <div id="exportTipoContImp">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-xs-1">
-                                                                <a  onclick="mostrarDatosTipoContImp()">
-                                                                    <span class="fa fa-table n fa-3" aria-hidden="true"></span>
-                                                                </a>
-                                                            </div>
-                                                            <div class="col-xs-1">
-                                                                <a data-toggle="modal" data-target="#modalTipoContImp">
-                                                                    <span class="fa  fa-arrows-alt fa-3" aria-hidden="true"></span>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                        <div id="datos_tablaTipoContImp" class="datos-cont"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- Tipo de procedimiento -->
-                                        <div class="row">
-                                            <div class="col-xs-12 col-sm-12">
-                                                <div class="panel panel-default">
-                                                    <div class="panel-heading">
-                                                        <em class="fa fa-bar-chart-o fa-fw"></em>
-                                                        <span id="textoCabeceraTipoProcNum" data-i18n="numero_procedimiento"></span>
-                                                    </div>
-                                                    <div class="panel-body">
-                                                        <div id="chartTipoProcNum" class="chart350"></div>
-
-                                                        <!-- Modal -->
-                                                        <div class="modal fullscreen-modal fade" id="modalTipoProcNum" tabindex="-1" role="dialog"
-                                                            aria-labelledby="modalTipoProcNumLabel" aria-hidden="true">
-                                                            <div class="modal-dialog" role="document">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <p class="modal-title" id="modalTipoProcNumLabel"><span data-i18n="numero_procedimiento"></span></p>
-                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                            <span aria-hidden="true">&times;</span>
-                                                                        </button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        <div id="chartTipoProcNum2" class="chart700"></div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="panel-footer text-right">
-                                                        <div class="row">
-                                                            <div class="col-xs-1 col-sm-offset-9">
-                                                                <div id="exportTipoProcNum">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-xs-1">
-                                                                <a  onclick="mostrarDatosTipoProcNum()">
-                                                                    <span class="fa fa-table n fa-3" aria-hidden="true"></span>
-                                                                </a>
-                                                            </div>
-                                                            <div class="col-xs-1">
-                                                                <a data-toggle="modal" data-target="#modalTipoProcNum">
-                                                                    <span class="fa  fa-arrows-alt fa-3" aria-hidden="true"></span>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                        <div id="datos_tablaTipoProcNum" class="datos-cont"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-xs-12 col-sm-12">
-                                                <div class="panel panel-default">
-                                                    <div class="panel-heading">
-                                                        <em class="fa fa-bar-chart-o fa-fw"></em>
-                                                        <span id="textoCabeceraTipoProcImp" data-i18n="importe_procedimiento"></span>
-                                                    </div>
-                                                    <div class="panel-body">
-                                                        <div id="chartTipoProcImp" class="chart350"></div>
-
-                                                        <!-- Modal -->
-                                                        <div class="modal fullscreen-modal fade" id="modalTipoProcImp" tabindex="-1" role="dialog"
-                                                            aria-labelledby="modalTipoProcImpLabel" aria-hidden="true">
-                                                            <div class="modal-dialog" role="document">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <p class="modal-title" id="modalTipoProcImpLabel"><span data-i18n="importe_procedimiento"></span></p>
-                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                            <span aria-hidden="true">&times;</span>
-                                                                        </button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        <div id="chartTipoProcImp2" class="chart700"></div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="panel-footer text-right">
-                                                        <div class="row">
-                                                            <div class="col-xs-1 col-sm-offset-9">
-                                                                <div id="exportTipoProcImp">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-xs-1">
-                                                                <a  onclick="mostrarDatosTipoProcImp()">
-                                                                    <span class="fa fa-table n fa-3" aria-hidden="true"></span>
-                                                                </a>
-                                                            </div>
-                                                            <div class="col-xs-1">
-                                                                <a data-toggle="modal" data-target="#modalTipoProcImp">
-                                                                    <span class="fa  fa-arrows-alt fa-3" aria-hidden="true"></span>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                        <div id="datos_tablaTipoProcImp" class="datos-cont"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div id="capaLicitaciones" role="tabpanel" aria-labelledby="buttonLicitaciones">
-                                        <div id="capaTablaLic" class="row table-responsive">
-                                            <div class="col-sm-12">
-                                                <table class="table  table-hover table_m" id="tablaContratos" >
-                                                    <thead>
-                                                    </thead>
-                                                    <tbody id="tablaContratosBody"></tbody>
-                                                    <tfoot></tfoot>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div id="capaAdjudicatarios" role="tabpanel" aria-labelledby="buttonAdjudicatarios">
-                                        <div id="capaTablaAdj" class="row table-responsive">
-                                            <div class="col-sm-12">
-                                                <table class="table  table-hover" id="tablaAdjudicatarios" >
-                                                    <thead>
-                                                    </thead>
-                                                    <tbody id="tablaAdjudicatariosBody"></tbody>
-
-                                                    <tfoot></tfoot>
-                                                </table>
                                             </div>
                                         </div>
                                     </div>
@@ -965,13 +1317,170 @@ See the Licence for the specific language governing permissions and limitations 
 
             <!-- Página del glosario de términos -->
             <div class="row" id="capaAyuda" role="tabpanel" aria-labelledby="buttonGlosario">
-                <div class="col-md-12" id="bloque_ayuda_que_es_contrato">
+                <div class="col-xs-12" id="bloque_ayuda">
                     <div class="panel panel-default">
                         <div class="panel-heading" role="heading" aria-level="2">
-                            <p data-i18n="ay_tx1"></p>
+                            <h2>Objeto de la visualización</h2>
                         </div>
                         <div class="panel-body">
-                            <p data-i18n="ay_tx2"></p>
+                            <p>
+                                A través de esta página se pretende mostrar una información completa de la contratación administrativa del Ayuntamiento de Madrid publicada en la Plataforma de Contratación del Estado.
+                            </p>
+                            <p>
+                                En esta página se permiten búsquedas por distintos criterios partir de las cuales se pueden consultar las licitaciones, los contratos adjudicados y los adjudicatarios. Se puede completar la información de cada procedimiento de adjudicación o contrato enlazando con la <a href="https://contrataciondelestado.es/wps/portal/plataforma">Plataforma de Contratación del Sector Público</a> (PCSP).
+                            </p>
+                            <p>
+                                Muestra también información estadística que permite una adecuada comprensión y transparencia de esta contratación pública.
+                            </p>
+                            <p>
+                                Los datos se actualizan diariamente a partir de la información de la propia <a href="https://contrataciondelestado.es/wps/portal/plataforma">Plataforma de Contratación del Sector Público</a> (PCSP).
+                            </p>
+                            <p>
+                                Los importes siempre son sin impuestos.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12" id="bloque_ayuda2">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="heading" aria-level="2">
+                            <h2>Descripción de las pantallas</h2>
+                        </div>
+                        <div class="panel-body">
+                            <p><strong>Pantalla inicial</strong></p>
+                            <p>
+                                La pantalla inicial presenta: Filtros, Resumen, licitaciones y Adjudicatarios.
+                            </p>
+                            <p>
+                                Se pueden realizar búsquedas desplegando los filtros. 
+                            </p>
+                            <p>
+                                La información se puede filtrar por distintos criterios bien por uno solo o combinando varios de ellos. 
+                            </p>
+                            <p>
+                                Los filtros son el número de expediente, nombre del contrato, adjudicatarios, fecha de licitación, importe de licitación, estado, organización contratante, tipo de contrato, procedimiento de contratación. 
+                            </p>
+                            <p>
+                                En la pestaña resumen se muestran gráficos e indicadores con los datos resultado de la búsqueda.
+                            </p>
+                            <p>
+                                En la pestaña Licitaciones, se accede a todos los expedientes de contratación resultado de la búsqueda. A través de esta pestaña se obtiene información de todo el procedimiento de adjudicación con enlace a toda la información publicada en la <a href="https://contrataciondelestado.es/wps/portal/plataforma">Plataforma de Contratación del Sector Público</a> (PCSP).
+                            </p>
+                            <p>
+                                En la pestaña de adjudicatarios, se accede a todos los adjudicatarios resultado de la búsqueda.
+                            </p>
+                            <p>
+                                Los datos de las tablas resultados de las búsquedas se pueden exportar en diferentes formatos: csv, Excel, json y pdf.
+                            </p>
+
+                            <p><strong>Pantalla detalle de una licitación</strong></p>
+                            <p>
+                                En el detalle de la licitación se puede ver toda la información, si la licitación tiene lotes, se mostrará la información de cada uno de ellos. Además, se podrá acceder a la licitación en la <a href="https://contrataciondelestado.es/wps/portal/plataforma">Plataforma de Contratación del Sector Público</a> (PCSP) pulsando sobre la URL de la licitación.
+                            </p>
+
+                            <p><strong>Pantalla detalle de un adjudicatario</strong></p>
+                            <p>
+                                En la ficha de cada adjudicatorio se encuentra un resumen muy completo de la actividad contractual de ese adjudicatario: n.º total de contratos adjudicados, importe total, evolución anual del número de contratos adjudicados, evolución anual del importe de los contratos adjudicados, n.º de contratos por organización contratante y n.º de contratos por procedimiento.
+                            </p>
+                            <p>
+                                Además, se muestra la relación de todas las licitaciones adjudicadas, pudiendo acceder a la ficha de cada licitación.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            
+
+                <div class="col-xs-12" id="bloque_ayuda3">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="heading" aria-level="2">
+                            <h2>Glosario</h2>
+                        </div>
+                        <div class="panel-body">
+                            <section>
+                            <p>
+                                El objetivo de la lista de definiciones que viene a continuación es el de ayudar a comprender esta visualización y la contratación.
+                            </p>
+                            <p>
+                                <strong>Procedimiento  o licitación.</strong>  Conjunto de actos o trámites a través de los cuales se produce la adjudicación y en su caso, formalización de los contratos del sector público.
+                            </p>
+                            <p>
+                                Los contratos se adjudican, por regla general, utilizando o bien el procedimiento abierto o bien el procedimiento restringido.
+                            </p>
+                            <p>
+                                Además de estos dos procedimientos, podrán utilizarse el procedimiento negociado o licitación con negociación, el procedimiento de dialogo competitivo y el procedimiento de asociación para la innovación solo en los supuestos previstos en la <a href="https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf">Ley de Contratos del Sector Público</a>.
+                            </p>
+                            <p>
+                                <strong>Procedimiento abierto:</strong> Es el procedimiento más utilizado. Se caracteriza porque cualquier empresario interesado puede presentar una proposición u oferta y no existe ningún tipo de negociación en el procedimiento. 
+                            </p>
+                            <p>
+                                La ley establece también un procedimiento abierto simplificado como modalidad del procedimiento abierto más ágil para ciertos contratos en función de su valor estimado y de los criterios de adjudicación que se hayan establecido 
+                            </p>
+                            <p>
+                                <strong>Procedimiento restringido.</strong> En este procedimiento cualquier empresa interesada podrá presentar una solicitud de participación en respuesta a una convocatoria de licitación, pero solo podrán presentar proposiciones aquellos empresarios que, en atención a su solvencia, sean seleccionados por el órgano de contratación, invitándolos a presentar su proposición. Presentada la proposición, se seguirán los trámites previstos para el procedimiento abierto. No hay negociación con los licitadores.
+                            </p>
+                            <p>
+                                <strong>Procedimiento con negociación.</strong> Procedimiento caracterizado por la negociación que el órgano de contratación realiza con los licitadores sobre los aspectos técnicos y económicos que se han fijado en el pliego como aspectos objeto de negociación. El pliego fijará también el procedimiento de negociación.
+                            </p>
+                            <p>
+                                <strong>Contrato menor:</strong> Constituye un tipo de procedimiento que se caracteriza por exigir unos requisitos mucho más simples que los requeridos con carácter general en la contratación pública, en atención a la menor cuantía del contrato. Para los contratos de obra el valor estimado tiene que ser inferior a 40.000 euros y para los contratos de suministro o de servicios el valor estimado debe ser inferior a 15.000 euros.
+                            </p>
+                            <p>
+                                <strong>Acuerdo marco.</strong> Los acuerdos marcos constituyen una forma o sistema de lo que la ley denomina “racionalización de la contratación”. Tiene por finalidad crear un marco dentro del cual el poder o los poderes adjudicadores podrán celebrar contratos <strong>(contratos basados)</strong> con una o varias empresas que serán seleccionadas a través de este procedimiento.
+                            </p>
+                            <p>
+                                El acuerdo marco fijará las condiciones, precios y en su caso, cantidades previstas a las que deben ajustarse los contratos basados.
+                            </p>
+                            <p>
+                                <strong>Organismo contratante:</strong>  Hace referencia al órgano de contratación. Es el órgano que en cada Ayuntamiento, organismo, entidad pública o sociedad ostenta la competencia para celebrar contratos en nombre de esta, teniendo su representación en el procedimiento de contratación.
+                            </p>
+                            <p>
+                                <strong>Nº de licitadores.</strong> Número de empresarios, personas físicas o jurídicas, que presentan una solicitud u oferta a un procedimiento de contratación.
+                            </p>
+                            <p>
+                                <strong>CPV:</strong> (Common Procurement Vocabulary - Vocabulario Común de Contratación Pública) es un vocabulario desarrollado por la Unión Europea para facilitar el procesamiento de las licitaciones publicadas en el Diario Oficial de la Unión Europea mediante un sistema de clasificación único para describir la materia o el objeto de los contratos públicos.
+                            </p>
+                            <p>
+                                <strong>Lotes:</strong> La existencia de lotes se produce cuando en un único procedimiento de adjudicación se procede a la división de su objeto en partes, que operaran como contratos independientes, dando lugar, en el mismo procedimiento a su adjudicación y en su caso, formalización.
+                            </p>
+                            <p>
+                                <strong>Adjudicación:</strong> Trámite o acto del procedimiento de contratación por el que el órgano de contratación determina cual es la oferta económicamente más ventajosa de las presentadas a la licitación proponiendo la celebración del contrato con el licitador que la haya presentado.
+                            </p>
+                            <p>
+                                <strong>Adjudicatario:</strong> Empresario, persona física o jurídica, que presenta la oferta económicamente más ventajosa y al que se atribuye el contrato.
+                            </p>
+                            <p>
+                                <strong>Formalización de un contrato.</strong> Es un documento formal, suscrito entre el órgano de contratación y el adjudicatario, culminando el procedimiento de contratación. En los contratos basados no se exige la formalización, ni en los contratos celebrados en el marco de un sistema dinámico de adquisición, ni en los contratos menores.
+                            </p>
+                            <p>
+                                <strong>Tipo de contrato,</strong> es una clasificación en función del objeto del contrato y de su finalidad:
+                            </p>
+                            <p>
+                                <ul style="padding-left: 23px;">
+                                    <li><strong>Suministro:</strong> Contrato que tiene por objeto la adquisición de productos o bienes muebles. También comprende el arrendamiento con o sin opción de compra y el arrendamiento financiero de bienes muebles.</li>
+                                    <li><strong>Servicios:</strong> Contrato que tiene por objeto prestaciones de hacer consistentes en el desarrollo de una actividad o dirigida a la obtención de un resultado distinto de una obra o de un suministro.</li>
+                                    <li><strong>Obras:</strong> Contrato que tiene por objeto la ejecución de una obra o la realización de un conjunto de trabajos de construcción o ingeniería civil que forman una obra completa, que tiene por objeto un bien inmueble.</li>
+                                    <li><strong>Concesión de servicios.</strong> Contrato que tiene por objeto la gestión de un servicio de la titularidad y competencia de la entidad pública contratante, cuya contrapartida o contraprestación consiste en el derecho a explotar el servicio o en ese derecho a explotar el servicio acompañado de un precio.</li>
+                                    <li><strong>Concesión de obra:</strong> Contrato que tiene por objeto la realización de una obra o la restauración, reparación y conservación de una obra existente cuya contrapartida o contraprestación consiste en el derecho a explotar la obra o en ese derecho acompañado de un precio.</li>
+                                </ul>
+                            </p>
+                            <p>
+                                <strong>Estado del contrato</strong>
+                            </p>
+                            <p>
+                                Situación en la que se encuentra el procedimiento de adjudicación. Este campo recoge los diferentes estados que utiliza la <a href="https://contrataciondelestado.es/wps/portal/plataforma">Plataforma de Contratación del Sector Público</a> (PCSP), que son:
+                            </p>
+                            <p>
+                                <ul style="padding-left: 23px;">
+                                    <li><strong>Anuncio Previo:</strong> los órganos de contratación pueden publicar un anuncio de información previa para dar a conocer aquellos contratos de obras, suministros o servicios que, estando sujetos a regulación armonizada, tengan proyectado adjudicar  </li>
+                                    <li><strong>En plazo de presentación de ofertas.</strong> Los licitadores pueden presentar sus proposiciones o solicitudes de participación. </li>
+                                    <li><strong>Pendiente de adjudicación:</strong> ya se han presentado las ofertas y el procedimiento está en tramitación.</li>
+                                    <li><strong>Adjudicada:</strong> la licitación ha sido adjudicada a un licitador, pero todavía no está formalizada.</li>
+                                    <li><strong>Formalizada,</strong> desistida o renunciada: en este grupo se encuentran diferentes situaciones que la Plataforma de Contratación del Sector Público recoge bajo un solo estado. En todos los casos el proceso ha finalizado, bien porque se ha formalizado el contrato, bien porque ha habido una renuncia o porque ha desistido el adjudicatario.</li>
+                                    <li><strong>Anulada,</strong> la licitación ha sido anulada.</li>
+                                </ul>
+                            </p>
+                            </section>
                         </div>
                     </div>
                 </div>
@@ -980,7 +1489,7 @@ See the Licence for the specific language governing permissions and limitations 
             <!-- Página de la ficha -->
             <div class="row" id="capaFichaContrato">
                 <div class="col-md-12">
-                    <iframe id="iframeFichaContrato" class="embed-responsive-item" src="fichaContrato.html"
+                    <iframe id="iframeFichaContrato" class="embed-responsive-item" src=""
                         title="Bloque para la ficha de contrato"></iframe>
                 </div>
             </div>
@@ -988,7 +1497,7 @@ See the Licence for the specific language governing permissions and limitations 
             <!-- Página de la ficha -->
             <div class="row" id="capaFichaAdjudicatario">
                 <div class="col-md-12">
-                    <iframe id="iframeFichaAdjudicatario" class="embed-responsive-item" src="fichaAdjudicatario.html"
+                    <iframe id="iframeFichaAdjudicatario" class="embed-responsive-item" src=""
                         title="Bloque para la ficha de adjudicatario"></iframe>
                 </div>
             </div>
@@ -996,7 +1505,7 @@ See the Licence for the specific language governing permissions and limitations 
             <!-- Página de la ficha -->
             <div class="row" id="capaFichaOrganizacionContratante">
                 <div class="col-md-12">
-                    <iframe id="iframeFichaOrganizacionContratante" class="embed-responsive-item" src="fichaOrganizacionContratante.html"
+                    <iframe id="iframeFichaOrganizacionContratante" class="embed-responsive-item" src=""
                         title="Bloque para la ficha de Organizacion Contratante"></iframe>
                 </div>
             </div>
@@ -1046,34 +1555,41 @@ See the Licence for the specific language governing permissions and limitations 
     <script src="https://code.jquery.com/jquery-1.12.4.js"  ></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"  ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.9.2/i18n/jquery.ui.datepicker-es.min.js" ></script>
+    
+    <!-- añadido input mask -->
+    <!-- <script type='text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/4.0.9/inputmask/jquery.inputmask.min.js"></script> -->
+    <script type='text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.7/jquery.inputmask.min.js"></script>
 
     <!-- Bootstrap Core -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-        crossorigin="anonymous" ></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.min.js" integrity="sha384-VHvPCCyXqtD5DqJeNxl2dtTyhF78xXNXdkwX1CZeRusQfRKp+tA7hAShOK/B/fQ2" crossorigin="anonymous"></script>
 
     <!-- bootstrap-select -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.8.1/js/bootstrap-select.min.js" ></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-es_ES.min.js" ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-es_ES.min.js"></script>
 
     <!-- Amcharts Visualizations-->
     <script src="https://cdn.amcharts.com/lib/4/core.js" ></script>
     <script src="https://cdn.amcharts.com/lib/4/charts.js" ></script>
     <script src="https://cdn.amcharts.com/lib/version/4.10.19/themes/frozen.js" ></script>
+    <script src="https://cdn.amcharts.com/lib/version/4.10.19/themes/animated.js"></script>
     <script src="https://cdn.amcharts.com/lib/version/4.10.19/lang/es_ES.js" ></script>
 
     <!-- DataTables -->
-    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js" ></script>
-    <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap.min.js"  ></script>
-    <script src="https://cdn.datatables.net/responsive/1.0.6/js/dataTables.responsive.js" ></script>
-    <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"  ></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js" ></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"  ></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js" ></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"  ></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.bootstrap4.min.js"  ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"  ></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"  ></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"  ></script>
-    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"  ></script>
-    <script src="https://cdn.datatables.net/colreorder/1.5.4/js/dataTables.colReorder.min.js"
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"  ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"  ></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"  ></script>
+    <script src="https://cdn.datatables.net/colreorder/1.5.5/js/dataTables.colReorder.min.js"
          ></script>
-    <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.colVis.min.js"  ></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.colVis.min.js"  ></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.10.25/sorting/date-eu.js" type="text/javascript"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap4.js"></script>
 
     <!-- Normalización de datos -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js" ></script>
@@ -1094,11 +1610,32 @@ See the Licence for the specific language governing permissions and limitations 
     <script src="dist/js/general.js"></script>
     <script src="dist/js/buscador.js"></script>
 
+    <!-- iframe resizer -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.3.2/iframeResizer.min.js"></script>
+
     <script>
+        if (LOG_DEGUB_COMUN) {
+            console.time("cargaindex");
+        }
+
         $(document).ready(function () {
-            // $(".modal").modal("show");
             $("#modalCargaInicial").modal("show");
             
+             // inicializamos alias mascaras input
+            Inputmask.extendAliases({
+                euro: {
+                suffix: " €",
+                groupSeparator: ".",
+                alias: "numeric",
+                placeholder: "0",
+                autoGroup: !0,    
+                removeMaskOnSubmit: true
+                }
+            });
+
+            // Initialize InputMask
+            $('input').inputmask();
+
             initComun();
             // cambioCapaInicio();
 			cambioCapaBuscador();
@@ -1122,6 +1659,18 @@ See the Licence for the specific language governing permissions and limitations 
                 historicoInicial++;
             };
         });
+
+        $(function () {
+            $('[data-toggle="popover"]').popover()
+        })
+
+        $('iframeFichaContrato').iFrameResize({  heightCalculationMethod: 'lowestElement' });
+        $('iframeFichaAdjudicatario').iFrameResize({ log: true });
+        $('iframeFichaOrganizacionContratante').iFrameResize({ log: true });
+
+        if (LOG_DEGUB_COMUN) {
+            console.timeEnd("cargaindex");
+        }
     </script>
 </body>
 

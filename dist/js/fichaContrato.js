@@ -28,40 +28,40 @@ var tenderRelItemCol = [];
 var lotCol = [];
 
 /*
-                Función de inicialización del script
+Función de inicialización del script
 */
 function inicializaFichaContrato() {
     if (LOG_DEGUB_FICHA_CONTRATO) {
-        console.log("inicializaFichaContrato");
+        console.log('inicializaFichaContrato');
     }
 
     inicializaMultidiomaFichaContrato();
 }
 
 /* 
-                Función para inicializar el multidioma
+Función para inicializar el multidioma
 */
 function inicializaMultidiomaFichaContrato() {
     if (LOG_DEGUB_FICHA_CONTRATO) {
-        console.log("inicializaMultidiomaFichaContrato");
+        console.log('inicializaMultidiomaFichaContrato');
     }
-    let langUrl = getUrlVars()["lang"];
+    let langUrl = getUrlVars()['lang'];
     if (!langUrl) {
-        langUrl = "es";
+        langUrl = 'es';
     }
     $.i18n().locale = langUrl;
     document.documentElement.lang = $.i18n().locale;
-    $("html").i18n();
+    $('html').i18n();
 
     jQuery(function ($) {
         $.i18n()
             .load({
-                en: "./dist/i18n/en.json",
-                es: "./dist/i18n/es.json",
-                gl: "./dist/i18n/gl.json",
+                en: './dist/i18n/en.json',
+                es: './dist/i18n/es.json',
+                gl: './dist/i18n/gl.json',
             })
             .done(function () {
-                $("html").i18n();
+                $('html').i18n();
                 inicializaDatosFichaContrato();
             });
     });
@@ -74,7 +74,7 @@ Función que invoca a todas las funciones que se realizan al inicializar el scri
 */
 function inicializaDatosFichaContrato() {
     if (LOG_DEGUB_FICHA_CONTRATO) {
-        console.log("inicializaDatosFichaContrato");
+        console.log('inicializaDatosFichaContrato');
     }
     capturaParam();
     inicializaDatos();
@@ -85,15 +85,15 @@ Función que comprueba y captura si se han pasado parámetros a la web, en caso 
 */
 function capturaParam() {
     if (LOG_DEGUB_FICHA_CONTRATO) {
-        console.log("capturaParam");
+        console.log('capturaParam');
     }
 
-    paramId = getUrlVars()["id"];
-    if (getUrlVars()["id"]) {
+    paramId = getUrlVars()['id'];
+    if (getUrlVars()['id']) {
         paramId = decodeURI(paramId);
     }
 
-    paramCapaAnterior = getUrlVars()["capaAnterior"];
+    paramCapaAnterior = getUrlVars()['capaAnterior'];
     if (paramId) {
         paramCapaAnterior = decodeURI(paramCapaAnterior);
     }
@@ -104,15 +104,15 @@ Función que iniciliza los datos que dependen de la API
 */
 function inicializaDatos() {
     if (LOG_DEGUB_FICHA_CONTRATO) {
-        console.log("inicializaDatos");
+        console.log('inicializaDatos');
     }
 
-    $("#liLotes").hide();
-    $("#etiquetaLotesA").hide();
-    $("#bloqueAdjudicacion").hide();
+    $('#liLotes').hide();
+    $('#etiquetaLotesA').hide();
+    $('#bloqueAdjudicacion').hide();
 
     if (paramId) {
-        obtieneDatosAPIProcess(dameURL(PROCESS_URL_1 + "/" + paramId + PROCESS_URL_2));
+        obtieneDatosAPIProcess(dameURL(PROCESS_URL_1 + '/' + paramId + PROCESS_URL_2));
     }
 }
 
@@ -121,7 +121,7 @@ Función que iniciliza los datos que dependen de la API
 */
 function obtieneDatosAPIProcess(url) {
     if (LOG_DEGUB_FICHA_CONTRATO) {
-        console.log("obtieneDatosAPIProcess | " + url);
+        console.log('obtieneDatosAPIProcess | ' + url);
     }
 
     $.getJSON(dameURL(url))
@@ -139,30 +139,30 @@ function obtieneDatosAPIProcess(url) {
                         description: data.records[i].description,
                     };
 
-                    $("#expediente").html(process.identifier);
-                    $("#titulo").html(process.title);
-                    $("#url").attr("href", process.url);
+                    $('#expediente').html(process.identifier);
+                    $('#titulo').html(process.title);
+                    $('#url').attr('href', process.url);
 
                     if (!data.records[i].url) {
-                        $("#bloqueLicitacion").hide();
+                        $('#bloqueLicitacion').hide();
                     }
                 }
 
                 obtieneDatosAPIOrganizationBuyer(
                     dameURL(
-                        ORGANIZATION_URL_1 + "/" + process.isBuyerFor + ORGANIZATION_URL_2
+                        ORGANIZATION_URL_1 + '/' + process.isBuyerFor + ORGANIZATION_URL_2
                     )
                 );
                 obtieneDatosAPITender(
-                    dameURL(TENDER_URL_1 + "/" + process.hasTender + TENDER_URL_2)
+                    dameURL(TENDER_URL_1 + '/' + process.hasTender + TENDER_URL_2)
                 );
             } else {
                 console.log(MSG_ERROR_API_RES_VACIO);
             }
         })
         .fail(function (jqxhr, textStatus, error) {
-            let err = textStatus + ", " + error;
-            console.error("Request Failed: " + err);
+            let err = textStatus + ', ' + error;
+            console.error('Request Failed: ' + err);
         });
 }
 
@@ -171,7 +171,7 @@ Función que iniciliza los datos que dependen de la API
 */
 function obtieneDatosAPIOrganizationBuyer(url) {
     if (LOG_DEGUB_FICHA_CONTRATO) {
-        console.log("obtieneDatosAPIOrganizationBuyer | " + url);
+        console.log('obtieneDatosAPIOrganizationBuyer | ' + url);
     }
 
     $.getJSON(dameURL(url))
@@ -184,9 +184,9 @@ function obtieneDatosAPIOrganizationBuyer(url) {
                         title: data.records[i].title,
                     };
 
-                    $("#enlaceOrganismoC").html(organizationBuyer.title);
-                    $("#enlaceOrganismoC").attr("href", "");
-                    $("#enlaceOrganismoC").on("click", function () {
+                    $('#enlaceOrganismoC').html(organizationBuyer.title);
+                    $('#enlaceOrganismoC').attr('href', '');
+                    $('#enlaceOrganismoC').on('click', function () {
                         abrirFichaOrganizacion(organizationBuyer.id);
                     });
                 }
@@ -195,8 +195,8 @@ function obtieneDatosAPIOrganizationBuyer(url) {
             }
         })
         .fail(function (jqxhr, textStatus, error) {
-            let err = textStatus + ", " + error;
-            console.error("Request Failed: " + err);
+            let err = textStatus + ', ' + error;
+            console.error('Request Failed: ' + err);
         });
 }
 
@@ -206,11 +206,11 @@ Función que iniciliza los datos que dependen de la API
 function obtieneDatosAPIOrganizationAward(url, valueAmount, title) {
     if (LOG_DEGUB_FICHA_CONTRATO) {
         console.log(
-            "obtieneDatosAPIOrganizationAward | " +
+            'obtieneDatosAPIOrganizationAward | ' +
                 url +
-                " , " +
+                ' , ' +
                 title +
-                " , " +
+                ' , ' +
                 valueAmount
         );
     }
@@ -225,7 +225,7 @@ function obtieneDatosAPIOrganizationAward(url, valueAmount, title) {
                         title: data.records[i].title,
                     };
 
-                    let bloqueHTML = "";
+                    let bloqueHTML = '';
                     let bloqueHTMLli1 = "<li>";
                     let bloqueHTMLli2 = "</li>";
                     let bloqueHTMLp11 = "<p>";
@@ -237,14 +237,14 @@ function obtieneDatosAPIOrganizationAward(url, valueAmount, title) {
                     let bloqueHTMLLic2 = '")>';
                     let bloqueHTMLLic3 = "</a></p>";
                     if (title) {
-                        $("#liLotes").show();
-                        $("#etiquetaLotesA").show();
+                        $('#liLotes').show();
+                        $('#etiquetaLotesA').show();
                     } else {
-                        $("#liLotes").hide();
-                        $("#etiquetaLotesA").hide();
+                        $('#liLotes').hide();
+                        $('#etiquetaLotesA').hide();
                     }
 
-                    bloqueHTML = $("#licitadores").html();
+                    bloqueHTML = $('#licitadores').html();
                     bloqueHTML = bloqueHTML + bloqueHTMLli1;
                     if (title) {
                         bloqueHTML = bloqueHTML + bloqueHTMLp11 + title + bloqueHTMLp12;
@@ -271,7 +271,7 @@ function obtieneDatosAPIOrganizationAward(url, valueAmount, title) {
                             bloqueHTMLp12;
                     }
                     bloqueHTML = bloqueHTML + bloqueHTMLli2;
-                    $("#licitadores").html(bloqueHTML);
+                    $('#licitadores').html(bloqueHTML);
                 }
                 lotCol;
             } else {
@@ -279,8 +279,8 @@ function obtieneDatosAPIOrganizationAward(url, valueAmount, title) {
             }
         })
         .fail(function (jqxhr, textStatus, error) {
-            let err = textStatus + ", " + error;
-            console.error("Request Failed: " + err);
+            let err = textStatus + ', ' + error;
+            console.error('Request Failed: ' + err);
         });
 }
 
@@ -289,7 +289,7 @@ Función que iniciliza los datos que dependen de la API
 */
 function obtieneDatosAPITender(url) {
     if (LOG_DEGUB_FICHA_CONTRATO) {
-        console.log("obtieneDatosAPITender | " + url);
+        console.log('obtieneDatosAPITender | ' + url);
     }
 
     $.getJSON(dameURL(url))
@@ -309,60 +309,60 @@ function obtieneDatosAPITender(url) {
                         periodStartDate: data.records[i].periodStartDate,
                         periodEndDate: data.records[i].periodEndDate,
                         periodDurationInDays: data.records[i].periodDurationInDays,
-                        anyo: "",
+                        anyo: '',
                     };
                     if (tender.periodStartDate) {
-                        tender.anyo = Date.parse(tender.periodStartDate).toString("yyyy");
+                        tender.anyo = Date.parse(tender.periodStartDate).toString('yyyy');
                     } else if (tender.periodEndDate) {
-                        tender.anyo = Date.parse(tender.periodEndDate).toString("yyyy");
+                        tender.anyo = Date.parse(tender.periodEndDate).toString('yyyy');
                     }
 
-                    $("#periodoinicio").html(
-                        Date.parse(tender.periodStartDate).toString("dd-MM-yyyy")
+                    $('#periodoinicio').html(
+                        Date.parse(tender.periodStartDate).toString('dd-MM-yyyy')
                     );
-                    $("#periodofin").html(
-                        Date.parse(tender.periodEndDate).toString("dd-MM-yyyy")
+                    $('#periodofin').html(
+                        Date.parse(tender.periodEndDate).toString('dd-MM-yyyy')
                     );
-                    $("#tipo").html(
+                    $('#tipo').html(
                         ETIQUETA_TIP_CONT.get(tender.mainProcurementCategory)
                     );
-                    $("#procedimiento").html(
+                    $('#procedimiento').html(
                         ETIQUETA_TIP_PROC.get(tender.procurementMethod)
                     );
                     if (tender.anyo) {
-                        $("#anyo").html(tender.anyo);
+                        $('#anyo').html(tender.anyo);
                     } else {
-                        $("#parrafoAnyo").hide();
+                        $('#parrafoAnyo').hide();
                     }
 
                     if (tender.periodDurationInDays) {
-                        $("#ejecucion").html(tender.periodDurationInDays + " días");
-                        $("#duraccion").html(tender.periodDurationInDays + " días");
+                        $('#ejecucion').html(tender.periodDurationInDays + ' días');
+                        $('#duraccion').html(tender.periodDurationInDays + ' días');
                     } else {
-                        $("#bloqueEjecucion").hide();
-                        $("#parrafoDuracion").hide();
+                        $('#bloqueEjecucion').hide();
+                        $('#parrafoDuracion').hide();
                     }
 
                     if (tender.numberOfTenderers) {
-                        $("#numLicitadores").html(tender.numberOfTenderers);
+                        $('#numLicitadores').html(tender.numberOfTenderers);
                     } else {
-                        $("#parrafoLicitadores").hide();
+                        $('#parrafoLicitadores').hide();
                     }
 
-                    $("#estado").html(ETIQUETA_ESTADO.get(tender.tenderStatus));
+                    $('#estado').html(ETIQUETA_ESTADO.get(tender.tenderStatus));
 					
 					if (tender.valueAmount) {
-                        $("#importe").html(
+                        $('#importe').html(
                         numeral(tender.valueAmount).format(importeFormato, Math.ceil));
                     } else {
-                        $("#parrafoImporte").hide();
+                        $('#parrafoImporte').hide();
                     }
                     
                 }
                 if (tender.hasSupplier) {
-                    $("#bloqueAdjudicacion").show();
+                    $('#bloqueAdjudicacion').show();
                     obtieneDatosAPIAward(
-                        dameURL(AWARD_URL_1 + "/" + tender.hasSupplier + AWARD_URL_2)
+                        dameURL(AWARD_URL_1 + '/' + tender.hasSupplier + AWARD_URL_2)
                     );
                 }
                 obtieneDatosAPILot(
@@ -380,8 +380,8 @@ function obtieneDatosAPITender(url) {
             }
         })
         .fail(function (jqxhr, textStatus, error) {
-            let err = textStatus + ", " + error;
-            console.error("Request Failed: " + err);
+            let err = textStatus + ', ' + error;
+            console.error('Request Failed: ' + err);
         });
 }
 
@@ -390,7 +390,7 @@ Función que iniciliza los datos que dependen de la API
 */
 function obtieneDatosAPIAward(url) {
     if (LOG_DEGUB_FICHA_CONTRATO) {
-        console.log("obtieneDatosAPIAward | " + url);
+        console.log('obtieneDatosAPIAward | ' + url);
     }
 
     $.getJSON(dameURL(url))
@@ -409,11 +409,10 @@ function obtieneDatosAPIAward(url) {
                     valueAmount = award.valueAmount;
 
                     if (award.isSupplierFor) {
-                        console.log("obtieneDatosAPIAward | " + url);
                         obtieneDatosAPIOrganizationAward(
                             dameURL(
                                 ORGANIZATION_URL_1 +
-                                    "/" +
+                                    '/' +
                                     award.isSupplierFor +
                                     ORGANIZATION_URL_2
                             ),
@@ -427,9 +426,9 @@ function obtieneDatosAPIAward(url) {
                             let bloqueHTMLp11 = "<p>";
                             let bloqueHTMLp12 = "</p>";
 
-                            $("#liLotes").hide();
-                            $("#etiquetaLotesA").hide();
-                            bloqueHTML = $("#licitadores").html();
+                            $('#liLotes').hide();
+                            $('#etiquetaLotesA').hide();
+                            bloqueHTML = $('#licitadores').html();
 
                             bloqueHTML =
                                 bloqueHTML +
@@ -438,7 +437,7 @@ function obtieneDatosAPIAward(url) {
                                 award.description +
                                 bloqueHTMLp12 +
                                 bloqueHTMLli2;
-                            $("#licitadores").html(bloqueHTML);
+                            $('#licitadores').html(bloqueHTML);
                         }
                     }
                 }
@@ -450,8 +449,8 @@ function obtieneDatosAPIAward(url) {
             }
         })
         .fail(function (jqxhr, textStatus, error) {
-            let err = textStatus + ", " + error;
-            console.error("Request Failed: " + err);
+            let err = textStatus + ', ' + error;
+            console.error('Request Failed: ' + err);
         });
 }
 
@@ -460,7 +459,7 @@ Función que iniciliza los datos que dependen de la API
 */
 function obtieneDatosAPIAwardLot(url, lot) {
     if (LOG_DEGUB_FICHA_CONTRATO) {
-        console.log("obtieneDatosAPIAwardLot | " + url + " , " + lot);
+        console.log('obtieneDatosAPIAwardLot | ' + url + ' , ' + lot);
     }
 
     $.getJSON(dameURL(url))
@@ -481,7 +480,7 @@ function obtieneDatosAPIAwardLot(url, lot) {
                         obtieneDatosAPIOrganizationAward(
                             dameURL(
                                 ORGANIZATION_URL_1 +
-                                    "/" +
+                                    '/' +
                                     award.isSupplierFor +
                                     ORGANIZATION_URL_2
                             ),
@@ -498,8 +497,8 @@ function obtieneDatosAPIAwardLot(url, lot) {
             }
         })
         .fail(function (jqxhr, textStatus, error) {
-            let err = textStatus + ", " + error;
-            console.error("Request Failed: " + err);
+            let err = textStatus + ', ' + error;
+            console.error('Request Failed: ' + err);
         });
 }
 
@@ -508,7 +507,7 @@ Función que iniciliza los datos que dependen de la API
 */
 function obtieneDatosAPIItem(url) {
     if (LOG_DEGUB_FICHA_CONTRATO) {
-        console.log("obtieneDatosAPIItem | " + url);
+        console.log('obtieneDatosAPIItem | ' + url);
     }
 
     $.getJSON(dameURL(url))
@@ -525,14 +524,14 @@ function obtieneDatosAPIItem(url) {
                     let bloqueHTML = "";
                     let bloqueHTML1 = "<li>";
                     let bloqueHTML2 = "</li>";
-                    bloqueHTML = $("#cpv").html().replace("/t", "").replace("/n", "");
+                    bloqueHTML = $('#cpv').html().replace('/t', '').replace('/n', '');
 
                     if (item.description) {
                         bloqueHTML =
                             bloqueHTML +
                             bloqueHTML1 +
                             item.hasClassification +
-                            " - " +
+                            ' - ' +
                             item.description +
                             bloqueHTML2;
                     } else {
@@ -540,7 +539,7 @@ function obtieneDatosAPIItem(url) {
                             bloqueHTML + bloqueHTML1 + item.hasClassification + bloqueHTML2;
                     }
 
-                    $("#cpv").html(bloqueHTML);
+                    $('#cpv').html(bloqueHTML);
                 }
                 if (data.next) {
                     obtieneDatosAPIItem(dameURL(data.next));
@@ -550,8 +549,8 @@ function obtieneDatosAPIItem(url) {
             }
         })
         .fail(function (jqxhr, textStatus, error) {
-            let err = textStatus + ", " + error;
-            console.error("Request Failed: " + err);
+            let err = textStatus + ', ' + error;
+            console.error('Request Failed: ' + err);
         });
 }
 
@@ -560,7 +559,7 @@ Función que iniciliza los datos que dependen de la API
 */
 function obtieneDatosAPITenderRelItem(url) {
     if (LOG_DEGUB_FICHA_CONTRATO) {
-        console.log("obtieneDatosAPITenderRelItem | " + url);
+        console.log('obtieneDatosAPITenderRelItem | ' + url);
     }
 
     $.getJSON(dameURL(url))
@@ -581,24 +580,24 @@ function obtieneDatosAPITenderRelItem(url) {
                     tenderRelItemCol[tenderRelItem.tender] = tenderRelItemAux;
 
                     obtieneDatosAPIItem(
-                        dameURL(ITEM_URL_1 + "/" + tenderRelItem.item + ITEM_URL_2)
+                        dameURL(ITEM_URL_1 + '/' + tenderRelItem.item + ITEM_URL_2)
                     );
                 }
                 if (data.next) {
                     obtieneDatosAPITenderRelItem(dameURL(data.next));
                 } else {
                     scrollTop();
-                    $(".modal").modal("hide");
+                    $('.modal').modal('hide');
                 }
             } else {
                 console.log(MSG_ERROR_API_RES_VACIO);
                 scrollTop();
-                $(".modal").modal("hide");
+                $('.modal').modal('hide');
             }
         })
         .fail(function (jqxhr, textStatus, error) {
-            let err = textStatus + ", " + error;
-            console.error("Request Failed: " + err);
+            let err = textStatus + ', ' + error;
+            console.error('Request Failed: ' + err);
         });
 }
 
@@ -607,7 +606,7 @@ Función que iniciliza los datos que dependen de la API
 */
 function obtieneDatosAPILot(url) {
     if (LOG_DEGUB_FICHA_CONTRATO) {
-        console.log("obtieneDatosAPILot | " + url);
+        console.log('obtieneDatosAPILot | ' + url);
     }
 
     $.getJSON(dameURL(url))
@@ -638,7 +637,7 @@ function obtieneDatosAPILot(url) {
                     let bloqueHTMLp12 = "</p>";
                     let bloqueHTMLImporte =
                         "<b>" + $.i18n("importe-licitacion:") + " </b>";
-                    bloqueHTML = $("#lotesPliego").html();
+                    bloqueHTML = $('#lotesPliego').html();
                     bloqueHTML = bloqueHTML + bloqueHTMLli1;
                     bloqueHTML = bloqueHTML + bloqueHTMLp11 + lot.title + bloqueHTMLp12;
                     let importe = numeral(lot.valueAmount).format(
@@ -652,12 +651,12 @@ function obtieneDatosAPILot(url) {
                         importe +
                         bloqueHTMLp12;
                     bloqueHTML = bloqueHTML + bloqueHTMLli2;
-                    $("#lotesPliego").html(bloqueHTML);
+                    $('#lotesPliego').html(bloqueHTML);
 
                     if (lot.hasSupplier) {
-                        $("#bloqueAdjudicacion").show();
+                        $('#bloqueAdjudicacion').show();
                         obtieneDatosAPIAwardLot(
-                            dameURL(AWARD_URL_1 + "/" + lot.hasSupplier + AWARD_URL_2),
+                            dameURL(AWARD_URL_1 + '/' + lot.hasSupplier + AWARD_URL_2),
                             lot
                         );
                     }
@@ -666,137 +665,106 @@ function obtieneDatosAPILot(url) {
                     obtieneDatosAPILot(data.next);
                 }
             } else if (data && data.records && !data.records.length) {
-                $("#liLotes").hide();
-                $("#etiquetaLotesA").hide();
+                $('#liLotes').hide();
+                $('#etiquetaLotesA').hide();
             }
         })
         .fail(function (jqxhr, textStatus, error) {
-            let err = textStatus + ", " + error;
-            console.error("Request Failed: " + err);
+            let err = textStatus + ', ' + error;
+            console.error('Request Failed: ' + err);
         });
 }
-
-/*
-Función que inserta los datos en la página web 
-
-function insertaDatos() {
-    if (LOG_DEGUB_FICHA_CONTRATO) {
-        console.log("insertaDatos");
-    }
-
-    $("#idProceso").html(process.id);
-    $("#tituloProceso").html(process.title);
-    $("#anuncioLicitacion").attr("href", process.url);
-    $("#organismoContratante").html(organizationBuyer.title);
-    $("#tipoContrato").html(
-        ETIQUETA_TIP_CONT.get(tender.mainProcurementCategory)
-    );
-    $("#tipoPliego").html(ETIQUETA_TIP_PROC.get(tender.procurementMethod));
-    if (tender.periodStartDate) {
-        $("#anyo").html(Date.parse(tender.periodStartDate).toString("yyyy"));
-    } else {
-        $("#anyo").hide();
-    }
-    if (tender.periodDurationInDays) {
-        $("#duracion").html(tender.periodDurationInDays + " días");
-        $("#duracionEjecucion").html(tender.periodDurationInDays + " días");
-    }
-    $("#numLicitadores").html(tender.numberOfTenderers);
-    $("#estadoPliego").html(ETIQUETA_ESTADO.get(tender.tenderStatus));
-}*/
 
 /*
 Función que permite ocultar la ficha
 */
 function volverBusqueda() {
     if (LOG_DEGUB_FICHA_CONTRATO) {
-        console.log("volverBusqueda");
+        console.log('volverBusqueda');
     }
 
-    if (paramCapaAnterior == "buscador") {
-        $("#capaBuscador", window.parent.document).show();
-        $("#capaAyuda", window.parent.document).hide();
-        $("#capaFichaContrato", window.parent.document).hide();
-        $("#capaFichaAdjudicatario", window.parent.document).hide();
-        $("#capaFichaOrganizacionContratante", window.parent.document).hide();
+    if (paramCapaAnterior == 'buscador') {
+        $('#capaBuscador', window.parent.document).show();
+        $('#capaAyuda', window.parent.document).hide();
+        $('#capaFichaContrato', window.parent.document).hide();
+        $('#capaFichaAdjudicatario', window.parent.document).hide();
+        $('#capaFichaOrganizacionContratante', window.parent.document).hide();
     }
-    if (paramCapaAnterior == "inicio") {
-        $("#capaBuscador", window.parent.document).hide();
-        $("#capaAyuda", window.parent.document).hide();
-        $("#capaFichaContrato", window.parent.document).hide();
-        $("#capaFichaAdjudicatario", window.parent.document).hide();
-        $("#capaFichaOrganizacionContratante", window.parent.document).hide();
+    if (paramCapaAnterior == 'inicio') {
+        $('#capaBuscador', window.parent.document).hide();
+        $('#capaAyuda', window.parent.document).hide();
+        $('#capaFichaContrato', window.parent.document).hide();
+        $('#capaFichaAdjudicatario', window.parent.document).hide();
+        $('#capaFichaOrganizacionContratante', window.parent.document).hide();
     }
-    if (paramCapaAnterior == "fichaAdjudicatario") {
-        $("#capaBuscador", window.parent.document).show();
-        $("#capaAyuda", window.parent.document).hide();
-        $("#capaFichaContrato", window.parent.document).hide();
-        $("#capaFichaAdjudicatario", window.parent.document).show();
-        $("#capaFichaOrganizacionContratante", window.parent.document).hide();
+    if (paramCapaAnterior == 'fichaAdjudicatario') {
+        $('#capaBuscador', window.parent.document).show();
+        $('#capaAyuda', window.parent.document).hide();
+        $('#capaFichaContrato', window.parent.document).hide();
+        $('#capaFichaAdjudicatario', window.parent.document).show();
+        $('#capaFichaOrganizacionContratante', window.parent.document).hide();
     }
-    if (paramCapaAnterior == "fichaContrato") {
-        $("#capaBuscador", window.parent.document).hide();
-        $("#capaAyuda", window.parent.document).hide();
-        $("#capaFichaContrato", window.parent.document).show();
-        $("#capaFichaAdjudicatario", window.parent.document).hide();
-        $("#capaFichaOrganizacionContratante", window.parent.document).hide();
+    if (paramCapaAnterior == 'fichaContrato') {
+        $('#capaBuscador', window.parent.document).hide();
+        $('#capaAyuda', window.parent.document).hide();
+        $('#capaFichaContrato', window.parent.document).show();
+        $('#capaFichaAdjudicatario', window.parent.document).hide();
+        $('#capaFichaOrganizacionContratante', window.parent.document).hide();
     }
-    if (paramCapaAnterior == "fichaOrganizacionContratante") {
-        $("#capaBuscador", window.parent.document).hide();
-        $("#capaAyuda", window.parent.document).hide();
-        $("#capaFichaContrato", window.parent.document).hide();
-        $("#capaFichaAdjudicatario", window.parent.document).hide();
-        $("#capaFichaOrganizacionContratante", window.parent.document).show();
+    if (paramCapaAnterior == 'fichaOrganizacionContratante') {
+        $('#capaBuscador', window.parent.document).hide();
+        $('#capaAyuda', window.parent.document).hide();
+        $('#capaFichaContrato', window.parent.document).hide();
+        $('#capaFichaAdjudicatario', window.parent.document).hide();
+        $('#capaFichaOrganizacionContratante', window.parent.document).show();
     }
 }
 
+/*
+abrirFichaAdjudicatario
+*/
 function abrirFichaAdjudicatario(id) {
     if (LOG_DEGUB_FICHA_CONTRATO) {
-        console.log("volverBusqueda");
+        console.log('abrirFichaAdjudicatario');
     }
 
-    console.log("id " + id);
+    let url = 'fichaAdjudicatario.html?lang=' + $.i18n().locale;
+    url = url + '&id=' + id + '&capaAnterior=fichaContrato';
 
-    let url = "fichaAdjudicatario.html?lang=" + $.i18n().locale;
-    url = url + "&id=" + id + "&capaAnterior=fichaContrato";
-
-    $("#iframeFichaAdjudicatario", window.parent.document).attr("src", url);
-    $("#iframeFichaAdjudicatario", window.parent.document).height(
+    $('#iframeFichaAdjudicatario', window.parent.document).attr('src', url);
+    $('#iframeFichaAdjudicatario', window.parent.document).height(
         $(document).height()
     );
 
-    $("#capaBuscador", window.parent.document).hide();
-    $("#capaAyuda", window.parent.document).hide();
-    $("#capaFichaContrato", window.parent.document).hide();
-    $("#capaFichaAdjudicatario", window.parent.document).show();
-    $("#capaFichaOrganizacionContratante", window.parent.document).hide();
-
-    // $("html,body", window.parent.document).scrollTop(0);
+    $('#capaBuscador', window.parent.document).hide();
+    $('#capaAyuda', window.parent.document).hide();
+    $('#capaFichaContrato', window.parent.document).hide();
+    $('#capaFichaAdjudicatario', window.parent.document).show();
+    $('#capaFichaOrganizacionContratante', window.parent.document).hide();
 }
 
+/*
+abrirFichaOrganizacion
+*/
 function abrirFichaOrganizacion(id) {
     if (LOG_DEGUB_FICHA_CONTRATO) {
-        console.log("volverBusqueda");
+        console.log('abrirFichaOrganizacion');
     }
 
-    console.log("id " + id);
+    let url = 'fichaOrganizacionContratante.html?lang=' + $.i18n().locale;
+    url = url + '&id=' + id + '&capaAnterior=fichaContrato';
 
-    let url = "fichaOrganizacionContratante.html?lang=" + $.i18n().locale;
-    url = url + "&id=" + id + "&capaAnterior=fichaContrato";
-
-    $("#iframeFichaOrganizacionContratante", window.parent.document).attr(
-        "src",
+    $('#iframeFichaOrganizacionContratante', window.parent.document).attr(
+        'src',
         url
     );
-    $("#iframeFichaOrganizacionContratante", window.parent.document).height(
+    $('#iframeFichaOrganizacionContratante', window.parent.document).height(
         $(document).height()
     );
 
-    $("#capaBuscador", window.parent.document).hide();
-    $("#capaAyuda", window.parent.document).hide();
-    $("#capaFichaContrato", window.parent.document).hide();
-    $("#capaFichaAdjudicatario", window.parent.document).hide();
-    $("#capaFichaOrganizacionContratante", window.parent.document).show();
-
-    // $("html,body", window.parent.document).scrollTop(0);
+    $('#capaBuscador', window.parent.document).hide();
+    $('#capaAyuda', window.parent.document).hide();
+    $('#capaFichaContrato', window.parent.document).hide();
+    $('#capaFichaAdjudicatario', window.parent.document).hide();
+    $('#capaFichaOrganizacionContratante', window.parent.document).show();
 }

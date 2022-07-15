@@ -13,19 +13,19 @@ See the Licence for the specific language governing permissions and limitations 
 */
 
 // variables para normalizar datos
-var numFormatoSinDecimales = "0,0";
-var numFormato = "0,0.[00]";
-var importeFormato = "0,0.[00]";
-var importeFormatoSinDecimales = "0,0";
+var numFormatoSinDecimales = '0,0';
+var numFormato = '0,0.[00]';
+var importeFormato = '0,0.[00]';
+var importeFormatoSinDecimales = '0,0';
 var anyos = [];
 
 
 /* 
-                Métodos para el arranque de la web
+Métodos para el arranque de la web
 */
 function initComun() {
     if (LOG_DEGUB_COMUN) {
-        console.log("initComun");
+        console.log('initComun');
     }
 
     inicializaDatosInicio();
@@ -35,91 +35,52 @@ function initComun() {
 }
 
 /* 
-                Función para el multiidioma 
+Función para el multiidioma 
 */
 function multidiomaComun() {
     if (LOG_DEGUB_COMUN) {
-        console.log("multidiomaComun");
+        console.log('multidiomaComun');
     }
 
     jQuery(function ($) {
         //carga de los idiomas
         $.i18n()
             .load({
-                es: "dist/i18n/es.json",
-                en: "dist/i18n/en.json",
-                gl: "dist/i18n/gl.json",
+                es: 'dist/i18n/es.json',
+                en: 'dist/i18n/en.json',
+                gl: 'dist/i18n/gl.json',
             })
             .done(function () {
-                $("html").i18n();
+                $('html').i18n();
             });
 
         //configuración del botón que cambia de idioma
-        $(".switch-locale").click(function () {
+        $('.switch-locale').click(function () {
             let r = confirm(
-                "Si se cambia de idioma se perderán las posibles busquedas realizadas"
+                'Si se cambia de idioma se perderán las posibles busquedas realizadas'
             );
             if (r) {
-                // $("#modalCargaInicial").modal("show");
-                $("#capaBuscador").show();
-                $("#capaFichaContrato").show();
-                $("#capaFichaAdjudicatario").show();
-                $("#capaFichaOrganizacionContratante").show();
-                $("#capaAyuda").show();
-                $.i18n().locale = $(this).data("locale");
-                $("html").i18n();
+                $('#capaBuscador').show();
+                $('#capaFichaContrato').show();
+                $('#capaFichaAdjudicatario').show();
+                $('#capaFichaOrganizacionContratante').show();
+                $('#capaAyuda').show();
+                $.i18n().locale = $(this).data('locale');
+                $('html').i18n();
                 document.documentElement.lang = $.i18n().locale;
 
 
-                let tableCon = $('#tablaContratos').DataTable();
-                tableCon.destroy();
-
-                let tableAdj = $('#tablaAdjudicatarios').DataTable();
-                tableAdj.destroy();
+                $('#tablaContratos').dataTable().fnDestroy();
+                $('#tablaAdjudicatarios').dataTable().fnDestroy();
 
                 preparaTablaBuscadorCont();
                 preparaTablaBuscadorAdj();        
+
+                $('#tablaContratos').dataTable().fnUpdate();
+                $('#tablaAdjudicatarios').dataTable().fnUpdate();
                 
-                // tableCon = $('#tablaContratos').DataTable();
-                // tableCont.clear().draw();
                 $('#tablaContratos').DataTable().rows.add(dataSet).draw();
-
-                // tableAdj = $('#tablaAdjudicatarios').DataTable();
-                // tableAdj.clear().draw();
                 $('#tablaAdjudicatarios').DataTable().rows.add(datasetAdj).draw();
-
-                url = $("#iframeFichaContrato").attr("src");
-                if(url.indexOf('lang')!=-1)
-                {
-                    pos = url.search("lang=");
-                    url = url.substring(0, pos) + "lang=" + $(this).data("locale");
-                    $("#iframeFichaContrato").attr("src", url);
-                }else{
-                    url = url + "?lang=" + $(this).data("locale");
-                    $("#iframeFichaContrato").attr("src", url);
-                }
-
-                url = $("#iframeFichaAdjudicatario").attr("src");
-                if(url.indexOf('lang')!=-1)
-                {
-                    pos = url.search("lang=");
-                    url = url.substring(0, pos) + "lang=" + $(this).data("locale");
-                    $("#iframeFichaAdjudicatario").attr("src", url);
-                }else{
-                    url = url + "?lang=" + $(this).data("locale");
-                    $("#iframeFichaAdjudicatario").attr("src", url);
-                }
-
-                url = $("#iframeFichaOrganizacionContratante").attr("src");
-                if(url.indexOf('lang')!=-1)
-                {
-                    pos = url.search("lang=");
-                    url = url.substring(0, pos) + "lang=" + $(this).data("locale");
-                    $("#iframeFichaOrganizacionContratante").attr("src", url);
-                }else{
-                    url = url + "?lang=" + $(this).data("locale");
-                    $("#iframeFichaOrganizacionContratante").attr("src", url);
-                }
                 
                 cambioCapaBuscador();
             }
@@ -135,48 +96,40 @@ Función que iniciliza los datos que dependen de la API
 */
 function inicializaDatosInicio() {
     if (LOG_DEGUB_COMUN) {
-        console.log("inicializaDatosInicio");
+        console.log('inicializaDatosInicio');
     }
     if (SEGURIDAD) {
         generarToken();
     }
-
-    $.ajaxSetup({
-        beforeSend: function (xhr) {
-            let authorization = sessionStorage.getItem("authorization");
-            xhr.setRequestHeader("Accept", "application/json");
-            xhr.setRequestHeader("Authorization", authorization);
-        },
-    });
 }
 
 /*
-                Se inicializa la librería para tratar los formatos de los números
+Se inicializa la librería para tratar los formatos de los números
 */
 function numeralInit() {
     if (LOG_DEGUB_COMUN) {
-        console.log("numeralInit");
+        console.log('numeralInit');
     }
 
-    numeral.register("locale", "es", {
+    numeral.register('locale', 'es', {
         delimiters: {
-            thousands: ".",
-            decimal: ",",
+            thousands: '.',
+            decimal: ',',
         },
         abbreviations: {
-            thousand: "k",
-            million: "m",
-            billion: "b",
-            trillion: "t",
+            thousand: 'k',
+            million: 'm',
+            billion: 'b',
+            trillion: 't',
         },
         ordinal: function (number) {
-            return number === 1 ? "er" : "o";
+            return number === 1 ? 'er' : 'o';
         },
         currency: {
-            symbol: "€",
+            symbol: '€',
         },
     });
-    numeral.locale("es");
+    numeral.locale('es');
 }
 
 /* 
@@ -184,17 +137,17 @@ Función que permite cambiar a la capa de buscador
 */
 function cambioCapaBuscador() {
     if (LOG_DEGUB_COMUN) {
-        console.log("cambioCapaBuscador");
+        console.log('cambioCapaBuscador');
     }
 
-    $("#capaBuscador").show();
-    $("#capaFichaContrato").hide();
-    $("#capaFichaAdjudicatario").hide();
-    $("#capaFichaOrganizacionContratante").hide();
-    $("#capaAyuda").hide();
+    $('#capaBuscador').show();
+    $('#capaFichaContrato').hide();
+    $('#capaFichaAdjudicatario').hide();
+    $('#capaFichaOrganizacionContratante').hide();
+    $('#capaAyuda').hide();
 
-    $("#buttonBuscador").css("font-weight", "bold");
-    $("#buttonGlosario").css("font-weight", "normal");
+    $('#buttonBuscador').css('font-weight', 'bold');
+    $('#buttonGlosario').css('font-weight', 'normal');
 }
 
 /* 
@@ -202,17 +155,17 @@ Función que permite cambiar a la capa de buscador
 */
 function cambioCapaBuscadorIframe() {
     if (LOG_DEGUB_COMUN) {
-        console.log("cambioCapaBuscador");
+        console.log('cambioCapaBuscador');
     }
 
-    $("#capaBuscador", window.parent.document).show();
-    $("#capaFichaContrato", window.parent.document).hide();
-    $("#capaFichaAdjudicatario", window.parent.document).hide();
-    $("#capaFichaOrganizacionContratante", window.parent.document).hide();
-    $("#capaAyuda", window.parent.document).hide();
+    $('#capaBuscador', window.parent.document).show();
+    $('#capaFichaContrato', window.parent.document).hide();
+    $('#capaFichaAdjudicatario', window.parent.document).hide();
+    $('#capaFichaOrganizacionContratante', window.parent.document).hide();
+    $('#capaAyuda', window.parent.document).hide();
 
-    $("#buttonBuscador", window.parent.document).css("font-weight", "bold");
-    $("#buttonGlosario", window.parent.document).css("font-weight", "normal");
+    $('#buttonBuscador', window.parent.document).css('font-weight', 'bold');
+    $('#buttonGlosario', window.parent.document).css('font-weight', 'normal');
 }
 
 /* 
@@ -220,25 +173,25 @@ Función que permite cambiar a la capa de ayuda
 */
 function cambioCapaAyuda() {
     if (LOG_DEGUB_COMUN) {
-        console.log("cambioCapaAyuda");
+        console.log('cambioCapaAyuda');
     }
 
-    $("#capaBuscador").hide();
-    $("#capaFichaContrato").hide();
-    $("#capaFichaAdjudicatario").hide();
-    $("#capaFichaOrganizacionContratante").hide();
-    $("#capaAyuda").show();
+    $('#capaBuscador').hide();
+    $('#capaFichaContrato').hide();
+    $('#capaFichaAdjudicatario').hide();
+    $('#capaFichaOrganizacionContratante').hide();
+    $('#capaAyuda').show();
 
-    $("#buttonBuscador").css("font-weight", "normal");
-    $("#buttonGlosario").css("font-weight", "bold");
+    $('#buttonBuscador').css('font-weight', 'normal');
+    $('#buttonGlosario').css('font-weight', 'bold');
 }
 
 /*
-                Función usa la SEGURIDAD de la API en caso de ser necesario
+Función usa la SEGURIDAD de la API en caso de ser necesario
 */
 function dameURL(URL) {
     if (LOG_DEGUB_COMUN) {
-        console.log("dameURL: " + URL);
+        console.log('dameURL: ' + URL);
     }
 
     let resultado;
@@ -246,8 +199,8 @@ function dameURL(URL) {
 
     if (SEGURIDAD) {
         let fechaActual = new Date();
-        let fechaExpiracion = sessionStorage.getItem("fechaExpiracion");
-        if (fechaExpiracion || fechaExpiracion == "Invalid Date") {
+        let fechaExpiracion = sessionStorage.getItem('fechaExpiracion');
+        if (fechaExpiracion || fechaExpiracion == 'Invalid Date') {
             fechaExpiracion = new Date();
         }
 
@@ -257,9 +210,9 @@ function dameURL(URL) {
 
         $.ajaxSetup({
             beforeSend: function (xhr) {
-                let authorization = sessionStorage.getItem("authorization");
-                xhr.setRequestHeader("Accept", "application/json");
-                xhr.setRequestHeader("Authorization", authorization);
+                let authorization = sessionStorage.getItem('authorization');
+                xhr.setRequestHeader('Accept', 'application/json');
+                xhr.setRequestHeader('Authorization', authorization);
             },
         });
     }
@@ -272,26 +225,26 @@ Función que genera el token para realizar la autenticación con la API
 */
 function generarToken() {
     if (LOG_DEGUB_COMUN) {
-        console.log("generarToken");
+        console.log('generarToken');
     }
     let urlT =
         TOKEN_URL +
-        "?username=" +
+        '?username=' +
         USER +
-        "&password=" +
+        '&password=' +
         PASS +
-        "&grant_type=password";
-    let basicA = "Basic " + btoa(APP_NAME + ":" + APP_SECRET);
+        '&grant_type=password';
+    let basicA = 'Basic ' + btoa(APP_NAME + ':' + APP_SECRET);
 
     $.ajax({
-        type: "POST",
+        type: 'POST',
         url: urlT,
-        contentType: "application/json; charset=utf-8",
+        contentType: 'application/json; charset=utf-8',
         async: false,
         timeout: VAL_TIME_OUT,
 
         headers: {
-            Accept: "application/json",
+            Accept: 'application/json',
             Authorization: basicA,
         },
 
@@ -299,10 +252,10 @@ function generarToken() {
             let fechaExpiracion = new Date().getTime();
             let timeSeconds = Number(data.expires_in) - 1;
             fechaExpiracion = new Date(fechaExpiracion + timeSeconds * 1000);
-            sessionStorage.setItem("fechaExpiracion", fechaExpiracion);
+            sessionStorage.setItem('fechaExpiracion', fechaExpiracion);
 
-            let authorization = "Bearer " + data.access_token;
-            sessionStorage.setItem("authorization", authorization);
+            let authorization = 'Bearer ' + data.access_token;
+            sessionStorage.setItem('authorization', authorization);
         },
 
         error: function (xhr, textStatus, errorThrown) {
@@ -319,7 +272,7 @@ Funcion para obtener parametros de la URL
 */
 function getUrlVars() {
     if (LOG_DEGUB_COMUN) {
-        console.log("getUrlVars");
+        console.log('getUrlVars');
     }
 
     let vars = {};
@@ -333,84 +286,12 @@ function getUrlVars() {
 }
 
 /*
-Funcion que chequea si un array de booleans esta entero a true
-
-function checkBooleanArray(vector) {
-    if (LOG_DEGUB_COMUN) {
-        console.log("checkBooleanArray");
-    }
-
-    let i;
-    for (i = 0; i < vector.length; i++) {
-        let temp = vector[i];
-        if (!temp) {
-            return temp;
-        }
-    }
-    return true;
-}*/
-
-/*
-Función que devuelve true si se ejecuta dentro de un iframe
-
-function inIframe() {
-    if (LOG_DEGUB_COMUN) {
-        console.log("inIframe");
-    }
-
-    try {
-        return window.self !== window.top;
-    } catch (e) {
-        return true;
-    }
-}*/
-
-/*
-Función que calcula el porcentaje de un numero
-
-function porcentaje(numero, porc) {
-    if (LOG_DEGUB_COMUN) {
-        console.log("porcentaje");
-    }
-
-    let p = Math.floor(numero * porc) / 100;
-    p = Math.round(p);
-    return p;
-}*/
-
+Función para llevar la página arriba del todo
+*/
 function scrollTop() {
     if (LOG_DEGUB_COMUN) {
-        console.log("scrollTop");
+        console.log('scrollTop');
     }
 
     window.scrollTo(0, 0);
 }
-
-/*
-Función que devuelve el tipo de adjudicatario pasando como parámetro el DNI / CIF
-
-function dameTipoEntidad(dniNif) {
-    if (LOG_DEGUB_COMUN) {
-        console.log("dameTipoEntidad");
-    }
-
-    if (dniNif) {
-        return "";
-    }
-
-    let result = "";
-    let firstchar = dniNif[0];
-    let secondchar = dniNif[1];
-    if (secondchar) {
-        secondchar = "0";
-    }
-    if (isNaN(firstchar) && !isNaN(secondchar)) {
-        result = ETIQUETA_TIPO_ENTIDAD.get(firstchar);
-    } else {
-        result = ETIQUETA_TIPO_ENT_PERSONA;
-    }
-    if (result) {
-        result = ETIQUETA_TIPO_ENT_PERSONA;
-    }
-    return result;
-}*/

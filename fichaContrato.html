@@ -26,14 +26,13 @@ See the Licence for the specific language governing permissions and limitations 
     <title data-i18n="ficha_contrato">Ficha de contrato</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
 
     <!-- JQUERY UI CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet">
 
     <!-- Custom Fonts -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.css" rel="stylesheet"
-        type="text/css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.css" rel="stylesheet" type="text/css">
 
     <!-- Hojas de estilos internos -->
     <link rel="stylesheet" href="../comunV2/dist/css/main.css">
@@ -51,110 +50,117 @@ See the Licence for the specific language governing permissions and limitations 
         role="dialog">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content modal-loading">
-                <span class="fa fa-spinner fa-spin fa-5x"></span>
-                <span class="home-header_title">Cargando. Espere, por favor</span>
+               <span class="loader"></span>
+               </br></br>
+               <span class="home-header_title">Cargando datos</span>
             </div>
         </div>
     </div>
-    <div class="container-fluid">
+    <div class="container-fluid" id="modalcontrato">
         <div class="row">
             <div class="col-sm-12">
                 <div class="panel panel-default">
                     <div class="panel-heading" role="heading" aria-level="2">
-                        <div class="col-md-7 col-xs-7">
-                            <h2 id="titulo"></h2>
+                        <div class="row">
+                            <div class="col-sm-10">
+                                <h2 class="lineasActuacion__title datosAbiertos-color" data-i18n="Licitacion">Licitación</h2>
+                            </div>
+                            <div class="col-sm-2">
+                                    <button type="button" class="btn btn-primary btn-sm" onclick="volverBusqueda()">
+                                        <i class="fa fa-arrow-left"></i>
+                                        <span data-i18n="volver">Volver</span>
+                                    </button>
+                                    <button type="button" class="btn btn-primary btn-sm"
+                                        onclick="cambioCapaBuscadorIframe()">
+                                        <i class="fa fa-times"></i>
+                                        <span data-i18n="cerrar">Cerrar</span>
+                                    </button>
+                            </div>
                         </div>
-                        <div class="col-md-5 col-xs-5">
-                            <div class="pull-right">
-                                <button type="button" class="btn btn-primary btn-xs" onclick="volverBusqueda()"
-                                    data-i18n="volver">
-                                    Volver
-                                </button>
-                                <button type="button" class="btn btn-primary btn-xs"
-                                    onclick="cambioCapaBuscadorIframe()">
-                                    &times;
-                                </button>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h2 id="titulo"></h2>
                             </div>
                         </div>
                     </div>
                     <div class="panel-body">
-                                <div class="container-fluid">
-									<p class="fontbloq" data-i18n="detalle">Detalle</p>
-                                    <div class="row ficha panel_indi">
-										<p><strong data-i18n="">Información general:</strong></p>
-										<div class="col-sm-4">
-											<p><span class="etiqueta" data-i18n="organismo_contratante:">Organismo Contratante:</span><a id="enlaceOrganismoC"><span id="organismoC"> </span></a></p>
-											<p><span class="etiqueta" data-i18n="n_expediente:">Nº Expediente:</span> <span id="expediente"></span> </p>
-											<p><span class="etiqueta" data-i18n="tipo_contrato:">Tipo de Contrato:</span> <span id="tipo"></span></p>
-											<p><span class="etiqueta" data-i18n="estado:">Estado:</span> <span id="estado"></span> </p>
-										</div>
-										<div class="col-sm-4">
-											<p><span class="etiqueta" data-i18n="procedimiento:">Procedimiento:</span> <span id="procedimiento"></span></p>
-											<p><span class="etiqueta" id="parrafoImporte" data-i18n="importe-licitacion:">Importe licitación:</span> <span id="importe"></span></p>
-											<p><span class="etiqueta" id="parrafoDuracion" data-i18n="duracion:">Duración:</span> <span id="duraccion"></span></p>
-											<p><span class="etiqueta" id="parrafoLicitadores" data-i18n="licitadores:">Licitadores:</span> <span id="numLicitadores"></span></p>
-                                        </div>
-										<div class="col-sm-4">
-											<p><span class="etiqueta" data-i18n="periodoinicio:">F Inicio:</span> <span id="periodoinicio"></span></p>
-											<p><span class="etiqueta" data-i18n="periodofin:">F Fin:</span> <span id="periodofin"></span></p>
-										</div>
-										<div class="col-sm-12 ficha_lista">
-											<p><span class="etiqueta" data-i18n="CPV:">CPV:</span><ul id="cpv"></ul></p>
-                                        </div>
-                                        <div class="col-sm-12 ficha_lista">
-											<p><span class="etiqueta" id="liLotes" data-i18n="lotes:">Lotes:</span><ol id="lotesPliego"></ol></p>
-										</div>
-                                    </div>
+                        <div class="container-fluid">
+                            <h2><i class="fa fa-file">&nbsp;</i><span  data-i18n="detalle"> Detalle</span></h2>
+                            <div class="row ficha panel_indi">
+                                <div class="col-sm-4">
+                                    <p><span class="etiqueta" data-i18n="organismo_contratante:">Organismo Contratante:</span><a id="enlaceOrganismoC"><span id="organismoC"> </span></a></p>
+                                    <p><span class="etiqueta" data-i18n="n_expediente:">Nº Expediente:</span> <span id="expediente"></span> </p>
+                                    <p><span class="etiqueta" data-i18n="tipo_contrato:">Tipo de Contrato:</span> <span id="tipo"></span></p>
+                                    <p><span class="etiqueta" data-i18n="estado:">Estado:</span> <span id="estado"></span> </p>
                                 </div>
-                                <div class="container-fluid ">
-									<p class="fontbloq"  data-i18n="proceso">Proceso</p>
-									<div class="col-sm-offset-2 col-sm-8 col-sm-offset-2">
-										<ul class="timeline">
-											<li id="bloqueLicitacion">
-												<div class="timeline-badge">
-													<em class="fa fa-check"></em>
-												</div>
-												<div class="timeline-panel">
-													<div class="timeline-heading">
-														<p class="timeline-title" data-i18n="licitacion">Licitación</p>
-													</div>
-													<div class="timeline-body container-fluid">
-														<p><a id="url" data-i18n="url_licitacion" target="_blank">URL de la Licitación</a></p>
-													</div>
-												</div>
-											</li>
-											<li class="timeline-inverted" id="bloqueAdjudicacion">
-												<div class="timeline-badge">
-													<em class="fa fa-check"></em>
-												</div>
-												<div class="timeline-panel">
-													<div class="timeline-heading">
-														<p class="timeline-title" data-i18n="adjudicacion">Adjudicación
-														</p>
-													</div>
-													<div class="timeline-body container-fluid">
-														<strong id="etiquetaLotesA" data-i18n="lotes:">Lotes:</strong>
-														<ol id="licitadores">
-														</ol>
-													</div>
-												</div>
-											</li>
-											<li id="bloqueEjecucion">
-												<div class="timeline-badge">
-													<em class="fa fa-check"></em>
-												</div>
-												<div class="timeline-panel">
-													<div class="timeline-heading">
-														<p class="timeline-title" data-i18n="ejecucion">Ejecución</p>
-													</div>
-													<div class="timeline-body container-fluid">
-														<p><em class="fa fa-clock-o"></em> <span id="ejecucion"></span></p>
-													</div>
-												</div>
-											</li>
-										</ul>
-									 </div>
+                                <div class="col-sm-4">
+                                    <p><span class="etiqueta" data-i18n="procedimiento:">Procedimiento:</span> <span id="procedimiento"></span></p>
+                                    <p><span class="etiqueta" id="parrafoImporte" data-i18n="importe-licitacion:">Importe licitación:</span> <span id="importe"></span></p>
+                                    <p><span class="etiqueta" id="parrafoDuracion" data-i18n="duracion:">Duración:</span> <span id="duraccion"></span></p>
+                                    <p><span class="etiqueta" id="parrafoLicitadores" data-i18n="licitadores:">Licitadores:</span> <span id="numLicitadores"></span></p>
                                 </div>
+                                <div class="col-sm-4">
+                                    <p><span class="etiqueta" data-i18n="periodoinicio:">F Inicio:</span> <span id="periodoinicio"></span></p>
+                                    <p><span class="etiqueta" data-i18n="periodofin:">F Fin:</span> <span id="periodofin"></span></p>
+                                </div>
+                                <div class="col-sm-12 ficha_lista">
+                                    <p><span class="etiqueta" data-i18n="CPV:">CPV:</span><ul id="cpv"></ul></p>
+                                </div>
+                                <div class="col-sm-12 ficha_lista">
+                                    <p><span class="etiqueta" id="liLotes" data-i18n="lotes:">Lotes:</span><ol id="lotesPliego"></ol></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container-fluid ">
+                            <h2 ><i class="fa fa-arrows-alt">&nbsp;</i><span data-i18n="proceso">Proceso</span></h2>
+                            <div class="row">
+                                <div class="offset-sm-2 col-sm-8">
+                                    <ul class="timeline">
+                                        <li id="bloqueLicitacion">
+                                            <div class="timeline-badge">
+                                                <em class="fa fa-check"></em>
+                                            </div>
+                                            <div class="timeline-panel">
+                                                <div class="timeline-heading">
+                                                    <h4 class="timeline-title" data-i18n="licitacion">Licitación</h4>
+                                                </div>
+                                                <div class="timeline-body container-fluid">
+                                                    <p><a id="url" data-i18n="url_licitacion" target="_blank">URL de la Licitación</a></p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="timeline-inverted" id="bloqueAdjudicacion">
+                                            <div class="timeline-badge">
+                                                <em class="fa fa-check"></em>
+                                            </div>
+                                            <div class="timeline-panel">
+                                                <div class="timeline-heading">
+                                                    <h4 class="timeline-title" > <i class="fa fa-file-text">&nbsp;</i><span data-i18n="adjudicacion" >Adjudicación</span></h4>
+                                                </div>
+                                                <div class="timeline-body container-fluid">
+                                                    <strong id="etiquetaLotesA" data-i18n="lotes:">Lotes:</strong>
+                                                    <ol id="licitadores">
+                                                    </ol>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li id="bloqueEjecucion">
+                                            <div class="timeline-badge">
+                                                <em class="fa fa-check"></em>
+                                            </div>
+                                            <div class="timeline-panel">
+                                                <div class="timeline-heading">
+                                                    <h4 class="timeline-title"><i class="fa fa-calendar">&nbsp;</i><span data-i18n="ejecucion">Ejecución</span></h4>
+                                                </div>
+                                                <div class="timeline-body container-fluid">
+                                                    <p><em class="fa fa-clock-o"></em> <span id="ejecucion"></span></p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
                 </div>
@@ -166,12 +172,11 @@ See the Licence for the specific language governing permissions and limitations 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"  ></script>
 
     <!-- jQuery UI-->
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"  ></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"  ></script>
 
     <!-- Bootstrap Core -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.min.js" integrity="sha384-VHvPCCyXqtD5DqJeNxl2dtTyhF78xXNXdkwX1CZeRusQfRKp+tA7hAShOK/B/fQ2" crossorigin="anonymous"></script>
 
     <!-- Normalización de datos -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"  ></script>
